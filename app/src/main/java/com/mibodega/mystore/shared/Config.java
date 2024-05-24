@@ -4,7 +4,7 @@ public class Config {
     private String jwt;
     private String userName;
     private String user_ruc;
-    private String URL_API ="http://104.196.251.51/api/v1/";
+    private String URL_API ="http://34.168.45.44/api/v1/";
 
     public String getURL_API() {
         return this.URL_API;
