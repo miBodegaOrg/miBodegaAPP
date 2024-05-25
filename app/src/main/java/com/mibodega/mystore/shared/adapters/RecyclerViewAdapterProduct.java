@@ -58,7 +58,6 @@ public class RecyclerViewAdapterProduct extends RecyclerView.Adapter<RecyclerVie
 
     private int viewType_;
     private Context context;
-    private Resources resources;
     private View viewToast;
     private View.OnClickListener listener;
     final RecyclerViewAdapterProduct.OnDetailItem onDetailItem;
@@ -79,12 +78,12 @@ public class RecyclerViewAdapterProduct extends RecyclerView.Adapter<RecyclerVie
         void onClick(ProductResponse product);
     }
 
-    public RecyclerViewAdapterProduct(Resources resources, Context context, int viewType, ArrayList<ProductResponse> productList, RecyclerViewAdapterProduct.OnDetailItem onDetailItem, RecyclerViewAdapterProduct.OnSupplierItem onSupplierItem) {
+    public RecyclerViewAdapterProduct(Context context, int viewType, ArrayList<ProductResponse> productList, RecyclerViewAdapterProduct.OnDetailItem onDetailItem, RecyclerViewAdapterProduct.OnSupplierItem onSupplierItem) {
         this.context = context;
         this.viewType_ = viewType;
         this.productList = productList;
 
-        this.resources = resources;
+
         this.onDetailItem = onDetailItem;
         this.onSupplierItem = onSupplierItem;
     }
@@ -116,9 +115,9 @@ public class RecyclerViewAdapterProduct extends RecyclerView.Adapter<RecyclerVie
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         ProductResponse product = productList.get(position);
-        holder.productCodigo.setText("codigo: " + product.getCode());
+        holder.productCodigo.setText("sku:" + product.getCode());
         holder.productDescription.setText(product.getName());
-        holder.productStock.setText(product.getStock());
+        holder.productStock.setText(String.valueOf(product.getStock()));
         holder.productLevel.setText("ALTO");
         holder.productState.setText("ACTIVO");
         holder.buyPrice.setText("s/ " +String.valueOf(product.getPrice()));
