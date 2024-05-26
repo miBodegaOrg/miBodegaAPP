@@ -1,5 +1,6 @@
 package com.mibodega.mystore.views;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,13 +13,16 @@ import android.telecom.Conference;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.mibodega.mystore.MainNavigationActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.PagesProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProduct;
+import com.mibodega.mystore.views.products.ProductEditActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +42,27 @@ public class ProductsFragment extends Fragment {
     private PagesProductResponse pagesProductResponse;
     private Config  config = new Config();
     private RecyclerView recyclerView;
+    private Button btnMoveToAddProduct;
+
+    private View _root;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_products, container, false);
+        _root =root;
         recyclerView = root.findViewById(R.id.Rv_productlist_product);
         initProductsData(root);
+
+        btnMoveToAddProduct = root.findViewById(R.id.Btn_addNewProduct_product);
+
+        btnMoveToAddProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent moveHMA = new Intent(getContext(), ProductEditActivity.class);
+                startActivity(moveHMA);
+            }
+        });
         return root;
     }
 
@@ -66,7 +84,7 @@ public class ProductsFragment extends Fragment {
                     if(pagesProductResponse!=null){
                         System.out.println(pagesProductResponse.getDocs().size());
                         productlist  = (ArrayList<ProductResponse>) pagesProductResponse.getDocs();
-
+                        recyclerView.removeAllViews();
                         RecyclerViewAdapterProduct listAdapter = new RecyclerViewAdapterProduct(getContext(), 1, productlist, new RecyclerViewAdapterProduct.OnDetailItem() {
                             @Override
                             public void onClick(ProductResponse product) {
@@ -93,5 +111,12 @@ public class ProductsFragment extends Fragment {
                 System.out.println("errror "+t.getMessage());
             }
         });
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initProductsData(_root);
     }
 }

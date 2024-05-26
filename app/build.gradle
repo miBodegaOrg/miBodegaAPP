@@ -60,12 +60,8 @@ dependencies {
 
     implementation 'org.imaginativeworld.whynotimagecarousel:whynotimagecarousel:2.1.0'
 
-    //for recycle view
-    //noinspection GradleCompatible
-    //implementation 'com.android.support:recyclerview-v7:28.0.0'
-    //noinspection GradleCompatible
-    //implementation 'com.android.support:cardview-v7:28.0.0'
     implementation 'com.github.bumptech.glide:glide:4.4.0'
+
     //glide
     annotationProcessor('com.github.bumptech.glide:compiler:4.4.0')
     //circle imageview
@@ -77,15 +73,13 @@ dependencies {
     // Material Design Library
     implementation 'com.google.android.material:material:1.9.0'
 
-    // Lottie Animation Library
+
     implementation 'com.airbnb.android:lottie:6.1.0'
 
 
-    //biometric finger auth
+
     implementation 'androidx.biometric:biometric-ktx:1.2.0-alpha04'
     implementation 'androidx.biometric:biometric:1.1.0'
-    ////nubis dependencies
-
 
     implementation 'com.google.android.flexbox:flexbox:3.0.0' // Para FlexBox CSS
     implementation platform('com.google.firebase:firebase-bom:32.4.0') //Para notificaiones firebase FCM
