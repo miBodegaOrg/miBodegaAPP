@@ -6,39 +6,52 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.Manifest;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import android.graphics.Point;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+
+import android.view.Display;
+
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.mibodega.mystore.MainNavigationActivity;
+
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanOptions;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.ProductCreateRequest;
-import com.mibodega.mystore.models.Responses.PagesProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.shared.Config;
-import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProduct;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import okhttp3.MediaType;
@@ -55,6 +68,7 @@ public class ProductEditActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_GALLERY = 2;
     private static final int PERMISSION_REQUEST_CODE = 100;
+    private static final int CAMERA_PERMISSION_REQUEST = 101;
 
     private Uri imageUri;
     private MultipartBody.Part imagePart;
@@ -76,6 +90,22 @@ public class ProductEditActivity extends AppCompatActivity {
     private Button btn_saveProduct;
     private Config config = new Config();
 
+    private Dialog dialogShowProductImage;
+    private Bitmap paymentBitmapImg;
+
+    private ImageView imgProduct;
+
+    private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
+            result -> {
+                if (result.getContents() == null) {
+                    Toast.makeText(ProductEditActivity.this, "Escaneo cancelado", Toast.LENGTH_LONG).show();
+                } else {
+                    String barcodeValue = result.getContents();
+                    // Procesa el valor del código de barras
+                    txt_code_product.setText(barcodeValue);
+                }
+            });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +118,11 @@ public class ProductEditActivity extends AppCompatActivity {
         getSp_category_product = findViewById(R.id.Sp_selectProductCategory_product);
         btn_saveProduct = findViewById(R.id.Btn_saveProduct_product);
         tv_fileName = findViewById(R.id.Tv_productFileName_product);
+        btnScanProduct = findViewById(R.id.Imgb_scanProductCode_product);
+
+
         tv_fileName.setText("");
+        setDialogs(this);
 
         String[] categories = {"BEBIDAS", "SNACKS", "GOLOSINAS", "COMIDA"};
 
@@ -105,11 +139,30 @@ public class ProductEditActivity extends AppCompatActivity {
             }
         });
 
+        tv_fileName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!(tv_fileName.getText().toString().equals(""))){
+                    if(paymentBitmapImg!=null){
+                        imgProduct.setImageBitmap(paymentBitmapImg);
+                    }
+                    dialogShowProductImage.show();
+                }
+            }
+        });
+        btnScanProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startBarcodeScanner();
+            }
+        });
+
+
     }
     private void setupButtons() {
          btnCamera = findViewById(R.id.Imgb_takeProductPhoto_product);
          btnGallery = findViewById(R.id.Imgb_getproductPhoto_product);
-         btnScanProduct = findViewById(R.id.Imgb_scanProductCode_product);
+
 
         btnCamera.setOnClickListener(v -> {
             if (checkPermissions()) {
@@ -126,13 +179,52 @@ public class ProductEditActivity extends AppCompatActivity {
                 requestPermissions();
             }
         });
-        btnScanProduct.setOnClickListener(new View.OnClickListener() {
+
+    }
+
+    public void setDialogs(Context context){
+        dialogShowProductImage = new Dialog(context);
+        dialogShowProductImage.setContentView(R.layout.dialog_show_product_photo);
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialogShowProductImage.getWindow().getAttributes());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            dialogShowProductImage.getWindow().setBackgroundDrawableResource(R.drawable.backgroun_custom_rectangle);
+        }
+        imgProduct = dialogShowProductImage.findViewById(R.id.Imgv_showProductPhoto);
+        ImageButton btn_close = dialogShowProductImage.findViewById(R.id.Imgb_closeShowProduct);
+        btn_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                dialogShowProductImage.dismiss();
             }
         });
+        Display display;
+        Point size = new Point();
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            display = context.getDisplay();
+            display.getSize(size);
+        } else {
+            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            if (windowManager != null) {
+                display = windowManager.getDefaultDisplay();
+                display.getSize(size);
+            }
+        }
+        int screenWidth = size.x;
+        int dialogWidth = (int) (screenWidth * 0.9);
+        int dialogHeight = ViewGroup.LayoutParams.WRAP_CONTENT;
+
+        dialogShowProductImage.getWindow().setLayout(dialogWidth, dialogHeight);
+        dialogShowProductImage.getWindow().getAttributes().windowAnimations = R.style.animation;
+
     }
+
+
+
+
+
+
 
     public static String generateRandomNumber() {
         Random random = new Random();
@@ -150,9 +242,14 @@ public class ProductEditActivity extends AppCompatActivity {
 
         ArrayList<String> categoryList = new ArrayList<>();
         categoryList.add(getSp_category_product.getSelectedItem().toString());
+        String code = txt_code_product.getText().toString();
+        if(txt_code_product.getText().toString().equals("")){
+            code = generateRandomNumber();
+        }
+
         ProductCreateRequest request = new ProductCreateRequest(
                 txt_name_product.getText().toString(),
-                generateRandomNumber(),
+                code,
                 Double.valueOf(txt_price_product.getText().toString()),
                 Integer.valueOf(txt_stock_product.getText().toString()),
                 categoryList,
@@ -222,6 +319,8 @@ public class ProductEditActivity extends AppCompatActivity {
                 PERMISSION_REQUEST_CODE);
     }
 
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -231,8 +330,15 @@ public class ProductEditActivity extends AppCompatActivity {
             } else {
                 // Permisos denegados, muestra un mensaje al usuario o realiza alguna acción alternativa
             }
+        } else if (requestCode == CAMERA_PERMISSION_REQUEST) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            } else {
+                Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show();
+            }
         }
     }
+
 
     private void openCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -255,6 +361,8 @@ public class ProductEditActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        paymentBitmapImg = bitmap;
+
         RequestBody requestFile = RequestBody.create(MediaType.parse("image/jpeg"), file);
         imagePart = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
         System.out.println("datos");
@@ -271,11 +379,18 @@ public class ProductEditActivity extends AppCompatActivity {
             imagePart = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
             System.out.println("datos");
 
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(imageUri);
+                paymentBitmapImg = BitmapFactory.decodeStream(inputStream);
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             System.out.println(imagePart.body().toString());
             tv_fileName.setText("imageGallery.jpg");
         }
     }
-
     private String getPathFromUri(Uri uri) {
         String[] projection = {MediaStore.Images.Media.DATA};
         try (Cursor cursor = getContentResolver().query(uri, projection, null, null, null)) {
@@ -288,119 +403,17 @@ public class ProductEditActivity extends AppCompatActivity {
     }
 
 
-
-
-
-/*
-    private void setupButtons() {
-        btnCamera = findViewById(R.id.Imgb_takeProductPhoto_product);
-        btnGallery = findViewById(R.id.Imgb_getproductPhoto_product);
-        btnScanProduct = findViewById(R.id.Imgb_scanProductCode_product);
-
-
-        btnCamera.setOnClickListener(v -> {
-            // Abre la cámara para tomar una foto
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                cameraLauncher.launch(takePictureIntent);
-            }
-        });
-
-        btnGallery.setOnClickListener(v -> {
-            // Abre la galería para seleccionar una imagen
-            Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            galleryLauncher.launch(galleryIntent);
-        });
-
-        btnScanProduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-
-
-
-
-
-    }
-    private ActivityResultLauncher<Intent> cameraLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == RESULT_OK) {
-                    // Obtén la imagen de la cámara
-                    Bundle extras = result.getData().getExtras();
-                    Bitmap imageBitmap = (Bitmap) extras.get("data");
-                    // Guarda la imagen en un archivo y crea el MultipartBody.Part
-                    try {
-                        saveBitmapToFile(imageBitmap);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-    );
-
-    private ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == RESULT_OK) {
-                    // Obtén la URI de la imagen seleccionada de la galería
-                    Intent data = result.getData();
-                    if (data != null) {
-                        imageUri = data.getData();
-                        // Crea el MultipartBody.Part a partir de la URI de la imagen
-                        createImagePart();
-                    }
-                }
-            }
-    );
-
-
-    private void saveBitmapToFile(Bitmap bitmap) throws IOException {
-        // Guarda el Bitmap en un archivo
-        File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_image.jpg");
-        FileOutputStream outputStream = new FileOutputStream(file);
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-        outputStream.flush();
-        outputStream.close();
-
-        // Crea el MultipartBody.Part a partir del archivo
-        RequestBody requestFile = RequestBody.create(MediaType.parse("image/jpeg"), file);
-        imagePart = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
-        tv_fileName.setText("imagecamera.jpg");
-
+    private void startBarcodeScanner() {
+        ScanOptions options = new ScanOptions()
+                .setDesiredBarcodeFormats(ScanOptions.ALL_CODE_TYPES)
+                .setPrompt("Escanea un código de barras")
+                .setCameraId(0)
+                .setBeepEnabled(false)
+                .setBarcodeImageEnabled(false);
+        barcodeLauncher.launch(options);
     }
 
-    private void createImagePart() {
-        // Obtén la ruta del archivo a partir de la URI de la imagen
-        String filePath = getPathFromUri(imageUri);
-        File file = new File(filePath);
 
-        // Crea el MultipartBody.Part a partir del archivo
-        RequestBody requestFile = RequestBody.create(MediaType.parse("image/jpeg"), file);
-        imagePart = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
-
-        tv_fileName.setText("imagegallery.jpg");
-    }
-
-    private String getPathFromUri(Uri uri) {
-        String filePath = null;
-        if (uri != null) {
-            String[] projection = {MediaStore.Images.Media.DATA};
-            Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
-            if (cursor != null) {
-                int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                if (cursor.moveToFirst()) {
-                    filePath = cursor.getString(columnIndex);
-                }
-                cursor.close();
-            }
-        }
-        return filePath;
-    }
-*/
 
 
 }
