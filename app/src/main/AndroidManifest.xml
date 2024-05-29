@@ -48,7 +48,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.pees.fileprovider"
+            android:authorities="com.mibodega.mystore.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
