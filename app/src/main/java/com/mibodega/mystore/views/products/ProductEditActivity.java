@@ -51,7 +51,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import okhttp3.MediaType;
@@ -84,7 +86,6 @@ public class ProductEditActivity extends AppCompatActivity {
     private Spinner sp_category_product;
     private TextView tv_fileName;
     private ImageButton btnScanProduct;
-
     private Spinner getSp_category_product;
 
     private Button btn_saveProduct;
@@ -94,6 +95,7 @@ public class ProductEditActivity extends AppCompatActivity {
     private Bitmap paymentBitmapImg;
 
     private ImageView imgProduct;
+    private RequestBody finalImageBody;
 
     private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
             result -> {
@@ -247,16 +249,15 @@ public class ProductEditActivity extends AppCompatActivity {
             code = generateRandomNumber();
         }
 
-        ProductCreateRequest request = new ProductCreateRequest(
-                txt_name_product.getText().toString(),
-                code,
-                Double.valueOf(txt_price_product.getText().toString()),
-                Integer.valueOf(txt_stock_product.getText().toString()),
-                categoryList,
-                imagePart
-                );
+        Map<String, RequestBody> requestMap = new HashMap<>();
+        requestMap.put("name", RequestBody.create(MediaType.parse("text/plain"), txt_name_product.getText().toString()));
+        requestMap.put("code", RequestBody.create(MediaType.parse("text/plain"), code));
+        requestMap.put("price", RequestBody.create(MediaType.parse("text/plain"), txt_price_product.getText().toString()));
+        requestMap.put("stock", RequestBody.create(MediaType.parse("text/plain"), txt_stock_product.getText().toString()));
+        requestMap.put("category", RequestBody.create(MediaType.parse("text/plain"), categoryList.toString()));
+        requestMap.put("image\"; filename=\"" + "image", finalImageBody);
 
-        Call<ProductResponse> call = service.createProduct(request,"Bearer "+config.getJwt());
+        Call<ProductResponse> call = service.createProduct(requestMap,"Bearer "+config.getJwt());
         System.out.println(config.getJwt());
         call.enqueue(new Callback<ProductResponse>() {
             @Override
@@ -364,6 +365,7 @@ public class ProductEditActivity extends AppCompatActivity {
         paymentBitmapImg = bitmap;
 
         RequestBody requestFile = RequestBody.create(MediaType.parse("image/jpeg"), file);
+        finalImageBody =requestFile;
         imagePart = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
         System.out.println("datos");
         System.out.println(imagePart.body().toString());
@@ -376,6 +378,7 @@ public class ProductEditActivity extends AppCompatActivity {
         if (filePath != null) {
             File file = new File(filePath);
             RequestBody requestFile = RequestBody.create(MediaType.parse("image/jpeg"), file);
+            finalImageBody =requestFile;
             imagePart = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
             System.out.println("datos");
 

@@ -1,71 +1,32 @@
 package com.mibodega.mystore.models.Requests;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 
 public class ProductCreateRequest {
     private String name;
     private String code;
     private Double price;
     private int stock;
-    private ArrayList<String> category = new ArrayList<>();
-    private MultipartBody.Part imagePart;
+    private ArrayList<String> category;
+    private Map<String, RequestBody> imageMap;
 
-    public ProductCreateRequest(String name, String code, Double price, int stock, ArrayList<String> category, MultipartBody.Part imagePart) {
+    public ProductCreateRequest(String name, String code, Double price, int stock, ArrayList<String> category, RequestBody requestBody,String filename) {
         this.name = name;
         this.code = code;
         this.price = price;
         this.stock = stock;
         this.category = category;
-        this.imagePart = imagePart;
-    }
+        this.imageMap = new HashMap<>();
+        this.imageMap.put("image\"; filename=\"" + filename, requestBody);
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public int getStock() {
-        return stock;
-    }
-
-    public void setStock(int stock) {
-        this.stock = stock;
-    }
-
-    public ArrayList<String> getCategory() {
-        return category;
-    }
-
-    public void setCategory(ArrayList<String> category) {
-        this.category = category;
-    }
-
-    public MultipartBody.Part getImagePart() {
-        return imagePart;
-    }
-
-    public void setImagePart(MultipartBody.Part imagePart) {
-        this.imagePart = imagePart;
     }
 }
