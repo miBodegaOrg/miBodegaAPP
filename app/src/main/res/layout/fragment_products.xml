@@ -33,8 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="2.3"
-                android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
-                android:text="Agregar"
+                android:background="@drawable/backgroun_custom_rectangle"
                 android:textSize="12sp"
                 app:icon="@drawable/baseline_add_24" />
 
@@ -55,7 +54,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:background="@drawable/rectangle_withoutcorners"
-                android:backgroundTint="@color/md_theme_light_secondary"
+                android:backgroundTint="@color/md_theme_light_errorContainer"
                 android:queryHint="Buscar productos">
 
             </SearchView>
