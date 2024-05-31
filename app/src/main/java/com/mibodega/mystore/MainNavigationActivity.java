@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 
 import android.view.MenuItem;
+import android.view.View;
 
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.mibodega.mystore.databinding.ActivityMainNavigationBinding;
 
@@ -26,6 +28,10 @@ import com.mibodega.mystore.views.ProfileFragment;
 public class MainNavigationActivity extends AppCompatActivity {
 
     private ActivityMainNavigationBinding binding;
+    private FloatingActionButton btn_moveSale;
+    private FloatingActionButton btn_moveChat;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,25 +89,19 @@ public class MainNavigationActivity extends AppCompatActivity {
             }
         });
 
-/*
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        binding.FabtnMoveSaleProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+            }
+        });
 
-        binding = ActivityMainNavigationBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        binding.FabtnMoveChatBot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home,
-                R.id.navigation_dashboard,
-                R.id.navigation_notifications)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main_navigation);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(binding.navView, navController);*/
+            }
+        });
 
     }
 
