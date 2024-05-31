@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,15 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="20dp">
-
-            <TextView
-                android:id="@+id/Tv_cleanFilter_product"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="Limpiar"
-                android:textColor="@color/md_theme_dark_onTertiary" />
+            android:padding="10dp">
 
             <TextView
                 android:id="@+id/textView"
@@ -35,32 +28,59 @@
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/Tv_filterProduct_product"
+            <Button
+                android:id="@+id/Btn_addNewProduct_product"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="Filtros"
-                android:textColor="@color/md_theme_dark_onTertiary" />
+                android:layout_weight="2.3"
+                android:background="@drawable/backgroun_custom_rectangle"
+                android:textSize="12sp"
+                app:icon="@drawable/baseline_add_24" />
+
         </LinearLayout>
 
-        <SearchView
-            android:id="@+id/Sv_searchproduct_product"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/rectangle_withoutcorners"
-            android:queryHint="Buscar productos">
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp">
 
-        </SearchView>
+            <SearchView
+                android:id="@+id/Sv_searchproduct_product"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/rectangle_withoutcorners"
+                android:backgroundTint="@color/md_theme_light_errorContainer"
+                android:queryHint="Buscar productos">
+
+            </SearchView>
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:src="@drawable/baseline_filter_list_off_24" />
+
+            <ImageButton
+                android:id="@+id/imageButton2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:src="@drawable/baseline_tune_24" />
+
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/Rv_productlist_product"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" >
+
+        </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
 
 </FrameLayout>
