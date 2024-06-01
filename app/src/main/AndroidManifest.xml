@@ -37,6 +37,9 @@
         android:theme="@style/Theme.MyStore"
         tools:targetApi="31">
         <activity
+            android:name=".views.sales.DetailSaleActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.sales.SaleProductsActivity"
             android:exported="false" />
         <activity
