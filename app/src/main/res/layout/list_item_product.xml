@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,11 +24,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:fontFamily="@font/poppins_regular"
                 android:gravity="fill_vertical"
                 android:text="LECHE GLORIA SIX PACK"
                 android:textAlignment="center"
                 android:textSize="16sp"
-                android:fontFamily="@font/poppins_regular"
                 tools:ignore="RtlCompat" />
 
             <TextView
@@ -36,11 +36,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
+                android:fontFamily="@font/poppins_regular"
                 android:gravity="fill_vertical"
                 android:text="sku: 1236845"
                 android:textColor="@color/design_default_color_primary"
                 android:textSize="12sp"
-                android:fontFamily="@font/poppins_regular"
                 android:visibility="gone" />
         </LinearLayout>
 
