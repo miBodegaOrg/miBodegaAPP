@@ -19,11 +19,18 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface IProductServices {
 
     @GET("products")
     Call<PagesProductResponse> getProducts(@Header("Authorization") String token);
+    @GET("products/{code}")
+    Call<ProductResponse> getProductByCode(@Path("code") String code,@Header("Authorization") String token);
+    @GET("products")
+    Call<PagesProductResponse> getProductByName(@Query("search") String name, @Query("limit") int limit, @Header("Authorization") String token);
+
+
     @Multipart()
     @POST("products")
     Call<ProductResponse> createProduct(@PartMap Map<String, RequestBody> request, @Header("Authorization") String token );

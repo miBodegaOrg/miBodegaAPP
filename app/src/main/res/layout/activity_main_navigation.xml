@@ -42,7 +42,8 @@
             android:layout_marginRight="5dp"
             android:layout_marginBottom="70dp"
             android:clickable="true"
-            android:src="@drawable/ic_chat_message" />
+            android:src="@drawable/ic_chat_ia"
+            app:fabSize="auto" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/Fabtn_moveSaleProduct"
