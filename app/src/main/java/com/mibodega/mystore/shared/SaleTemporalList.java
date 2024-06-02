@@ -76,7 +76,7 @@ public class SaleTemporalList {
         }
     }
 
-    public static void cleanAll() {
+    public void cleanAll() {
         arrayList.clear();
         mapAmountProduct.clear();
         totalPrice = 0.0;

@@ -16,7 +16,7 @@ public class ProductResponse {
     private int __v;
     private ArrayList<String> category;
 
-    public ProductResponse(String _id, String name, String code, double price, int stock, String image_url, String shop, String createdAt, String updatedAt, int __v, ArrayList<String> category) {
+    public ProductResponse(String _id, String name, String code, double price, int stock, String image_url, String shop, String createdAt, String updatedAt, ArrayList<String> category) {
         this._id = _id;
         this.name = name;
         this.code = code;
@@ -26,7 +26,6 @@ public class ProductResponse {
         this.shop = shop;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.__v = __v;
         this.category = category;
     }
 

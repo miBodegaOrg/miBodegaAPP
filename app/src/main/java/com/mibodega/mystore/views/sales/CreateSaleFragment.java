@@ -1,6 +1,5 @@
 package com.mibodega.mystore.views.sales;
 
-import android.app.Dialog;
 import android.os.Bundle;
 
 
@@ -16,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,18 +25,15 @@ import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.RequestCreateSale;
 import com.mibodega.mystore.models.Responses.PagesProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
-import com.mibodega.mystore.models.Responses.Status;
-import com.mibodega.mystore.models.common.ProductSale;
+import com.mibodega.mystore.models.Responses.SaleResponse;
+import com.mibodega.mystore.models.common.ProductSaleV2;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.services.ISaleServices;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.SaleTemporalList;
 import com.mibodega.mystore.shared.Utils;
-import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProduct;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSale;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSearch;
-import com.mibodega.mystore.views.ProductsFragment;
-import com.mibodega.mystore.views.products.ProductEditActivity;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -90,49 +85,6 @@ public class CreateSaleFragment extends Fragment {
         rv_recyclerProductList = root.findViewById(R.id.Rv_productAtSaleList_sale);
         btn_vender = root.findViewById(R.id.Btn_saleProducts_sale);
 
-
-        ArrayList<String> aux = new ArrayList<>();
-        aux.add("COMIDA");
-        saleTemporalList.addProduct(new ProductResponse(
-                "12",
-        "GLORIA 1LT",
-                "53312531531354",
-                5.20,
-                10,
-                "",
-                "",
-                "",
-                "",
-                0,
-                aux
-        ),1);
-        saleTemporalList.addProduct(new ProductResponse(
-                "12",
-                "ARROZ COSTEÑO",
-                "53312521315313",
-                5.20,
-                10,
-                "",
-                "",
-                "",
-                "",
-                0,
-                aux
-        ),1);
-        saleTemporalList.addProduct(new ProductResponse(
-                "12",
-                "ACEITE 1LT",
-                "53312115315313",
-                5.20,
-                10,
-                "",
-                "",
-                "",
-                "",
-                0,
-                aux
-        ),1);
-
         btn_scanCodeBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -142,7 +94,7 @@ public class CreateSaleFragment extends Fragment {
         btn_vender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                createSale();
             }
         });
 
@@ -257,10 +209,10 @@ public class CreateSaleFragment extends Fragment {
 
 
     public void createSale(){
-        ArrayList<ProductSale> arraux = new ArrayList<>();
+        ArrayList<ProductSaleV2> arraux = new ArrayList<>();
 
         for (ProductResponse product : saleTemporalList.getArrayList()){
-            arraux.add(new ProductSale(product.getCode(),1,product.getName(),product.getPrice()));
+            arraux.add(new ProductSaleV2(product.getCode(),1, ""));
         }
         RequestCreateSale requestCreateSale = new RequestCreateSale(arraux);
 
@@ -269,22 +221,22 @@ public class CreateSaleFragment extends Fragment {
                 baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
                 build();
         ISaleServices service = retrofit.create(ISaleServices.class);
-        Call<Status> call = service.createSales(requestCreateSale, "Bearer " + config.getJwt());
-        call.enqueue(new Callback<Status>() {
+        Call<SaleResponse> call = service.createSales(requestCreateSale, "Bearer " + config.getJwt());
+        call.enqueue(new Callback<SaleResponse>() {
             @Override
-            public void onResponse(Call<Status> call, Response<Status> response) {
+            public void onResponse(Call<SaleResponse> call, Response<SaleResponse> response) {
                 Log.e("error", response.toString());
-                Status data = response.body();
                 if (response.isSuccessful()) {
-
+                    Toast.makeText(getContext(),"Creado",Toast.LENGTH_SHORT).show();
+                    saleTemporalList.cleanAll();
+                    loadData();
                 } else {
-
+                    Toast.makeText(getContext(),"no Creado",Toast.LENGTH_SHORT).show();
                 }
-
             }
 
             @Override
-            public void onFailure(Call<Status> call, Throwable t) {
+            public void onFailure(Call<SaleResponse> call, Throwable t) {
 
             }
         });

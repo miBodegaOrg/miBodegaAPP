@@ -1,16 +1,14 @@
 package com.mibodega.mystore.models.common;
 
-public class ProductSale {
+public class ProductSaleV2 {
     private String code;
     private int quantity;
     private String name;
-    private Double price;
 
-    public ProductSale(String code, int quatity, String name, Double price) {
+    public ProductSaleV2(String code, int quantity, String name) {
         this.code = code;
-        this.quantity = quatity;
+        this.quantity = quantity;
         this.name = name;
-        this.price = price;
     }
 
     public String getCode() {
@@ -35,13 +33,5 @@ public class ProductSale {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
     }
 }
