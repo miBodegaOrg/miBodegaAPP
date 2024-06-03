@@ -3,7 +3,9 @@ package com.mibodega.mystore.views;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,14 +18,28 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.mibodega.mystore.R;
+import com.mibodega.mystore.models.Responses.CategoryResponse;
+import com.mibodega.mystore.models.Responses.PagesProductResponse;
+import com.mibodega.mystore.models.Responses.ProductResponse;
+import com.mibodega.mystore.services.ICategoryServices;
+import com.mibodega.mystore.services.IProductServices;
+import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProduct;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 
 public class HomeFragment extends Fragment {
 
+    private Config config = new Config();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,7 +85,38 @@ public class HomeFragment extends Fragment {
         xAxis.setValueFormatter(new IndexAxisValueFormatter(Arrays.asList("Ene", "Feb", "Mar","Abr","May","Jun"))); // Etiquetas del eje X
 
 
+        initProductsData(root);
         chart.invalidate();
         return root;
+    }
+    private void initProductsData(View root) {
+        Retrofit retrofit = new Retrofit.
+                Builder().
+                baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
+                build();
+
+        ICategoryServices service = retrofit.create(ICategoryServices.class);
+        Call<List<CategoryResponse>> call = service.getCategories("Bearer "+config.getJwt());
+        System.out.println(config.getJwt());
+        call.enqueue(new Callback<List<CategoryResponse>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<CategoryResponse>> call, @NonNull Response<List<CategoryResponse>> response) {
+                System.out.println(response.toString());
+                if(response.isSuccessful()){
+                    ArrayList<CategoryResponse> arr = (ArrayList<CategoryResponse>) response.body();
+                    if(arr!=null){
+                        config.setArrCategories(arr);
+                    }
+                    System.out.println("successfull request");
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<CategoryResponse>> call, @NonNull Throwable t) {
+                System.out.println("errror "+t.getMessage());
+            }
+        });
     }
 }

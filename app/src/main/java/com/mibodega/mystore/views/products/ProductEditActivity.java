@@ -28,6 +28,7 @@ import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -87,6 +88,7 @@ public class ProductEditActivity extends AppCompatActivity {
     private TextView tv_fileName;
     private ImageButton btnScanProduct;
     private Spinner getSp_category_product;
+    private Spinner getSp_subcategory_product;
 
     private Button btn_saveProduct;
     private Config config = new Config();
@@ -118,6 +120,8 @@ public class ProductEditActivity extends AppCompatActivity {
         txt_stock_product = findViewById(R.id.Edt_stock_product);
         txt_code_product = findViewById(R.id.Edt_productCode_product);
         getSp_category_product = findViewById(R.id.Sp_selectProductCategory_product);
+        getSp_subcategory_product = findViewById(R.id.Sp_selectProductSubCategory_product);
+
         btn_saveProduct = findViewById(R.id.Btn_saveProduct_product);
         tv_fileName = findViewById(R.id.Tv_productFileName_product);
         btnScanProduct = findViewById(R.id.Imgb_scanProductCode_product);
@@ -126,12 +130,18 @@ public class ProductEditActivity extends AppCompatActivity {
         tv_fileName.setText("");
         setDialogs(this);
 
-        String[] categories = {"BEBIDAS", "SNACKS", "GOLOSINAS", "COMIDA"};
+        String[] categories = {"Bebidas"};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         getSp_category_product.setAdapter(adapter);
+
+        String[] subcategories = {"Bebidas energizantes", "Gaseosas"};
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_spinner_item, subcategories);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        getSp_subcategory_product.setAdapter(adapter2);
+
 
         setupButtons();
         btn_saveProduct.setOnClickListener(new View.OnClickListener() {
@@ -244,6 +254,10 @@ public class ProductEditActivity extends AppCompatActivity {
 
         ArrayList<String> categoryList = new ArrayList<>();
         categoryList.add(getSp_category_product.getSelectedItem().toString());
+
+        String category = getSp_category_product.getSelectedItem().toString();
+        String subcategory = getSp_subcategory_product.getSelectedItem().toString();
+
         String code = txt_code_product.getText().toString();
         if(txt_code_product.getText().toString().equals("")){
             code = generateRandomNumber();
@@ -254,7 +268,8 @@ public class ProductEditActivity extends AppCompatActivity {
         requestMap.put("code", RequestBody.create(MediaType.parse("text/plain"), code));
         requestMap.put("price", RequestBody.create(MediaType.parse("text/plain"), txt_price_product.getText().toString()));
         requestMap.put("stock", RequestBody.create(MediaType.parse("text/plain"), txt_stock_product.getText().toString()));
-        requestMap.put("category", RequestBody.create(MediaType.parse("text/plain"), categoryList.toString()));
+        requestMap.put("category", RequestBody.create(MediaType.parse("text/plain"), category));
+        requestMap.put("subcategory", RequestBody.create(MediaType.parse("text/plain"), subcategory));
         requestMap.put("image\"; filename=\"" + "image", finalImageBody);
 
         Call<ProductResponse> call = service.createProduct(requestMap,"Bearer "+config.getJwt());
@@ -263,6 +278,7 @@ public class ProductEditActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<ProductResponse> call, @NonNull Response<ProductResponse> response) {
                 System.out.println(response.toString());
+
                 if(response.isSuccessful()){
 
                    // pagesProductResponse = response.body();
