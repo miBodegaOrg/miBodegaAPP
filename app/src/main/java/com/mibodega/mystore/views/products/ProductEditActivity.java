@@ -43,8 +43,10 @@ import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.ProductCreateRequest;
+import com.mibodega.mystore.models.Responses.CategoryResponse;
 import com.mibodega.mystore.models.Responses.GenerateCodeResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
+import com.mibodega.mystore.models.Responses.SubCategoryResponse;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.shared.Config;
 
@@ -59,6 +61,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 import okhttp3.MediaType;
@@ -136,17 +139,27 @@ public class ProductEditActivity extends AppCompatActivity {
         tv_fileName.setText("");
         setDialogs(this);
 
-        String[] categories = {"Bebidas"};
-
+        ArrayList<String> categories = new ArrayList<>();
+        for (CategoryResponse item : config.getArrCategories()){
+            categories.add(item.getName());
+        }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         getSp_category_product.setAdapter(adapter);
 
-        String[] subcategories = {"Bebidas energizantes", "Gaseosas"};
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_spinner_item, subcategories);
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        getSp_subcategory_product.setAdapter(adapter2);
+        getSp_category_product.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selected = getSp_category_product.getSelectedItem().toString();
+                setSelectSubCategories(selected);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
 
 
         setupButtons();
@@ -209,6 +222,20 @@ public class ProductEditActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void setSelectSubCategories(String category){
+        ArrayList<String> subcategories = new ArrayList<>();
+        for(CategoryResponse item : config.getArrCategories()){
+            if(Objects.equals(item.getName(), category)){
+                for (SubCategoryResponse subcategory : item.getSubcategories()){
+                    subcategories.add(subcategory.getName());
+                }
+            }
+        }
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_spinner_item, subcategories);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        getSp_subcategory_product.setAdapter(adapter2);
     }
 
     public void setDialogs(Context context){
