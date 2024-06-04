@@ -43,9 +43,13 @@ import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.ProductCreateRequest;
+import com.mibodega.mystore.models.Responses.GenerateCodeResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.shared.Config;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -86,7 +90,8 @@ public class ProductEditActivity extends AppCompatActivity {
 
     private Spinner sp_category_product;
     private TextView tv_fileName;
-    private ImageButton btnScanProduct;
+    private Button btnScanProduct;
+    private Button btnGenerateCode;
     private Spinner getSp_category_product;
     private Spinner getSp_subcategory_product;
 
@@ -124,7 +129,8 @@ public class ProductEditActivity extends AppCompatActivity {
 
         btn_saveProduct = findViewById(R.id.Btn_saveProduct_product);
         tv_fileName = findViewById(R.id.Tv_productFileName_product);
-        btnScanProduct = findViewById(R.id.Imgb_scanProductCode_product);
+        btnScanProduct = findViewById(R.id.Btn_scanProductCode_product);
+        btnGenerateCode = findViewById(R.id.Btn_generateProductCode_product);
 
 
         tv_fileName.setText("");
@@ -147,7 +153,11 @@ public class ProductEditActivity extends AppCompatActivity {
         btn_saveProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                postProductsData();
+                if(!txt_code_product.getText().toString().equals("")){
+                    postProductsData();
+                }else {
+                        Toast.makeText(getBaseContext(),"Genera el codigo del producto",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -165,7 +175,14 @@ public class ProductEditActivity extends AppCompatActivity {
         btnScanProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startBarcodeScanner();
+                    startBarcodeScanner();
+            }
+        });
+
+        btnGenerateCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                  generateCodeBars();
             }
         });
 
@@ -259,9 +276,6 @@ public class ProductEditActivity extends AppCompatActivity {
         String subcategory = getSp_subcategory_product.getSelectedItem().toString();
 
         String code = txt_code_product.getText().toString();
-        if(txt_code_product.getText().toString().equals("")){
-            code = generateRandomNumber();
-        }
 
         Map<String, RequestBody> requestMap = new HashMap<>();
         requestMap.put("name", RequestBody.create(MediaType.parse("text/plain"), txt_name_product.getText().toString()));
@@ -270,6 +284,7 @@ public class ProductEditActivity extends AppCompatActivity {
         requestMap.put("stock", RequestBody.create(MediaType.parse("text/plain"), txt_stock_product.getText().toString()));
         requestMap.put("category", RequestBody.create(MediaType.parse("text/plain"), category));
         requestMap.put("subcategory", RequestBody.create(MediaType.parse("text/plain"), subcategory));
+        requestMap.put("weight", RequestBody.create(MediaType.parse("text/plain"), "false"));
         requestMap.put("image\"; filename=\"" + "image", finalImageBody);
 
         Call<ProductResponse> call = service.createProduct(requestMap,"Bearer "+config.getJwt());
@@ -285,6 +300,17 @@ public class ProductEditActivity extends AppCompatActivity {
                     System.out.println("successfull request");
                     finish();
 
+                }else {
+                    try {
+                        String errorBody = response.errorBody().string();
+                        System.out.println("Error response body: " + errorBody);
+                        JSONObject errorJson = new JSONObject(errorBody);
+                        String errorMessage = errorJson.getString("message");
+                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
+
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
 
             }
@@ -294,6 +320,53 @@ public class ProductEditActivity extends AppCompatActivity {
                 System.out.println("errror "+t.getMessage());
             }
         });
+    }
+
+    public void generateCodeBars(){
+
+        Retrofit retrofit = new Retrofit.
+                Builder().
+                baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
+                build();
+
+        IProductServices service = retrofit.create(IProductServices.class);
+
+        Call<GenerateCodeResponse> call = service.generateCodeProduct("Bearer "+config.getJwt());
+        System.out.println(config.getJwt());
+        call.enqueue(new Callback<GenerateCodeResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<GenerateCodeResponse> call, @NonNull Response<GenerateCodeResponse> response) {
+                System.out.println(response.toString());
+
+                if (response.isSuccessful()) {
+
+                    GenerateCodeResponse code = response.body();
+                    if(code!=null){
+                        System.out.println(code.getCode());
+                        txt_code_product.setText(code.getCode());
+                    }
+                    System.out.println("successfull request");
+
+                } else {
+                    try {
+                        String errorBody = response.errorBody().string();
+                        System.out.println("Error response body: " + errorBody);
+                        JSONObject errorJson = new JSONObject(errorBody);
+                        String errorMessage = errorJson.getString("message");
+                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
+
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+            @Override
+            public void onFailure(@NonNull Call<GenerateCodeResponse> call, @NonNull Throwable t) {
+                System.out.println("errror " + t.getMessage());
+            }
+        });
+
     }
 
 

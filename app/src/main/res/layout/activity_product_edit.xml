@@ -154,15 +154,36 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
-                android:text="Agregar codigo de producto: *opcional"
+                android:text="Agregar codigo de producto:"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="94dp"
-                android:orientation="horizontal"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
                 android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/Btn_generateProductCode_product"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Generar" />
+
+                    <Button
+                        android:id="@+id/Btn_scanProductCode_product"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Escanear" />
+
+                </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
@@ -172,19 +193,9 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/Edt_productCode_product"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:editable="false" />
                 </com.google.android.material.textfield.TextInputLayout>
-
-                <ImageButton
-                    android:id="@+id/Imgb_scanProductCode_product"
-                    android:layout_width="match_parent"
-                    android:layout_height="54dp"
-                    android:layout_margin="2dp"
-                    android:layout_weight="2"
-                    android:background="@drawable/backgroun_custom_rectangle"
-                    android:backgroundTint="@color/md_theme_dark_inversePrimary"
-                    android:src="@drawable/baseline_camera_alt_24"
-                    app:tint="@color/white" />
 
             </LinearLayout>
 

@@ -2,6 +2,7 @@ package com.mibodega.mystore.services;
 
 import com.mibodega.mystore.models.Requests.ProductCreateRequest;
 import com.mibodega.mystore.models.Requests.RequestSignIn;
+import com.mibodega.mystore.models.Responses.GenerateCodeResponse;
 import com.mibodega.mystore.models.Responses.PagesProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.models.Responses.SignInResponse;
@@ -34,5 +35,11 @@ public interface IProductServices {
     @Multipart()
     @POST("products")
     Call<ProductResponse> createProduct(@PartMap Map<String, RequestBody> request, @Header("Authorization") String token );
+
+    @POST("products/generate-code")
+    Call<GenerateCodeResponse> generateCodeProduct(@Header("Authorization") String token );
+
+
+
 
 }
