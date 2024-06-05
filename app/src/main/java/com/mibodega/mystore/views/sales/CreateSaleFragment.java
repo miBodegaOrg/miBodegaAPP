@@ -1,5 +1,6 @@
 package com.mibodega.mystore.views.sales;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 
@@ -230,6 +231,10 @@ public class CreateSaleFragment extends Fragment {
                     Toast.makeText(getContext(),"Creado",Toast.LENGTH_SHORT).show();
                     saleTemporalList.cleanAll();
                     loadData();
+                    SaleResponse saleResponse = response.body();
+                    saleTemporalList.setSaleCurrent(saleResponse);
+                    Intent moveHMA = new Intent(getContext(), ValidateSaleActivity.class);
+                    startActivity(moveHMA);
                 } else {
                     Toast.makeText(getContext(),"no Creado",Toast.LENGTH_SHORT).show();
                 }

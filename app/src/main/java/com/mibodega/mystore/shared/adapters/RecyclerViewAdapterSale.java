@@ -139,7 +139,7 @@ public class RecyclerViewAdapterSale extends RecyclerView.Adapter<RecyclerViewAd
 
         Button btn_pay;
         Button btn_cancel;
-        ImageButton btn_details;
+        Button btn_details;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -151,7 +151,7 @@ public class RecyclerViewAdapterSale extends RecyclerView.Adapter<RecyclerViewAd
             total = itemView.findViewById(R.id.Tv_totalSale_item_sale);
             btn_pay = itemView.findViewById(R.id.Btn_paySale_item_sale);
             btn_cancel = itemView.findViewById(R.id.Btn_cancelSale_item_sale);
-            btn_details = itemView.findViewById(R.id.Imgb_showDetails_item_sale);
+            btn_details = itemView.findViewById(R.id.Btn_details_item_sale);
 
 
         }

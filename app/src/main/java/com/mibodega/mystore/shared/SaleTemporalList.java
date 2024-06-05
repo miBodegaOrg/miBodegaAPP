@@ -1,6 +1,7 @@
 package com.mibodega.mystore.shared;
 
 import com.mibodega.mystore.models.Responses.ProductResponse;
+import com.mibodega.mystore.models.Responses.SaleResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +11,16 @@ public class SaleTemporalList {
     private static ArrayList<ProductResponse> arrayList = new ArrayList<>();
     private static Map<String,Integer> mapAmountProduct = new HashMap<>();
     private static Double totalPrice;
+
+    private static SaleResponse saleCurrent=null;
+
+    public SaleResponse getSaleCurrent() {
+        return saleCurrent;
+    }
+
+    public void setSaleCurrent(SaleResponse saleCurrent) {
+        SaleTemporalList.saleCurrent = saleCurrent;
+    }
 
 
     public ArrayList<ProductResponse> getArrayList() {
