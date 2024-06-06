@@ -14,18 +14,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mibodega.mystore.MainNavigationActivity;
 import com.mibodega.mystore.R;
+import com.mibodega.mystore.models.Responses.CategoryResponse;
 import com.mibodega.mystore.models.Responses.PagesProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
+import com.mibodega.mystore.models.Responses.SubCategoryResponse;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProduct;
+import com.mibodega.mystore.shared.adapters.SubcategoryView;
 import com.mibodega.mystore.views.products.ProductEditActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,11 +50,17 @@ public class ProductsFragment extends Fragment {
 
     private GridLayoutManager glm;
     private ArrayList<ProductResponse> productlist = new ArrayList<>();
+    private ArrayList<String> arrayListCategoriesChecked = new ArrayList<>();
     private PagesProductResponse pagesProductResponse;
     private Config  config = new Config();
     private RecyclerView recyclerView;
-    private Button btnMoveToAddProduct;
+    private FloatingActionButton btnMoveToAddProduct;
+    private LinearLayout ly_categoriesContainer;
+    private MaterialCardView viewCategory;
+    private ImageButton btn_toggleCategory;
+    private int NUMBER_SIZE_PAGINATION=20;
 
+    private LinearLayout linearLayoutSubcategoryViews;
     private View _root;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,7 +72,10 @@ public class ProductsFragment extends Fragment {
         initProductsData(root);
 
         btnMoveToAddProduct = root.findViewById(R.id.Btn_addNewProduct_product);
-
+        ly_categoriesContainer = root.findViewById(R.id.Ly_categoriesCheckBox);
+        viewCategory = root.findViewById(R.id.mv_categories_product);
+        btn_toggleCategory = root.findViewById(R.id.Imgb_toggleCategory_product);
+        linearLayoutSubcategoryViews = root.findViewById(R.id.Ly_subcategoriesContainer);
         btnMoveToAddProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,9 +83,79 @@ public class ProductsFragment extends Fragment {
                 startActivity(moveHMA);
             }
         });
+
+        for (CategoryResponse category : config.getArrCategories()) {
+            CheckBox aux = new CheckBox(getContext());
+            aux.setText(category.getName());
+            aux.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        String selectedCategory = buttonView.getText().toString();
+
+                        CategoryResponse categoryResponse = null;
+                        for (CategoryResponse item : config.getArrCategories()){
+                            if(Objects.equals(item.getName(), selectedCategory)){
+                                categoryResponse = item;
+                            }
+                        }
+                        if(categoryResponse!=null){
+                            arrayListCategoriesChecked.add(selectedCategory);
+                            setNewSubCategory(categoryResponse.getSubcategories(),selectedCategory);
+                        }
+                        
+
+                    } else {
+                        String deselectedCategory = buttonView.getText().toString();
+                        arrayListCategoriesChecked.remove(deselectedCategory);
+                        removeSubCategoryCard(deselectedCategory);
+                    }
+                }
+            });
+            ly_categoriesContainer.addView(aux);
+        }
+
+        viewCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleSubcategories();
+            }
+        });
+
+
         return root;
     }
 
+    private void toggleSubcategories() {
+        if (ly_categoriesContainer.getVisibility() == View.VISIBLE) {
+            ly_categoriesContainer.setVisibility(View.GONE);
+            btn_toggleCategory.setImageResource(R.drawable.baseline_keyboard_arrow_down_24);
+        } else {
+            ly_categoriesContainer.setVisibility(View.VISIBLE);
+            btn_toggleCategory.setImageResource(R.drawable.baseline_keyboard_arrow_up_24);
+        }
+    }
+    public void setNewSubCategory(ArrayList<SubCategoryResponse> subCategory,String category){
+        SubcategoryView subcategoryViewFood = new SubcategoryView(getContext());
+        subcategoryViewFood.setTitle(category+" (Subcategoría)");
+
+        for (SubCategoryResponse item : subCategory){
+            subcategoryViewFood.addSubcategory(item.getName());
+        }
+        linearLayoutSubcategoryViews.addView(subcategoryViewFood);
+    }
+    public void removeSubCategoryCard(String category) {
+        for (int i = 0; i < linearLayoutSubcategoryViews.getChildCount(); i++) {
+            View view = linearLayoutSubcategoryViews.getChildAt(i);
+            if (view instanceof SubcategoryView) {
+                SubcategoryView subcategoryView = (SubcategoryView) view;
+                if (subcategoryView.getTitle().equals(category + " (Subcategoría)")) {
+                    linearLayoutSubcategoryViews.removeView(subcategoryView);
+                    break;
+                }
+            }
+        }
+    }
     private void initProductsData(View root) {
         Retrofit retrofit = new Retrofit.
                 Builder().
@@ -113,6 +203,23 @@ public class ProductsFragment extends Fragment {
         });
     }
 
+
+    private void searchProduct(){
+
+    }
+
+    private void searchProductWithDifferentCategories(){
+
+    }
+    private void searchProductWithDifferentCategoriesSubcategories(){
+
+    }
+    private void filterProductsCategory(){
+
+    }
+    private void filterProductsCategorySubcategories(){
+
+    }
 
     @Override
     public void onResume() {

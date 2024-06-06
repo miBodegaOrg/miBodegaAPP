@@ -173,8 +173,8 @@ public class RecyclerViewAdapterProduct extends RecyclerView.Adapter<RecyclerVie
         TextView buyPrice;
         TextView sellPrice;
 
-        Button btn_details;
-        Button btn_supplier;
+        MaterialButton btn_details;
+        MaterialButton btn_supplier;
 
         private OnSupplierItem onSupplierItem;
         private OnDetailItem onDetailItem;
