@@ -1,6 +1,7 @@
 package com.mibodega.mystore.shared;
 
 import com.mibodega.mystore.models.Responses.CategoryResponse;
+import com.mibodega.mystore.models.Responses.CategoryResponseWithProducts;
 
 import java.util.ArrayList;
 
@@ -11,6 +12,17 @@ public class Config {
     private static String URL_API ="http://34.168.45.44/api/v1/";
 
     private static ArrayList<CategoryResponse> arrCategories =  new ArrayList<>();
+
+    private static ArrayList<CategoryResponseWithProducts> arrCategoriesWithProducts =  new ArrayList<>();
+
+    public ArrayList<CategoryResponseWithProducts> getArrCategoriesWithProducts() {
+        return arrCategoriesWithProducts;
+    }
+
+    public void setArrCategoriesWithProducts(ArrayList<CategoryResponseWithProducts> arrCategoriesWithProducts) {
+        Config.arrCategoriesWithProducts = arrCategoriesWithProducts;
+    }
+
 
     public ArrayList<CategoryResponse> getArrCategories() {
         return arrCategories;

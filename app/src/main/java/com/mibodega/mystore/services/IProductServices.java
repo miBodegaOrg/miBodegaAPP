@@ -31,6 +31,15 @@ public interface IProductServices {
     @GET("products")
     Call<PagesProductResponse> getProductByName(@Query("search") String name, @Query("limit") int limit, @Header("Authorization") String token);
 
+    @GET("products")
+    Call<PagesProductResponse> getProductByCategorySubcategorySearch(
+            @Query(value = "search", encoded = true) String name,
+            @Query(value = "category", encoded = true) String category,
+            @Query(value = "subcategory", encoded = true) String subcategory,
+            @Query(value = "limit", encoded = true) int limit,
+            @Header("Authorization") String token);
+
+
 
     @Multipart()
     @POST("products")

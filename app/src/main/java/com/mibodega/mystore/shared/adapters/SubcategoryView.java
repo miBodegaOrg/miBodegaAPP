@@ -22,7 +22,13 @@ public class SubcategoryView extends LinearLayout {
     private MaterialCardView mv_card;
     private LinearLayout linearLayoutSubcategories;
 
+    private OnSubcategorySelectedListener subcategorySelectedListener;
+
     private List<String> selectedSubcategories = new ArrayList<>();
+
+    public void setOnSubcategorySelectedListener(OnSubcategorySelectedListener listener) {
+        subcategorySelectedListener = listener;
+    }
 
     public SubcategoryView(Context context) {
         super(context);
@@ -38,6 +44,8 @@ public class SubcategoryView extends LinearLayout {
         super(context, attrs, defStyleAttr);
         init(context);
     }
+
+
 
     private void init(Context context) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -74,6 +82,9 @@ public class SubcategoryView extends LinearLayout {
                 } else {
                     selectedSubcategories.remove(subcategory);
                 }
+                if (subcategorySelectedListener != null) {
+                    subcategorySelectedListener.onSubcategorySelected(subcategory, isChecked);
+                }
             }
         });
         linearLayoutSubcategories.addView(checkBoxSubcategory);
@@ -92,5 +103,9 @@ public class SubcategoryView extends LinearLayout {
             linearLayoutSubcategories.setVisibility(VISIBLE);
             imageButtonExpand.setImageResource(R.drawable.baseline_keyboard_arrow_up_24);
         }
+    }
+
+    public interface OnSubcategorySelectedListener {
+        void onSubcategorySelected(String subcategory, boolean isChecked);
     }
 }

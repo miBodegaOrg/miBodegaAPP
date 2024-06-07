@@ -19,6 +19,7 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.CategoryResponse;
+import com.mibodega.mystore.models.Responses.CategoryResponseWithProducts;
 import com.mibodega.mystore.models.Responses.PagesProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.services.ICategoryServices;
@@ -86,6 +87,7 @@ public class HomeFragment extends Fragment {
 
 
         initProductsData(root);
+        initCategoryData(root);
         chart.invalidate();
         return root;
     }
@@ -115,6 +117,36 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(@NonNull Call<List<CategoryResponse>> call, @NonNull Throwable t) {
+                System.out.println("errror "+t.getMessage());
+            }
+        });
+    }
+    private void initCategoryData(View root) {
+        Retrofit retrofit = new Retrofit.
+                Builder().
+                baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
+                build();
+
+        ICategoryServices service = retrofit.create(ICategoryServices.class);
+        Call<List<CategoryResponseWithProducts>> call = service.getCategoriesWithProducts("Bearer "+config.getJwt());
+        System.out.println(config.getJwt());
+        call.enqueue(new Callback<List<CategoryResponseWithProducts>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<CategoryResponseWithProducts>> call, @NonNull Response<List<CategoryResponseWithProducts>> response) {
+                System.out.println(response.toString());
+                if(response.isSuccessful()){
+                    ArrayList<CategoryResponseWithProducts> arr = (ArrayList<CategoryResponseWithProducts>) response.body();
+                    if(arr!=null){
+                        config.setArrCategoriesWithProducts(arr);
+                    }
+                    System.out.println("successfull request");
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<CategoryResponseWithProducts>> call, @NonNull Throwable t) {
                 System.out.println("errror "+t.getMessage());
             }
         });
