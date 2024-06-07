@@ -76,7 +76,8 @@ public class SalesListFragment extends Fragment {
 
                         //set arr products search list
 
-                        RecyclerViewAdapterSale listAdapter = new RecyclerViewAdapterSale(getContext(), arrSaleList, new RecyclerViewAdapterSale.OnDetailItem() {
+                        RecyclerViewAdapterSale listAdapter = new RecyclerViewAdapterSale(getContext(), arrSaleList,
+                                new RecyclerViewAdapterSale.OnDetailItem() {
                             @Override
                             public void onClick(SaleResponse sale) {
                                 Intent moveHMA = new Intent(getContext(), DetailSaleActivity.class);

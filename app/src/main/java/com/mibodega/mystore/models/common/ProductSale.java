@@ -2,11 +2,11 @@ package com.mibodega.mystore.models.common;
 
 public class ProductSale {
     private String code;
-    private int quantity;
+    private Double quantity;
     private String name;
     private Double price;
 
-    public ProductSale(String code, int quatity, String name, Double price) {
+    public ProductSale(String code, Double quatity, String name, Double price) {
         this.code = code;
         this.quantity = quatity;
         this.name = name;
@@ -21,11 +21,11 @@ public class ProductSale {
         this.code = code;
     }
 
-    public int getQuantity() {
+    public Double getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Double quantity) {
         this.quantity = quantity;
     }
 

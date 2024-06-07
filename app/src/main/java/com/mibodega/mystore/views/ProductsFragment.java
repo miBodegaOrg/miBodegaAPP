@@ -137,7 +137,7 @@ public class ProductsFragment extends Fragment {
     }
     public void setNewSubCategory(ArrayList<SubCategoryResponse> subCategory,String category){
         SubcategoryView subcategoryViewFood = new SubcategoryView(getContext());
-        subcategoryViewFood.setTitle(category+" (Subcategoría)");
+        subcategoryViewFood.setTitle(category+" (Subcategorías)");
 
         for (SubCategoryResponse item : subCategory){
             subcategoryViewFood.addSubcategory(item.getName());
@@ -149,7 +149,7 @@ public class ProductsFragment extends Fragment {
             View view = linearLayoutSubcategoryViews.getChildAt(i);
             if (view instanceof SubcategoryView) {
                 SubcategoryView subcategoryView = (SubcategoryView) view;
-                if (subcategoryView.getTitle().equals(category + " (Subcategoría)")) {
+                if (subcategoryView.getTitle().equals(category + " (Subcategorías)")) {
                     linearLayoutSubcategoryViews.removeView(subcategoryView);
                     break;
                 }
