@@ -24,6 +24,7 @@ import com.mibodega.mystore.views.DashboardsFragment;
 import com.mibodega.mystore.views.HomeFragment;
 import com.mibodega.mystore.views.ProductsFragment;
 import com.mibodega.mystore.views.ProfileFragment;
+import com.mibodega.mystore.views.chatbot.ChatListActivity;
 import com.mibodega.mystore.views.products.ProductEditActivity;
 import com.mibodega.mystore.views.sales.SaleProductsActivity;
 
@@ -103,7 +104,8 @@ public class MainNavigationActivity extends AppCompatActivity {
         binding.FabtnMoveChatBot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent moveHMA = new Intent(getBaseContext(), ChatListActivity.class);
+                startActivity(moveHMA);
             }
         });
 
