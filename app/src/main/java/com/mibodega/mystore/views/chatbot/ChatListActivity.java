@@ -60,7 +60,11 @@ public class ChatListActivity extends AppCompatActivity {
         btn_newChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Bundle enviarDatos = new Bundle();
+                enviarDatos.putString("ChatID","");
+                Intent move = new Intent(getApplicationContext(), ChatbotActivity.class);
+                move.putExtras(enviarDatos);
+                startActivity(move);
             }
         });
 
@@ -127,5 +131,17 @@ public class ChatListActivity extends AppCompatActivity {
                 System.out.println("errror "+t.getMessage());
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadChats();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

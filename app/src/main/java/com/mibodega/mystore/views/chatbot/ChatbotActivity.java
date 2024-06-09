@@ -23,6 +23,7 @@ import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterChat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -58,7 +59,12 @@ public class ChatbotActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(messageAdapter);
 
-        loadMessages(chatID);
+        if(!Objects.equals(chatID, "")){
+            loadMessages(chatID);
+        }else{
+            loadCreateChat();
+        }
+
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,6 +115,38 @@ public class ChatbotActivity extends AppCompatActivity {
             }
         });
     }
+    public void loadCreateChat(){
+        Retrofit retrofit = new Retrofit.
+                Builder().
+                baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
+                build();
+
+        IChatServices service = retrofit.create(IChatServices.class);
+        RequestMessage message = new RequestMessage("soy un bodeguero, quiero hacer consultas sobre gestion y deseo que  respondas de forma concreta");
+        Call<MessageResponseGpt> call = service.createContextCreateChat(message,"Bearer "+config.getJwt());
+        System.out.println(config.getJwt());
+        call.enqueue(new Callback<MessageResponseGpt>() {
+            @Override
+            public void onResponse(@NonNull Call<MessageResponseGpt> call, @NonNull Response<MessageResponseGpt> response) {
+                System.out.println(response.toString());
+                if(response.isSuccessful()){
+                    MessageResponseGpt messageRptContext =response.body();
+                    if(messageRptContext!=null){
+                        recyclerView.removeAllViews();
+                        chatID = messageRptContext.get_id();
+                        loadMessages(messageRptContext.get_id());
+                    }
+                    System.out.println("successfull request");
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<MessageResponseGpt> call, @NonNull Throwable t) {
+                System.out.println("errror "+t.getMessage());
+            }
+        });
+    }
     public void askChatGPT(String id, String msg){
         Retrofit retrofit = new Retrofit.
                 Builder().
@@ -144,6 +182,15 @@ public class ChatbotActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }
