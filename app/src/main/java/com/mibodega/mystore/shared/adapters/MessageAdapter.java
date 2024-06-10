@@ -38,7 +38,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         if (Objects.equals(message.getRole(), "user")) {
             layoutParams.gravity = Gravity.END;
-            holder.textViewMessage.setBackgroundResource(R.drawable.bg_message);
+            holder.textViewMessage.setBackgroundResource(R.drawable.bg_message_me);
         } else {
             layoutParams.gravity = Gravity.START;
             holder.textViewMessage.setBackgroundResource(R.drawable.bg_message);
