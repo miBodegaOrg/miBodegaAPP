@@ -37,6 +37,39 @@
         android:theme="@style/Theme.MyStore"
         tools:targetApi="31">
         <activity
+            android:name=".views.dashboards.PredictionDataActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.dashboards.PerformanceDataActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.dashboards.InventoryDataActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.dashboards.BuyingDataActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.dashboards.RentabilityDataActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.dashboards.SalesDataActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.employers.ManageSupplierActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.employers.ProfileEmployeeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.supplier.AdminSupplierProductsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.supplier.SupplierDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.supplier.SupplierRegisterActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.chatbot.ChatbotActivity"
             android:exported="false" />
         <activity

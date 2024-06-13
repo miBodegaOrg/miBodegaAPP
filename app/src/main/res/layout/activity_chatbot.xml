@@ -48,7 +48,8 @@
             android:layout_weight="1"
             android:hint="Escribe un mensaje"
             android:inputType="text"
-            android:maxLines="1" />
+            android:maxLines="1"
+            android:textCursorDrawable="@drawable/backgroun_custom_rectangle" />
 
         <Button
             android:id="@+id/buttonSend"

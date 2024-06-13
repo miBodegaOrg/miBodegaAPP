@@ -5,15 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".views.supplier.SupplierActivity">
+    tools:context=".views.supplier.AdminSupplierProductsActivity">
 
     <TextView
-        android:id="@+id/textView22"
+        android:id="@+id/textView29"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Proveedores"
+        android:padding="15dp"
+        android:text="Gestion de productos proveedor"
         android:textAlignment="center"
-        android:textSize="34sp" />
+        android:textSize="20sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -43,26 +44,23 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/Btn_addNewSupplier_supplier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="5dp"
-            android:src="@drawable/baseline_add_24"
-            app:backgroundTint="?attr/colorPrimary"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:tint="@color/white" />
-
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/Rv_supplierList_supplier"
+        android:id="@+id/Rv_productList_supplier"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp" />
+        android:layout_height="wrap_content">
 
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/textView30"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Productos de proveedor:" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/Rv_productSuppliers_supplier"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>
