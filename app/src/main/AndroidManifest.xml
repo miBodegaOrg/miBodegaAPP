@@ -55,7 +55,7 @@
             android:name=".views.dashboards.SalesDataActivity"
             android:exported="false" />
         <activity
-            android:name=".views.employers.ManageSupplierActivity"
+            android:name=".views.employers.ManageEmployerActivity"
             android:exported="false" />
         <activity
             android:name=".views.employers.ProfileEmployeeActivity"
