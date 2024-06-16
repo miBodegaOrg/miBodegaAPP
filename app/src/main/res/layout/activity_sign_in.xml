@@ -55,7 +55,7 @@
                 android:layout_alignBottom="@+id/Imv_bannerSignIn"
                 android:layout_marginBottom="5dp"
                 android:gravity="center"
-                android:text="Welcome Back!"
+                android:text="Bienvenido"
                 android:textColor="@color/md_theme_light_onPrimary"
                 android:textSize="24dp"
                 android:textStyle="bold" />
@@ -123,7 +123,7 @@
                 android:layout_marginTop="17dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="19dp"
-                android:text="Login"
+                android:text="Iniciar sesion"
                 android:textAllCaps="true"
                 android:textSize="16dp"
                 android:textStyle="bold" />

@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.shared.Config;
@@ -82,12 +83,14 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
             ProductResponse product = productList.get(position);
 
 
-            Glide.with(context).
-                    asBitmap().
-                    load(product.getImage_url()).
-                    error(R.drawable.no_photo).
-                    override(convertDpToPixel(150, context), convertDpToPixel(100, context)).
-                    into(holder.image);
+            Glide.with(context)
+                    .asBitmap()
+                    .load(product.getImage_url())
+                    .error(R.drawable.no_photo)
+                    .override(convertDpToPixel(150, context), convertDpToPixel(100, context))
+                    .centerCrop()
+                    .transform(new RoundedCorners(20))
+                    .into(holder.image);
 
             holder.productDescription.setText(product.getName());
             holder.productStock.setText(String.valueOf(product.getStock()));

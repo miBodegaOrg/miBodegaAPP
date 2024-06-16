@@ -24,9 +24,12 @@ import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.RequestCreateSale;
+import com.mibodega.mystore.models.Responses.CategoryProduct;
 import com.mibodega.mystore.models.Responses.PagesProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
+import com.mibodega.mystore.models.Responses.ProductResponseByCode;
 import com.mibodega.mystore.models.Responses.SaleResponse;
+import com.mibodega.mystore.models.Responses.SubCategoryResponse;
 import com.mibodega.mystore.models.common.ProductSaleV2;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.services.ISaleServices;
@@ -139,16 +142,33 @@ public class CreateSaleFragment extends Fragment {
                 build();
 
         IProductServices service = retrofit.create(IProductServices.class);
-        Call<ProductResponse> call = service.getProductByCode(code,"Bearer "+config.getJwt());
+        Call<ProductResponseByCode> call = service.getProductByCode(code,"Bearer "+config.getJwt());
         System.out.println(config.getJwt());
-        call.enqueue(new Callback<ProductResponse>() {
+        call.enqueue(new Callback<ProductResponseByCode>() {
             @Override
-            public void onResponse(@NonNull Call<ProductResponse> call, @NonNull Response<ProductResponse> response) {
+            public void onResponse(@NonNull Call<ProductResponseByCode> call, @NonNull Response<ProductResponseByCode> response) {
                 System.out.println(response.toString());
                 if(response.isSuccessful()){
-                    ProductResponse product = response.body();
+                    ProductResponseByCode product = response.body();
+                    CategoryProduct categoryProduct = new CategoryProduct(product.getCategory(),"");
+                    SubCategoryResponse subCategoryResponse = new SubCategoryResponse(product.getSubcategory(),"");
                     if(product!=null){
-                        saleTemporalList.addProduct(product,1);
+                        ProductResponse productResponse = new ProductResponse(
+                                product.get_id(),
+                                product.getName(),
+                                product.getCode(),
+                                product.getPrice(),
+                                product.getStock(),
+                                product.getImage_url(),
+                                product.getSales(),
+                                false,
+                                categoryProduct,
+                                subCategoryResponse,
+                                product.getShop(),
+                                product.getCreatedAt(),
+                                product.getUpdatedAt()
+                                );
+                        saleTemporalList.addProduct(productResponse,1);
                         loadData();
                     }
                     System.out.println("successfull request");
@@ -157,7 +177,7 @@ public class CreateSaleFragment extends Fragment {
                 }
             }
             @Override
-            public void onFailure(@NonNull Call<ProductResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<ProductResponseByCode> call, @NonNull Throwable t) {
                 System.out.println("errror "+t.getMessage());
             }
         });
@@ -213,7 +233,7 @@ public class CreateSaleFragment extends Fragment {
         ArrayList<ProductSaleV2> arraux = new ArrayList<>();
 
         for (ProductResponse product : saleTemporalList.getArrayList()){
-            arraux.add(new ProductSaleV2(product.getCode(),1, ""));
+            arraux.add(new ProductSaleV2(product.getCode(),1, product.getName()));
         }
         RequestCreateSale requestCreateSale = new RequestCreateSale(arraux);
 

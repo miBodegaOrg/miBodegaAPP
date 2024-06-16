@@ -15,6 +15,8 @@ import com.mibodega.mystore.services.ISaleServices;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.SaleTemporalList;
 
+import java.text.DecimalFormat;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,10 +42,13 @@ public class ValidateSaleActivity extends AppCompatActivity {
         btn_cancelSale = findViewById(R.id.Btn_cancelSaleDetail);
         btn_backSale  = findViewById(R.id.Btn_backSaleDetail);
 
-        totalSale.setText("S/ "+String.valueOf(saleTemporalList.getSaleCurrent().getTotal()));
-        subtotalSale.setText("S/ "+String.valueOf(saleTemporalList.getSaleCurrent().getSubtotal()));
-        discountSale.setText("S/ "+String.valueOf(saleTemporalList.getSaleCurrent().getDiscount()));
-        igvSale.setText("S/ "+String.valueOf(saleTemporalList.getSaleCurrent().getIgv()));
+
+        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+
+        totalSale.setText("S/ " + decimalFormat.format(saleTemporalList.getSaleCurrent().getTotal()));
+        subtotalSale.setText("S/ " + decimalFormat.format(saleTemporalList.getSaleCurrent().getSubtotal()));
+        discountSale.setText("S/ " + decimalFormat.format(saleTemporalList.getSaleCurrent().getDiscount()));
+        igvSale.setText("S/ " + decimalFormat.format(saleTemporalList.getSaleCurrent().getIgv()));
 
 
         btn_paidSale.setOnClickListener(new View.OnClickListener() {

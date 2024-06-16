@@ -304,6 +304,8 @@ public class ProductEditActivity extends AppCompatActivity {
 
         String code = txt_code_product.getText().toString();
 
+        System.out.println(category);
+        System.out.println(subcategory);
         Map<String, RequestBody> requestMap = new HashMap<>();
         requestMap.put("name", RequestBody.create(MediaType.parse("text/plain"), txt_name_product.getText().toString()));
         requestMap.put("code", RequestBody.create(MediaType.parse("text/plain"), code));
@@ -313,6 +315,8 @@ public class ProductEditActivity extends AppCompatActivity {
         requestMap.put("subcategory", RequestBody.create(MediaType.parse("text/plain"), subcategory));
         requestMap.put("weight", RequestBody.create(MediaType.parse("text/plain"), "false"));
         requestMap.put("image\"; filename=\"" + "image", finalImageBody);
+
+
 
         Call<ProductResponse> call = service.createProduct(requestMap,"Bearer "+config.getJwt());
         System.out.println(config.getJwt());
@@ -326,25 +330,29 @@ public class ProductEditActivity extends AppCompatActivity {
                    // pagesProductResponse = response.body();
                     System.out.println("successfull request");
                     finish();
-
                 }else {
+                    System.out.println("error de respuesta");
                     try {
                         String errorBody = response.errorBody().string();
                         System.out.println("Error response body: " + errorBody);
                         JSONObject errorJson = new JSONObject(errorBody);
                         String errorMessage = errorJson.getString("message");
                         Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                        System.out.println(errorMessage);
 
                     } catch (IOException | JSONException e) {
                         e.printStackTrace();
                     }
+                    finish();
                 }
 
             }
 
             @Override
             public void onFailure(@NonNull Call<ProductResponse> call, @NonNull Throwable t) {
+                System.out.println("error de servidor");
                 System.out.println("errror "+t.getMessage());
+
             }
         });
     }

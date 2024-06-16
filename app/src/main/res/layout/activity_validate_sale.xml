@@ -60,10 +60,9 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/poppins_regular"
                     android:paddingLeft="40dp"
-                    android:paddingRight="30dp"
                     android:text="Subtotal:"
                     android:textAlignment="viewStart"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/Tv_subTotalSaleDetail"
@@ -74,7 +73,7 @@
                     android:paddingLeft="30dp"
                     android:text="S/ 30.45"
                     android:textAlignment="viewStart"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -91,7 +90,7 @@
                     android:paddingLeft="40dp"
                     android:text="Descuento:"
                     android:textAlignment="viewStart"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/Tv_discountSaleDetail"
@@ -102,7 +101,7 @@
                     android:paddingLeft="30dp"
                     android:text="S/ 0.00"
                     android:textAlignment="viewStart"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -119,7 +118,7 @@
                     android:paddingLeft="40dp"
                     android:text="IGV (18%): "
                     android:textAlignment="viewStart"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/Tv_igvSaleDetail"
@@ -130,7 +129,7 @@
                     android:paddingLeft="30dp"
                     android:text="S/ 5.00"
                     android:textAlignment="viewStart"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
 

@@ -5,6 +5,7 @@ import com.mibodega.mystore.models.Requests.RequestSignIn;
 import com.mibodega.mystore.models.Responses.GenerateCodeResponse;
 import com.mibodega.mystore.models.Responses.PagesProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
+import com.mibodega.mystore.models.Responses.ProductResponseByCode;
 import com.mibodega.mystore.models.Responses.SignInResponse;
 import com.mibodega.mystore.shared.Config;
 
@@ -27,7 +28,7 @@ public interface IProductServices {
     @GET("products")
     Call<PagesProductResponse> getProducts(@Header("Authorization") String token);
     @GET("products/{code}")
-    Call<ProductResponse> getProductByCode(@Path("code") String code,@Header("Authorization") String token);
+    Call<ProductResponseByCode> getProductByCode(@Path("code") String code, @Header("Authorization") String token);
     @GET("products")
     Call<PagesProductResponse> getProductByName(@Query("search") String name, @Query("limit") int limit, @Header("Authorization") String token);
 

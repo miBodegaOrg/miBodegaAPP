@@ -1,5 +1,6 @@
 package com.mibodega.mystore.views;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -26,6 +28,8 @@ import com.mibodega.mystore.services.ICategoryServices;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProduct;
+import com.mibodega.mystore.views.employers.EmployerActivity;
+import com.mibodega.mystore.views.supplier.SupplierActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,11 +45,29 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class HomeFragment extends Fragment {
 
     private Config config = new Config();
+    private Button btn_employe,btn_supplier;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root =  inflater.inflate(R.layout.fragment_home, container, false);
+        btn_employe = root.findViewById(R.id.Btn_manageEmployes_home);
+        btn_supplier = root.findViewById(R.id.Btn_manageSupplier_home);
+
+        btn_employe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent me = new Intent(getContext(),EmployerActivity.class);
+                startActivity(me);
+            }
+        });
+        btn_supplier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent su = new Intent(getContext(), SupplierActivity.class);
+                startActivity(su);
+            }
+        });
 
         BarChart chart = root.findViewById(R.id.chart);
 
