@@ -48,7 +48,7 @@ public class SignInActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(edt_user.getText().toString().length()>5){
                     String user = edt_user.getText().toString();
-                    String pass = utils.encryptSHA256(edt_password.getText().toString());
+                    String pass = edt_password.getText().toString();
                     postData(user,pass);
                 }
             }

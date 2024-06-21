@@ -1,6 +1,7 @@
 package com.mibodega.mystore;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.view.MenuItem;
@@ -23,6 +24,9 @@ import com.mibodega.mystore.views.DashboardsFragment;
 import com.mibodega.mystore.views.HomeFragment;
 import com.mibodega.mystore.views.ProductsFragment;
 import com.mibodega.mystore.views.ProfileFragment;
+import com.mibodega.mystore.views.chatbot.ChatListActivity;
+import com.mibodega.mystore.views.products.ProductEditActivity;
+import com.mibodega.mystore.views.sales.SaleProductsActivity;
 
 
 public class MainNavigationActivity extends AppCompatActivity {
@@ -92,14 +96,16 @@ public class MainNavigationActivity extends AppCompatActivity {
         binding.FabtnMoveSaleProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent moveHMA = new Intent(getBaseContext(), SaleProductsActivity.class);
+                startActivity(moveHMA);
             }
         });
 
         binding.FabtnMoveChatBot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent moveHMA = new Intent(getBaseContext(), ChatListActivity.class);
+                startActivity(moveHMA);
             }
         });
 

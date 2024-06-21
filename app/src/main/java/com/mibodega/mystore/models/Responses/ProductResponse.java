@@ -10,24 +10,29 @@ public class ProductResponse {
     private double price;
     private int stock;
     private String image_url;
+    private int sales;
+    private boolean weight;
+    private CategoryProduct category;
+    private SubCategoryResponse subcategory;
     private String shop;
     private String createdAt;
     private String updatedAt;
     private int __v;
-    private ArrayList<String> category;
 
-    public ProductResponse(String _id, String name, String code, double price, int stock, String image_url, String shop, String createdAt, String updatedAt, int __v, ArrayList<String> category) {
+    public ProductResponse(String _id, String name, String code, double price, int stock, String image_url, int sales, boolean weight, CategoryProduct category, SubCategoryResponse subcategory, String shop, String createdAt, String updatedAt) {
         this._id = _id;
         this.name = name;
         this.code = code;
         this.price = price;
         this.stock = stock;
         this.image_url = image_url;
+        this.sales = sales;
+        this.weight = weight;
+        this.category = category;
+        this.subcategory = subcategory;
         this.shop = shop;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.__v = __v;
-        this.category = category;
     }
 
     public String get_id() {
@@ -78,6 +83,38 @@ public class ProductResponse {
         this.image_url = image_url;
     }
 
+    public int getSales() {
+        return sales;
+    }
+
+    public void setSales(int sales) {
+        this.sales = sales;
+    }
+
+    public boolean isWeight() {
+        return weight;
+    }
+
+    public void setWeight(boolean weight) {
+        this.weight = weight;
+    }
+
+    public CategoryProduct getCategory() {
+        return category;
+    }
+
+    public void setCategory(CategoryProduct category) {
+        this.category = category;
+    }
+
+    public SubCategoryResponse getSubcategory() {
+        return subcategory;
+    }
+
+    public void setSubcategory(SubCategoryResponse subcategory) {
+        this.subcategory = subcategory;
+    }
+
     public String getShop() {
         return shop;
     }
@@ -100,21 +137,5 @@ public class ProductResponse {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public int get__v() {
-        return __v;
-    }
-
-    public void set__v(int __v) {
-        this.__v = __v;
-    }
-
-    public ArrayList<String> getCategory() {
-        return category;
-    }
-
-    public void setCategory(ArrayList<String> category) {
-        this.category = category;
     }
 }

@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
@@ -123,12 +124,14 @@ public class RecyclerViewAdapterProduct extends RecyclerView.Adapter<RecyclerVie
         holder.buyPrice.setText("s/ " +String.valueOf(product.getPrice()));
         holder.sellPrice.setText("s/ " +String.valueOf(product.getPrice()));
 
-        Glide.with(context).
-                asBitmap().
-                load(product.getImage_url()).
-                error(R.drawable.no_photo).
-                override(convertDpToPixel(150, context), convertDpToPixel(100, context)).
-                into(holder.image);
+        Glide.with(context)
+                .asBitmap()
+                .load(product.getImage_url())
+                .error(R.drawable.no_photo)
+                .override(convertDpToPixel(150, context), convertDpToPixel(100, context))
+                .centerCrop()
+                .transform(new RoundedCorners(20))
+                .into(holder.image);
 
 
         holder.btn_details.setOnClickListener(new View.OnClickListener() {
@@ -170,8 +173,8 @@ public class RecyclerViewAdapterProduct extends RecyclerView.Adapter<RecyclerVie
         TextView buyPrice;
         TextView sellPrice;
 
-        Button btn_details;
-        Button btn_supplier;
+        MaterialButton btn_details;
+        MaterialButton btn_supplier;
 
         private OnSupplierItem onSupplierItem;
         private OnDetailItem onDetailItem;

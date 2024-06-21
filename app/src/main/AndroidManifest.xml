@@ -37,6 +37,66 @@
         android:theme="@style/Theme.MyStore"
         tools:targetApi="31">
         <activity
+            android:name=".views.selling.SellingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.dashboards.PredictionDataActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.dashboards.PerformanceDataActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.dashboards.InventoryDataActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.dashboards.BuyingDataActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.dashboards.RentabilityDataActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.dashboards.SalesDataActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.employers.ManageEmployerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.employers.ProfileEmployeeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.supplier.AdminSupplierProductsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.supplier.SupplierDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.supplier.SupplierRegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.chatbot.ChatbotActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.chatbot.ChatListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.supplier.SupplierActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.employers.EmployerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.products.ProductSupplierActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.products.ProductDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.sales.ValidateSaleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.sales.DetailSaleActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.sales.SaleProductsActivity"
             android:exported="false" />
         <activity
