@@ -14,15 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.card.MaterialCardView;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.ChatResponse;
-import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.Utils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 public class RecyclerViewAdapterChat extends RecyclerView.Adapter<RecyclerViewAdapterChat.ViewHolder> implements View.OnClickListener {
     private Utils utils = new Utils();
@@ -71,7 +66,7 @@ public class RecyclerViewAdapterChat extends RecyclerView.Adapter<RecyclerViewAd
         String formattedDate = utils.convertDateToClearFormat(chat.getCreatedAt().toString());
         holder.chatTitle.setText("Bodegas Consulta");
         holder.chatDate.setText(formattedDate);
-        holder.lastMessage.setText(chat.getMessages().get(0).getContent());
+        holder.lastMessage.setText(chat.getMessages().get(0).getText());
 
         holder.mv_item_card.setOnClickListener(new View.OnClickListener() {
             @Override

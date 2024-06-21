@@ -39,6 +39,10 @@ import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSale;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSearch;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -231,9 +235,9 @@ public class CreateSaleFragment extends Fragment {
 
     public void createSale(){
         ArrayList<ProductSaleV2> arraux = new ArrayList<>();
-
         for (ProductResponse product : saleTemporalList.getArrayList()){
-            arraux.add(new ProductSaleV2(product.getCode(),1, product.getName()));
+
+            arraux.add(new ProductSaleV2(product.getCode(),1));
         }
         RequestCreateSale requestCreateSale = new RequestCreateSale(arraux);
 
@@ -256,6 +260,17 @@ public class CreateSaleFragment extends Fragment {
                     Intent moveHMA = new Intent(getContext(), ValidateSaleActivity.class);
                     startActivity(moveHMA);
                 } else {
+                    try {
+                        String errorBody = response.errorBody().string();
+                        System.out.println("Error response body: " + errorBody);
+                        JSONObject errorJson = new JSONObject(errorBody);
+                        String errorMessage = errorJson.getString("message");
+                        Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                        System.out.println(errorMessage);
+
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
                     Toast.makeText(getContext(),"no Creado",Toast.LENGTH_SHORT).show();
                 }
             }

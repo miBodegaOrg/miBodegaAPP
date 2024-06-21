@@ -24,7 +24,9 @@ import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterChat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -116,10 +118,14 @@ public class ChatbotActivity extends AppCompatActivity {
         });
     }
     public void loadCreateChat(){
-        Retrofit retrofit = new Retrofit.
-                Builder().
-                baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
-                build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(config.getURL_API())
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(new OkHttpClient.Builder()
+                        .connectTimeout(30, TimeUnit.SECONDS) // Tiempo de conexión
+                        .readTimeout(30, TimeUnit.SECONDS) // Tiempo de lectura
+                        .build())
+                .build();
 
         IChatServices service = retrofit.create(IChatServices.class);
         RequestMessage message = new RequestMessage("soy un bodeguero, quiero hacer consultas sobre gestion y deseo que  respondas de forma concreta");
@@ -148,11 +154,14 @@ public class ChatbotActivity extends AppCompatActivity {
         });
     }
     public void askChatGPT(String id, String msg){
-        Retrofit retrofit = new Retrofit.
-                Builder().
-                baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
-                build();
-
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(config.getURL_API())
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(new OkHttpClient.Builder()
+                        .connectTimeout(30, TimeUnit.SECONDS) // Tiempo de conexión
+                        .readTimeout(30, TimeUnit.SECONDS) // Tiempo de lectura
+                        .build())
+                .build();
         IChatServices service = retrofit.create(IChatServices.class);
         RequestMessage message = new RequestMessage(msg);
         Call<MessageResponseGpt> call = service.requestQuestionGPT(id,message,"Bearer "+config.getJwt());

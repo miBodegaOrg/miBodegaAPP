@@ -2,11 +2,11 @@ package com.mibodega.mystore.models.Responses;
 
 public class MessageResponse {
     private String role;
-    private String content;
+    private String text;
 
-    public MessageResponse(String role, String content) {
+    public MessageResponse(String role, String text) {
         this.role = role;
-        this.content = content;
+        this.text = text;
     }
 
     public String getRole() {
@@ -17,11 +17,11 @@ public class MessageResponse {
         this.role = role;
     }
 
-    public String getContent() {
-        return content;
+    public String getText() {
+        return text;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setText(String text) {
+        this.text = text;
     }
 }

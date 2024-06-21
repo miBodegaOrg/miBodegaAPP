@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="@drawable/backgroun_custom_rectangle"
+    android:orientation="vertical">
+
+
+    <ImageButton
+        android:id="@+id/Imgb_custom_closeDialog"
+        android:layout_width="40dp"
+        android:layout_height="36dp"
+        android:layout_gravity="end"
+        android:layout_weight="1"
+        android:background="@drawable/backgroun_custom_rectangle"
+        android:src="@drawable/baseline_close_24" />
+
+    <ImageView
+        android:id="@+id/Imgv_icon_dialog"
+        android:layout_width="150dp"
+        android:layout_height="132dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:tint="@color/toast_success"
+        app:srcCompat="@drawable/baseline_check_24" />
+
+    <TextView
+        android:id="@+id/Tv_accion_custom_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Success"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/Tv_message_custom_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Congratulations! you have successfully create a custom dialog."
+        android:textAlignment="center" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            android:layout_weight="1"
+            android:background="@drawable/borde"
+            android:stateListAnimator="@null"
+            android:text="Cancelar"
+            android:textAllCaps="false"
+            android:textColor="@color/md_theme_dark_inversePrimary" />
+
+        <Button
+            android:id="@+id/btn_accept"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_weight="1"
+            android:background="@drawable/backgroun_custom_rectangle"
+            android:stateListAnimator="@null"
+            android:text="Aceptar"
+            android:textAllCaps="false"
+            android:textColor="@android:color/background_light" />
+    </LinearLayout>
+</LinearLayout>

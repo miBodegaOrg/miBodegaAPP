@@ -1,5 +1,6 @@
 package com.mibodega.mystore.shared.adapters;
 
+import android.graphics.Color;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,13 +33,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     @Override
     public void onBindViewHolder(MessageViewHolder holder, int position) {
         MessageResponse message = messageList.get(position);
-        holder.textViewMessage.setText(message.getContent());
+        holder.textViewMessage.setText(message.getText());
 
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) holder.textViewMessage.getLayoutParams();
 
         if (Objects.equals(message.getRole(), "user")) {
             layoutParams.gravity = Gravity.END;
             holder.textViewMessage.setBackgroundResource(R.drawable.bg_message_me);
+            holder.textViewMessage.setTextColor(Color.WHITE);
+
         } else {
             layoutParams.gravity = Gravity.START;
             holder.textViewMessage.setBackgroundResource(R.drawable.bg_message);
