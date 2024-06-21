@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:background="@color/md_theme_dark_onTertiary"
+        android:background="@color/md_theme_dark_inversePrimary"
         android:minHeight="?attr/actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +32,29 @@
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topAppBar" />
+        app:layout_constraintTop_toBottomOf="@+id/topAppBar" >
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/Fabtn_moveChatBot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="70dp"
+            android:clickable="true"
+            android:src="@drawable/ic_chat_ia"
+            app:fabSize="auto" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/Fabtn_moveSaleProduct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
+            android:clickable="true"
+            android:src="@drawable/ic_new_sale" />
+    </FrameLayout>
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -42,6 +64,9 @@
         android:layout_gravity="bottom"
         android:background="@android:color/transparent"
         app:itemIconSize="36dp"
+
+        app:itemIconTint="@color/md_theme_dark_inversePrimary"
+        app:itemTextColor="@color/black"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

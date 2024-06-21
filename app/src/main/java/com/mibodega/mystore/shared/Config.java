@@ -1,20 +1,44 @@
 package com.mibodega.mystore.shared;
 
+import com.mibodega.mystore.models.Responses.CategoryResponse;
+import com.mibodega.mystore.models.Responses.CategoryResponseWithProducts;
+
+import java.util.ArrayList;
+
 public class Config {
-    private String jwt;
-    private String userName;
-    private String user_ruc;
-    private String URL_API ="http://104.196.251.51/api/v1/";
+    private static String jwt;
+    private static String userName;
+    private static String user_ruc;
+    private static String URL_API ="http://34.168.45.44/api/v1/";
+
+    private static ArrayList<CategoryResponse> arrCategories =  new ArrayList<>();
+
+    private static ArrayList<CategoryResponseWithProducts> arrCategoriesWithProducts =  new ArrayList<>();
+
+    public ArrayList<CategoryResponseWithProducts> getArrCategoriesWithProducts() {
+        return arrCategoriesWithProducts;
+    }
+
+    public void setArrCategoriesWithProducts(ArrayList<CategoryResponseWithProducts> arrCategoriesWithProducts) {
+        Config.arrCategoriesWithProducts = arrCategoriesWithProducts;
+    }
+
+
+    public ArrayList<CategoryResponse> getArrCategories() {
+        return arrCategories;
+    }
+
+    public void setArrCategories(ArrayList<CategoryResponse> arrCategories) {
+        Config.arrCategories = arrCategories;
+    }
 
     public String getURL_API() {
-        return this.URL_API;
+        return URL_API;
     }
 
-    public void setURL_API(String URL_API) {
-        this.URL_API = URL_API;
+    public void setURL_API(String _URL_API) {
+        URL_API = _URL_API;
     }
-
-
 
     public String getJwt() {
         return jwt;

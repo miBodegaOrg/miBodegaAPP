@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <ImageButton
+        android:id="@+id/Imgb_closeShowProduct"
+        android:layout_width="55dp"
+        android:layout_height="48dp"
+        android:layout_gravity="end"
+        android:layout_marginTop="6dp"
+        android:background="@color/white"
+        android:src="@drawable/baseline_close_24"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <ImageView
+        android:id="@+id/Imgv_showProductPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="438dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/borde" />
+
+</LinearLayout>
