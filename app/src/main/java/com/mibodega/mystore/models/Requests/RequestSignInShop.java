@@ -1,10 +1,10 @@
 package com.mibodega.mystore.models.Requests;
 
-public class RequestSignIn {
+public class RequestSignInShop {
     private String ruc;
     private String password;
 
-    public RequestSignIn(String ruc, String password) {
+    public RequestSignInShop(String ruc, String password) {
         this.ruc = ruc;
         this.password = password;
     }
