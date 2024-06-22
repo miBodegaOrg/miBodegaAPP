@@ -59,5 +59,19 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="Proveedor" />
+
+        <Button
+            android:id="@+id/Btn_managePurchases_home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Compras" />
+
+        <Button
+            android:id="@+id/Btn_manageDiscountsOferts_home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Ofertas y Descuentos" />
     </LinearLayout>
 </LinearLayout>
