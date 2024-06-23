@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -19,6 +21,7 @@ import com.mibodega.mystore.services.IPurchasesService;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterEmployee;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterPurchase;
+import com.mibodega.mystore.views.supplier.SupplierRegisterActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +51,27 @@ public class EmployerActivity extends AppCompatActivity {
         btn_newEmployee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("employee_id","0");
                 Intent mg = new Intent(getBaseContext(),ManageEmployerActivity.class);
+                mg.putExtras(bundle);
                 startActivity(mg);
+            }
+        });
+        searchEmployer.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
         loadEmployers();
@@ -74,7 +96,10 @@ public class EmployerActivity extends AppCompatActivity {
                         adapter = new RecyclerViewAdapterEmployee(getBaseContext(), arrEmployeeList, new RecyclerViewAdapterEmployee.OnDetailItem() {
                             @Override
                             public void onClick(EmployeeResponse item) {
+                                Bundle bundle = new Bundle();
+                                bundle.putString("employee_id",item.get_id());
                                 Intent mg = new Intent(getBaseContext(),ManageEmployerActivity.class);
+                                mg.putExtras(bundle);
                                 startActivity(mg);
                             }
                         });

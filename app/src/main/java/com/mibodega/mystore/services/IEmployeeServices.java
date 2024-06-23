@@ -20,6 +20,6 @@ public interface IEmployeeServices {
     @POST("employees")
     Call<EmployeeResponse> createEmployee(@Body RequestEmployee request, @Header("Authorization") String token);
     @GET("employees/{id}")
-    Call<PromotionResponse> getEmployeeById(@Path("id") String id, @Header("Authorization") String token);
+    Call<EmployeeResponse> getEmployeeById(@Path("id") String id, @Header("Authorization") String token);
 
 }

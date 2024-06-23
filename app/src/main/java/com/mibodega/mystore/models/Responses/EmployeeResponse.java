@@ -7,6 +7,8 @@ public class EmployeeResponse {
     private String name;
     private String lastname;
     private String email;
+    private String dni;
+    private String phone;
     private String password;
     private String shop;
     private String createdAt;
@@ -14,17 +16,20 @@ public class EmployeeResponse {
     private int __v;
     private ArrayList<String> permissions = new ArrayList<>();
 
-    public EmployeeResponse(String _id, String name, String lastname, String email, String password, String shop, String createdAt, String updatedAt, ArrayList<String> permissions) {
+    public EmployeeResponse(String _id, String name, String lastname, String email, String dni, String phone, String password, String shop, String createdAt, String updatedAt, ArrayList<String> permissions) {
         this._id = _id;
         this.name = name;
         this.lastname = lastname;
         this.email = email;
+        this.dni = dni;
+        this.phone = phone;
         this.password = password;
         this.shop = shop;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.permissions = permissions;
     }
+
 
     public String get_id() {
         return _id;
@@ -96,5 +101,21 @@ public class EmployeeResponse {
 
     public void setPermissions(ArrayList<String> permissions) {
         this.permissions = permissions;
+    }
+
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

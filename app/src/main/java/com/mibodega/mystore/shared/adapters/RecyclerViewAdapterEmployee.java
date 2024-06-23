@@ -61,7 +61,7 @@ public class RecyclerViewAdapterEmployee extends RecyclerView.Adapter<RecyclerVi
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapterEmployee.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         EmployeeResponse item = employeeList.get(position);
-        holder.name.setText(item.getName());
+        holder.name.setText(item.getName()+" "+item.getLastname());
         holder.btn_manageEmployee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
