@@ -6,11 +6,11 @@ public class DiscountRequest {
     private String name;
     private String startDate;
     private String endDate;
-    private String percentage;
+    private int percentage;
     private boolean active;
     private ArrayList<String> products = new ArrayList<>();
 
-    public DiscountRequest(String name, String startDate, String endDate, String percentage, boolean active, ArrayList<String> products) {
+    public DiscountRequest(String name, String startDate, String endDate, int percentage, boolean active, ArrayList<String> products) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -43,11 +43,11 @@ public class DiscountRequest {
         this.endDate = endDate;
     }
 
-    public String getPercentage() {
+    public int getPercentage() {
         return percentage;
     }
 
-    public void setPercentage(String percentage) {
+    public void setPercentage(int percentage) {
         this.percentage = percentage;
     }
 

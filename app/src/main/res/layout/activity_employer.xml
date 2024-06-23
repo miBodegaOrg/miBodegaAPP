@@ -7,13 +7,22 @@
     android:orientation="vertical"
     tools:context=".views.employers.EmployerActivity">
 
+    <TextView
+        android:id="@+id/textView51"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Gestion de Empleados"
+        android:textAlignment="center"
+        android:textSize="34sp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/Txly_layoutSearch_employer"
+            android:id="@+id/Txly_layoutSearch_employee"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -24,7 +33,7 @@
             app:startIconDrawable="@drawable/baseline_search_24">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/Edt_searchEmployer_employer"
+                android:id="@+id/Edt_searchEmployee_employee"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:backgroundTint="@color/white"
@@ -35,10 +44,23 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/Btn_addNewEmployee_employee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
+            android:src="@drawable/baseline_add_24"
+            app:backgroundTint="?attr/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@color/white" />
+
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/Rv_productEmployer_employer"
+        android:id="@+id/Rv_employeeList_employee"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

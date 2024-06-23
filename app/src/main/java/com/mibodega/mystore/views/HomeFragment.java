@@ -29,6 +29,8 @@ import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProduct;
 import com.mibodega.mystore.views.employers.EmployerActivity;
+import com.mibodega.mystore.views.offers.OffersActivity;
+import com.mibodega.mystore.views.selling.SellingActivity;
 import com.mibodega.mystore.views.supplier.SupplierActivity;
 
 import java.util.ArrayList;
@@ -45,7 +47,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class HomeFragment extends Fragment {
 
     private Config config = new Config();
-    private Button btn_employe,btn_supplier;
+    private Button btn_employe,btn_supplier, btn_buying, btn_discountPromotion;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -53,6 +55,9 @@ public class HomeFragment extends Fragment {
         View root =  inflater.inflate(R.layout.fragment_home, container, false);
         btn_employe = root.findViewById(R.id.Btn_manageEmployes_home);
         btn_supplier = root.findViewById(R.id.Btn_manageSupplier_home);
+        btn_buying = root.findViewById(R.id.Btn_managePurchases_home);
+        btn_discountPromotion = root.findViewById(R.id.Btn_manageDiscountsOferts_home);
+
 
         btn_employe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +73,21 @@ public class HomeFragment extends Fragment {
                 startActivity(su);
             }
         });
+        btn_buying.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent su = new Intent(getContext(), SellingActivity.class);
+                startActivity(su);
+            }
+        });
+        btn_discountPromotion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent su = new Intent(getContext(), OffersActivity.class);
+                startActivity(su);
+            }
+        });
+
 
         BarChart chart = root.findViewById(R.id.chart);
 

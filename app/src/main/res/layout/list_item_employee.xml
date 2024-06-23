@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <com.google.android.material.card.MaterialCardView
@@ -54,9 +54,8 @@
 
                     <Button
                         android:id="@+id/Btn_manageEmployee_item"
-                        android:layout_width="match_parent"
+                        android:layout_width="200dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="Gestionar"
                         android:textSize="12sp"
                         app:icon="@drawable/baseline_manage_accounts_24" />
@@ -69,6 +68,7 @@
                         android:layout_weight="1"
                         android:text="Detalles"
                         android:textSize="12sp"
+                        android:visibility="gone"
                         app:icon="@drawable/baseline_list_alt_24" />
                 </LinearLayout>
             </LinearLayout>
