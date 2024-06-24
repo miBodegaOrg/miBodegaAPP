@@ -4,22 +4,22 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.mibodega.mystore.MainNavigationActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.RequestSignIn;
+import com.mibodega.mystore.models.Requests.RequestSignInShop;
 import com.mibodega.mystore.models.Requests.RequestSignUp;
 import com.mibodega.mystore.models.Responses.SignInResponse;
 import com.mibodega.mystore.services.IUserServices;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.Utils;
-
-import java.util.Objects;
+import com.mibodega.mystore.views.signUp.SignUpShopActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,6 +34,7 @@ public class SignInActivity extends AppCompatActivity {
     private TextInputEditText edt_password;
     private Config config = new Config();
     private Utils utils = new Utils();
+    private TextView Tv_questionForgotPassword_login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class SignInActivity extends AppCompatActivity {
         edt_user = findViewById(R.id.Tedt_user);
         edt_password = findViewById(R.id.Tedt_password);
         btn_moveToHome = findViewById(R.id.Btn_moveToHome_login);
+        Tv_questionForgotPassword_login = findViewById(R.id.Tv_questionForgotPassword_login);
         btn_moveToHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,6 +53,13 @@ public class SignInActivity extends AppCompatActivity {
                     String pass = edt_password.getText().toString();
                     postData(user,pass);
                 }
+            }
+        });
+        Tv_questionForgotPassword_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mg = new Intent(getBaseContext(), SignUpShopActivity.class);
+                startActivity(mg);
             }
         });
     }

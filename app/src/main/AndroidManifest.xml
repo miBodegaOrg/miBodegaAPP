@@ -37,6 +37,30 @@
         android:theme="@style/Theme.MyStore"
         tools:targetApi="31">
         <activity
+            android:name=".views.selling.PurchaseFormActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.offers.PromotionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.offers.DiscountsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.offers.OffersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.signUp.SetPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.signUp.ValidateRegisterDataActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.signUp.SignUpShopActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.signUp.SignUpEmployeeActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.selling.SellingActivity"
             android:exported="false" />
         <activity

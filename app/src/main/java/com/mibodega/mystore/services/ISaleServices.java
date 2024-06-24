@@ -27,4 +27,8 @@ public interface ISaleServices {
     @POST("sales/cancel/{id}")
     Call<SaleResponse> cancelSale(@Path("id") String id, @Header("Authorization") String token);
 
+    @GET("sales/{id}")
+    Call<SaleResponse> getSalesById(@Path("id") String id,@Header("Authorization") String token);
+
+
 }
