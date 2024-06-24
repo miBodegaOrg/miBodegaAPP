@@ -12,7 +12,9 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 import com.mibodega.mystore.MainNavigationActivity;
 import com.mibodega.mystore.R;
+import com.mibodega.mystore.models.Requests.RequestSignIn;
 import com.mibodega.mystore.models.Requests.RequestSignInShop;
+import com.mibodega.mystore.models.Requests.RequestSignUp;
 import com.mibodega.mystore.models.Responses.SignInResponse;
 import com.mibodega.mystore.services.IUserServices;
 import com.mibodega.mystore.shared.Config;
@@ -66,12 +68,12 @@ public class SignInActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         IUserServices usersService = retrofit.create(IUserServices.class);
-        RequestSignInShop modal = new RequestSignInShop(user, pass);
+        RequestSignIn modal = new RequestSignIn(user, pass);
         System.out.println("user "+user);
         System.out.println("password "+pass);
 
 
-        Call<SignInResponse> call = usersService.post_signin_shop(modal);
+        Call<SignInResponse> call = usersService.post_signin(modal);
         call.enqueue(new Callback<SignInResponse>() {
             @Override
             public void onResponse(Call<SignInResponse> call, Response<SignInResponse> response) {
