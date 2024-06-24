@@ -1,6 +1,11 @@
 package com.mibodega.mystore.shared.adapters;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,16 +17,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.MessageResponse;
+import com.mibodega.mystore.shared.TextFormaterMarkdown;
 
 import java.util.List;
 import java.util.Objects;
 
+import io.noties.markwon.Markwon;
+import io.noties.markwon.SpanFactory;
+import io.noties.markwon.core.MarkwonTheme;
+
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> {
 
     private List<MessageResponse> messageList;
+    private Context context;
+    private TextFormaterMarkdown textFormaterMarkdown = new TextFormaterMarkdown();
 
-    public MessageAdapter(List<MessageResponse> messageList) {
+    public MessageAdapter(Context context,List<MessageResponse> messageList) {
         this.messageList = messageList;
+        this.context=context;
     }
 
     @Override
@@ -33,7 +46,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     @Override
     public void onBindViewHolder(MessageViewHolder holder, int position) {
         MessageResponse message = messageList.get(position);
-        holder.textViewMessage.setText(message.getText());
+
+        holder.textViewMessage.setText(textFormaterMarkdown.formatText(context,message.getText()));
 
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) holder.textViewMessage.getLayoutParams();
 
@@ -45,6 +59,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         } else {
             layoutParams.gravity = Gravity.START;
             holder.textViewMessage.setBackgroundResource(R.drawable.bg_message);
+            holder.textViewMessage.setTextColor(Color.BLACK);
         }
         holder.textViewMessage.setLayoutParams(layoutParams);
     }

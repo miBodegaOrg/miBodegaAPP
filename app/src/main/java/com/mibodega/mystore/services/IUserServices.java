@@ -13,7 +13,7 @@ import retrofit2.http.POST;
 public interface IUserServices {
     @POST("auth/signin")
     Call<SignInResponse> post_signin(@Body RequestSignIn request);
-    @POST("auth/shop/signup")
+    @POST("auth/signup")
     Call<SignUpResponse> post_signup(@Body RequestSignUp request);
 
 }
