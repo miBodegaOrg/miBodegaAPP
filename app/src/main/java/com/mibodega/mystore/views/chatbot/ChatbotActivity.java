@@ -57,7 +57,7 @@ public class ChatbotActivity extends AppCompatActivity {
         editTextMessage = findViewById(R.id.editTextMessage);
         buttonSend = findViewById(R.id.buttonSend);
 
-        messageAdapter = new MessageAdapter(messageList);
+        messageAdapter = new MessageAdapter(this,messageList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(messageAdapter);
 
@@ -102,7 +102,7 @@ public class ChatbotActivity extends AppCompatActivity {
                     if(chatData!=null){
                         recyclerView.removeAllViews();
                         messageList = chatData.getMessages();
-                        messageAdapter = new MessageAdapter(messageList);
+                        messageAdapter = new MessageAdapter(getBaseContext(),messageList);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
                         recyclerView.setAdapter(messageAdapter);
                     }
