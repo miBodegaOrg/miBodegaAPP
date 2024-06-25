@@ -2,6 +2,7 @@ package com.mibodega.mystore.views.offers;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.DiscountResponse;
@@ -21,6 +23,7 @@ import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterDiscount;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterPromotion;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterPurchase;
+import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,6 +43,8 @@ public class OffersActivity extends AppCompatActivity {
     private RecyclerViewAdapterDiscount recyclerViewAdapterDiscount;
     private RecyclerViewAdapterPromotion recyclerViewAdapterPromotion;
     private Config config = new Config();
+    private DrawerLayout drawerLayout;
+    private FrameLayout chatFragmentContainer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +54,38 @@ public class OffersActivity extends AppCompatActivity {
         rv_discountList = findViewById(R.id.Rv_discountList_discount);
         rv_promotionList = findViewById(R.id.Rv_promotionList_promotion);
 
+        drawerLayout = findViewById(R.id.drawer_layout);
+        chatFragmentContainer = findViewById(R.id.chat_fragment_container);
+
+        // Configura el deslizable desde el lado derecho
+        //drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+                // No es necesario hacer nada aquí
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                // Mostrar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.chat_fragment_container, new ChatBotGlobalFragment())
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                // Ocultar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .remove(getSupportFragmentManager().findFragmentById(R.id.chat_fragment_container))
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                // No es necesario hacer nada aquí
+            }
+        });
         btn_newPromotion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

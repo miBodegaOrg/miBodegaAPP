@@ -1,103 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/drawer_layout"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context=".views.offers.OffersActivity">
+
+<!-- Contenido principal -->
+<FrameLayout
+    android:id="@+id/content_frame"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="15dp"
-    tools:context=".views.offers.OffersActivity">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView50"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Descuentos y Promociones"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <ScrollView
+    <!-- Tu contenido principal aquí -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="20dp">
+        android:orientation="vertical"
+        android:padding="15dp"
+        tools:ignore="UselessParent">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/textView50"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:text="Descuentos y Promociones"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:padding="5dp">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/Btn_newDiscount_discount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:text="Descuento"
-                    app:icon="@drawable/baseline_add_24" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
 
-                <Button
-                    android:id="@+id/Btn_newPromotion_promotion"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:text="Promocion"
-                    app:icon="@drawable/baseline_add_24" />
+                    <Button
+                        android:id="@+id/Btn_newDiscount_discount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:text="Descuento"
+                        app:icon="@drawable/baseline_add_24" />
+
+                    <Button
+                        android:id="@+id/Btn_newPromotion_promotion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:text="Promocion"
+                        app:icon="@drawable/baseline_add_24" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/borde"
+                    android:backgroundTint="@color/md_theme_dark_inversePrimary"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/textView41"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Descuentos"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/Rv_discountList_discount"
+                        android:layout_width="match_parent"
+                        android:layout_height="266dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/borde"
+                    android:backgroundTint="@color/md_theme_dark_inversePrimary"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/textView45"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Promociones"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/Rv_promotionList_promotion"
+                        android:layout_width="match_parent"
+                        android:layout_height="316dp" />
+                </LinearLayout>
+
             </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/borde"
-                android:backgroundTint="@color/md_theme_dark_inversePrimary"
-                android:orientation="vertical"
-                android:padding="10dp">
+</FrameLayout>
 
-                <TextView
-                    android:id="@+id/textView41"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Descuentos"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+<!-- Chatbot -->
+<FrameLayout
+    android:id="@+id/chat_fragment_container"
+    android:layout_width="370dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="end"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/Rv_discountList_discount"
-                    android:layout_width="match_parent"
-                    android:layout_height="266dp" />
-            </LinearLayout>
+</androidx.drawerlayout.widget.DrawerLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/borde"
-                android:backgroundTint="@color/md_theme_dark_inversePrimary"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <TextView
-                    android:id="@+id/textView45"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Promociones"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/Rv_promotionList_promotion"
-                    android:layout_width="match_parent"
-                    android:layout_height="316dp" />
-            </LinearLayout>
-
-        </LinearLayout>
-    </ScrollView>
-
-</LinearLayout>

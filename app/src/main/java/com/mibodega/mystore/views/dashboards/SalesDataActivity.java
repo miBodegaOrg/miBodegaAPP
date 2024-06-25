@@ -2,12 +2,14 @@ package com.mibodega.mystore.views.dashboards;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -32,6 +34,7 @@ import com.mibodega.mystore.models.Responses.SaleCategoryDataDashboardResponse;
 import com.mibodega.mystore.models.Responses.SaleTimeDataDashboardResponse;
 import com.mibodega.mystore.services.IDashboardServices;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -61,6 +64,8 @@ public class SalesDataActivity extends AppCompatActivity {
     private Button btn_day, btn_week, btn_month, btn_year;
     private Config config = new Config();
     private TextView tv_titleChart;
+    private DrawerLayout drawerLayout;
+    private FrameLayout chatFragmentContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +84,36 @@ public class SalesDataActivity extends AppCompatActivity {
         tv_titleChart.setText("Ultimo Dia");
         loadData("day");
         loadPieData();
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        chatFragmentContainer = findViewById(R.id.chat_fragment_container);
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+                // No es necesario hacer nada aquí
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                // Mostrar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.chat_fragment_container, new ChatBotGlobalFragment())
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                // Ocultar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .remove(getSupportFragmentManager().findFragmentById(R.id.chat_fragment_container))
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                // No es necesario hacer nada aquí
+            }
+        });
 
         btn_day.setOnClickListener(new View.OnClickListener() {
             @Override

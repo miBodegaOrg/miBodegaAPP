@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -31,6 +32,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -49,6 +51,7 @@ import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.models.Responses.SubCategoryResponse;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -106,6 +109,8 @@ public class ProductEditActivity extends AppCompatActivity {
 
     private ImageView imgProduct;
     private RequestBody finalImageBody;
+    private DrawerLayout drawerLayout;
+    private FrameLayout chatFragmentContainer;
 
     private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
             result -> {
@@ -134,6 +139,37 @@ public class ProductEditActivity extends AppCompatActivity {
         tv_fileName = findViewById(R.id.Tv_productFileName_product);
         btnScanProduct = findViewById(R.id.Btn_scanProductCode_product);
         btnGenerateCode = findViewById(R.id.Btn_generateProductCode_product);
+
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        chatFragmentContainer = findViewById(R.id.chat_fragment_container);
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+                // No es necesario hacer nada aquí
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                // Mostrar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.chat_fragment_container, new ChatBotGlobalFragment())
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                // Ocultar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .remove(getSupportFragmentManager().findFragmentById(R.id.chat_fragment_container))
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                // No es necesario hacer nada aquí
+            }
+        });
 
 
         tv_fileName.setText("");

@@ -3,6 +3,7 @@ package com.mibodega.mystore.views.offers;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -40,6 +42,7 @@ import com.mibodega.mystore.shared.SaleTemporalList;
 import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSale;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSearch;
+import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -76,6 +79,8 @@ public class PromotionActivity extends AppCompatActivity {
     private TextInputEditText edt_name, edt_dateInit, edt_dateEnd,edt_buy,edt_receiv;
     private Calendar startCalendar, endCalendar;
     private ImageButton btn_start,btn_end;
+    private DrawerLayout drawerLayout;
+    private FrameLayout chatFragmentContainer;
 
     private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
             result -> {
@@ -109,6 +114,37 @@ public class PromotionActivity extends AppCompatActivity {
 
         startCalendar = Calendar.getInstance();
         endCalendar = Calendar.getInstance();
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        chatFragmentContainer = findViewById(R.id.chat_fragment_container);
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+                // No es necesario hacer nada aquí
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                // Mostrar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.chat_fragment_container, new ChatBotGlobalFragment())
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                // Ocultar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .remove(getSupportFragmentManager().findFragmentById(R.id.chat_fragment_container))
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                // No es necesario hacer nada aquí
+            }
+        });
+        
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

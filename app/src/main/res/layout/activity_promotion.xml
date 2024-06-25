@@ -1,218 +1,246 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/drawer_layout"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context=".views.offers.PromotionActivity">
+
+<!-- Contenido principal -->
+<FrameLayout
+    android:id="@+id/content_frame"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".views.offers.PromotionActivity">
-    <TextView
-        android:id="@+id/textView26"
+    android:layout_height="match_parent">
+
+    <!-- Tu contenido principal aquí -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="Crear Promocion"
-        android:textAlignment="center"
-        android:textSize="24sp" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
-    <SearchView
-        android:id="@+id/Sv_searchProduct_promotion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/backgroun_custom_rectangle"
-        android:backgroundTint="@color/md_theme_dark_onSecondaryContainer">
-
-    </SearchView>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/textView26"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Crear Promocion"
+            android:textAlignment="center"
+            android:textSize="24sp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/Rv_listSearchProduct_promotion"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:visibility="gone" />
+        <SearchView
+            android:id="@+id/Sv_searchProduct_promotion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/backgroun_custom_rectangle"
+            android:backgroundTint="@color/md_theme_dark_onSecondaryContainer">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical">
+        </SearchView>
 
-                <TextView
-                    android:id="@+id/textView9"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Escanea codigo de barras para agregar producto:"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textView12"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Ultimo codigo: "
-                    android:textColor="@color/md_theme_dark_inversePrimary" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
-
-                    <TextView
-                        android:id="@+id/Tv_codeScannedBar_promotion"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@drawable/borde"
-                        android:gravity="center_vertical"
-                        android:padding="2dp"
-                        android:text="3213876416468464864684"
-                        android:textAlignment="center" />
-
-                    <ImageButton
-                        android:id="@+id/Imgb_scanCodeBarProduct_promotion"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_weight="4"
-                        android:background="@drawable/backgroun_custom_rectangle"
-                        android:backgroundTint="@color/md_theme_dark_inversePrimary"
-                        android:src="@drawable/ic_barcode"
-                        app:tint="@color/white" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Lista de productos:"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/Rv_productAtPromotionList_promotion"
-                android:layout_width="match_parent"
-                android:layout_height="218dp" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="10dp">
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/Rv_listSearchProduct_promotion"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Escanea codigo de barras para agregar producto:"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView12"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Ultimo codigo: "
+                        android:textColor="@color/md_theme_dark_inversePrimary" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:id="@+id/Tv_codeScannedBar_promotion"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/borde"
+                            android:gravity="center_vertical"
+                            android:padding="2dp"
+                            android:text="3213876416468464864684"
+                            android:textAlignment="center" />
+
+                        <ImageButton
+                            android:id="@+id/Imgb_scanCodeBarProduct_promotion"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="4"
+                            android:background="@drawable/backgroun_custom_rectangle"
+                            android:backgroundTint="@color/md_theme_dark_inversePrimary"
+                            android:src="@drawable/ic_barcode"
+                            app:tint="@color/white" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Lista de productos:"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/Rv_productAtPromotionList_promotion"
+                    android:layout_width="match_parent"
+                    android:layout_height="218dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:orientation="vertical"
+                    android:padding="10dp">
 
-                    <ImageButton
-                        android:id="@+id/Imgb_selectDateInit_promotion"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1.2"
-                        android:src="@drawable/ic_calendar" />
+                        android:orientation="horizontal">
+
+                        <ImageButton
+                            android:id="@+id/Imgb_selectDateInit_promotion"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1.2"
+                            android:src="@drawable/ic_calendar" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:hint="Fecha Inicial">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/Edt_dateInit_promotion"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:editable="false"
+                                android:textSize="10sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <ImageButton
+                            android:id="@+id/Imgb_selectDateEnd_promotion"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1.2"
+                            android:src="@drawable/ic_calendar" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:hint="Fecha Final">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/Edt_dateEnd_promotion"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:editable="false"
+                                android:textSize="10sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:hint="Fecha Inicial">
+                        android:hint="Nombre de Promocion">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/Edt_dateInit_promotion"
+                            android:id="@+id/Edt_namePromotion_promotion"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:editable="false"
-                            android:textSize="10sp" />
+                            android:layout_height="match_parent"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <ImageButton
-                        android:id="@+id/Imgb_selectDateEnd_promotion"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1.2"
-                        android:src="@drawable/ic_calendar" />
+                        android:orientation="horizontal">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:hint="Fecha Final">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/Edt_dateEnd_promotion"
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:editable="false"
-                            android:textSize="10sp" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/Edt_payAmount_promotion"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="number"
+                                android:hint="Paga por" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/Edt_receivAmount_promotion"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="number"
+                                android:hint="Recibe" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
 
                 </LinearLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
+                <Button
+                    android:id="@+id/Btn_createPromotionProducts_promotion"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Nombre de Promocion">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/Edt_namePromotion_promotion"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/Edt_payAmount_promotion"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="number"
-                            android:hint="Paga por" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/Edt_receivAmount_promotion"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="number"
-                            android:hint="Recibe" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:text="Crear" />
 
             </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
 
-            <Button
-                android:id="@+id/Btn_createPromotionProducts_promotion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="20dp"
-                android:text="Crear" />
+</FrameLayout>
 
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+<!-- Chatbot -->
+<FrameLayout
+    android:id="@+id/chat_fragment_container"
+    android:layout_width="370dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="end"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+</androidx.drawerlayout.widget.DrawerLayout>
+

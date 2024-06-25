@@ -2,12 +2,14 @@ package com.mibodega.mystore.views.supplier;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -20,6 +22,7 @@ import com.mibodega.mystore.services.ISupplierServices;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProduct;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterSupplier;
+import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +40,8 @@ public class SupplierActivity extends AppCompatActivity {
     private RecyclerView rv_supplierList;
     private Config config = new Config();
     private ArrayList<SupplierResponse> arrayListSupplier = new ArrayList<>();
+    private DrawerLayout drawerLayout;
+    private FrameLayout chatFragmentContainer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +49,8 @@ public class SupplierActivity extends AppCompatActivity {
         edt_searchSupplier = findViewById(R.id.Edt_searchSuplier_supplier);
         btn_newSupplier = findViewById(R.id.Btn_addNewSupplier_supplier);
         rv_supplierList = findViewById(R.id.Rv_supplierList_supplier);
+        drawerLayout = findViewById(R.id.drawer_layout_supplier);
+        chatFragmentContainer = findViewById(R.id.chat_fragment_container_supplier);
         laodSupplier();
 
 
@@ -55,6 +62,33 @@ public class SupplierActivity extends AppCompatActivity {
                 Intent mg = new Intent(getBaseContext(), SupplierRegisterActivity.class);
                 mg.putExtras(bundle);
                 startActivity(mg);
+            }
+        });
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+                // No es necesario hacer nada aquí
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                // Mostrar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.chat_fragment_container_supplier, new ChatBotGlobalFragment())
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                // Ocultar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .remove(getSupportFragmentManager().findFragmentById(R.id.chat_fragment_container_supplier))
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                // No es necesario hacer nada aquí
             }
         });
     }
@@ -110,6 +144,11 @@ public class SupplierActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
     @Override
     protected void onResume() {
         super.onResume();

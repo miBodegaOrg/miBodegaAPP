@@ -2,12 +2,14 @@ package com.mibodega.mystore.views.selling;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -19,6 +21,7 @@ import com.mibodega.mystore.services.IPurchasesService;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterChat;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterPurchase;
+import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
 import com.mibodega.mystore.views.chatbot.ChatbotActivity;
 
 import java.util.ArrayList;
@@ -37,12 +40,48 @@ public class SellingActivity extends AppCompatActivity {
 
     private Config config = new Config();
     private ArrayList<PurchaseResponse> purchaseList = new ArrayList<>();
+    private DrawerLayout drawerLayout;
+    private FrameLayout chatFragmentContainer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selling);
         btn_newPurchase = findViewById(R.id.Btn_addNewPurchase_purchases);
         rv_purchaseList = findViewById(R.id.Rv_purchaseList_purchases);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        chatFragmentContainer = findViewById(R.id.chat_fragment_container);
+
+        // Configura el deslizable desde el lado derecho
+        //drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+                // No es necesario hacer nada aquí
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                // Mostrar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.chat_fragment_container, new ChatBotGlobalFragment())
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                // Ocultar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .remove(getSupportFragmentManager().findFragmentById(R.id.chat_fragment_container))
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                // No es necesario hacer nada aquí
+            }
+        });
+
         btn_newPurchase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -2,6 +2,7 @@ package com.mibodega.mystore.views.employers;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -19,6 +21,7 @@ import com.mibodega.mystore.models.Responses.EmployeeResponse;
 import com.mibodega.mystore.services.IEmployeeServices;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterEmployee;
+import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +41,8 @@ public class ManageEmployerActivity extends AppCompatActivity {
     private String id_employee="";
     private Config config = new Config();
     private EmployeeResponse employeeResponse=null;
+    private DrawerLayout drawerLayout;
+    private FrameLayout chatFragmentContainer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +65,36 @@ public class ManageEmployerActivity extends AppCompatActivity {
         btn_back = findViewById(R.id.Btn_back_employee);
 
         id_employee = getIntent().getExtras().getString("employee_id");
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        chatFragmentContainer = findViewById(R.id.chat_fragment_container);
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+                // No es necesario hacer nada aquí
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                // Mostrar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.chat_fragment_container, new ChatBotGlobalFragment())
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                // Ocultar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .remove(getSupportFragmentManager().findFragmentById(R.id.chat_fragment_container))
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                // No es necesario hacer nada aquí
+            }
+        });
         if(Objects.equals(id_employee, "0")){
             btn_active.setVisibility(View.GONE);
             btn_desactive.setVisibility(View.GONE);

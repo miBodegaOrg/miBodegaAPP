@@ -2,6 +2,7 @@ package com.mibodega.mystore.views.supplier;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -29,6 +31,7 @@ import com.mibodega.mystore.shared.SupplierProductList;
 import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSale;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSearch;
+import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -55,6 +58,8 @@ public class SupplierRegisterActivity extends AppCompatActivity {
     private PagesProductResponse pagesSearchProductResponse;
 
     private String ruc="";
+    private DrawerLayout drawerLayout;
+    private FrameLayout chatFragmentContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +74,39 @@ public class SupplierRegisterActivity extends AppCompatActivity {
         btn_cancel = findViewById(R.id.Btn_cancelRegister_supplier);
         btn_save = findViewById(R.id.Btn_acceptRegister_supplier);
         search = findViewById(R.id.Edt_searchProduct_supplier);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        chatFragmentContainer = findViewById(R.id.chat_fragment_container);
+
+        // Configura el deslizable desde el lado derecho
+        //drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+                // No es necesario hacer nada aquí
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                // Mostrar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.chat_fragment_container, new ChatBotGlobalFragment())
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                // Ocultar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .remove(getSupportFragmentManager().findFragmentById(R.id.chat_fragment_container))
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                // No es necesario hacer nada aquí
+            }
+        });
 
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -302,6 +340,9 @@ public class SupplierRegisterActivity extends AppCompatActivity {
         rv_products_supplier.setAdapter(listAdapter);
     }
 
-
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }
