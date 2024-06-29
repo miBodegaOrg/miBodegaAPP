@@ -50,11 +50,11 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
                     android:gravity="end"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
                     <Button
                         android:id="@+id/Btn_manageSupplier_supplier_item"
-                        android:layout_width="match_parent"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Gestionar"
@@ -69,6 +69,7 @@
                         android:layout_weight="1"
                         android:text="Detalles"
                         android:textSize="12sp"
+                        android:visibility="gone"
                         app:icon="@drawable/baseline_list_alt_24" />
                 </LinearLayout>
             </LinearLayout>

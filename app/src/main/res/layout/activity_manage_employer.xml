@@ -116,7 +116,7 @@ tools:context=".views.employers.ManageEmployerActivity">
                             android:id="@+id/Edt_passwordEmployee_employee"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Contraseña"
+                            android:hint="Nueva Contraseña"
                             android:inputType="textPassword"
                             android:maxLines="1" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -129,8 +129,7 @@ tools:context=".views.employers.ManageEmployerActivity">
                     android:layout_marginTop="5dp"
                     android:background="@drawable/borde"
                     android:orientation="vertical"
-                    android:padding="5dp"
-                    android:visibility="gone">
+                    android:padding="5dp">
 
                     <TextView
                         android:id="@+id/textView40"
@@ -142,23 +141,16 @@ tools:context=".views.employers.ManageEmployerActivity">
                     <LinearLayout
                         android:id="@+id/Ly_permisesListCheck_employee"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <CheckBox
-                            android:id="@+id/checkBox2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="CheckBox" />
-                    </LinearLayout>
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
 
                     <Button
                         android:id="@+id/Btn_savePrivilegiesEmployee_employee"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
-                        android:text="Guardar"
-                        app:icon="@drawable/baseline_save_24" />
+                        android:text="Editar"
+                        app:icon="@drawable/baseline_edit_24" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -172,17 +164,10 @@ tools:context=".views.employers.ManageEmployerActivity">
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/Btn_desactiveEmployee_employee"
+                android:id="@+id/Btn_updateEmployee_employee"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Desactivar"
-                android:visibility="gone" />
-
-            <Button
-                android:id="@+id/Btn_activeEmployee_employee"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Activar"
+                android:text="Actualizar"
                 android:visibility="gone" />
 
             <Button
