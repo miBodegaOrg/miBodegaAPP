@@ -1,11 +1,21 @@
 package com.mibodega.mystore.models.common;
 
 public class ProductSaleV2 {
-    private String code;
-    private int quantity;
 
-    public ProductSaleV2(String code, int quantity) {
+    private String code;
+    private Number quantity;
+
+    public ProductSaleV2(String code, Number quantity) {
         this.code = code;
+        this.quantity = quantity;
+    }
+
+
+    public Number getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Number quantity) {
         this.quantity = quantity;
     }
 
@@ -17,12 +27,16 @@ public class ProductSaleV2 {
         this.code = code;
     }
 
-    public int getQuantity() {
-        return quantity;
+    // Métodos adicionales para obtener el valor como double o int si es necesario
+    public double getQuantityAsDouble() {
+        return quantity.doubleValue();
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public int getQuantityAsInt() {
+        return quantity.intValue();
     }
+
+
+
 
 }

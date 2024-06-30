@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponseByCode;
 import com.mibodega.mystore.models.Responses.SaleResponse;
 import com.mibodega.mystore.models.Responses.SubCategoryResponse;
+import com.mibodega.mystore.models.common.ProductPurchase;
 import com.mibodega.mystore.models.common.ProductSaleV2;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.services.ISaleServices;
@@ -66,6 +68,7 @@ public class CreateSaleFragment extends Fragment {
     private SaleTemporalList saleTemporalList =  new SaleTemporalList();
     private ArrayList<ProductResponse> arrayListProduct = new ArrayList<>();
     private ArrayList<ProductResponse> arraySearchListProduct = new ArrayList<>();
+    private RecyclerViewAdapterProductSale listAdapter;
 
 
     private PagesProductResponse pagesSearchProductResponse;
@@ -135,7 +138,7 @@ public class CreateSaleFragment extends Fragment {
 
     public void loadData(){
         arrayListProduct  = saleTemporalList.getArrayList();
-        RecyclerViewAdapterProductSale listAdapter = new RecyclerViewAdapterProductSale(getContext(),arrayListProduct);
+        listAdapter = new RecyclerViewAdapterProductSale(getContext(),arrayListProduct);
         rv_recyclerProductList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         rv_recyclerProductList.setAdapter(listAdapter);
     }
@@ -235,8 +238,24 @@ public class CreateSaleFragment extends Fragment {
     public void createSale(){
         ArrayList<ProductSaleV2> arraux = new ArrayList<>();
         for (ProductResponse product : saleTemporalList.getArrayList()){
+            int amountint = Integer.parseInt(listAdapter.getMapEditAmount().get(product.getCode()).getText().toString());
+            double amount = Double.parseDouble(listAdapter.getMapEditAmount().get(product.getCode()).getText().toString());
+            if(!product.isWeight()){
+                double cost =0;
+                double rentability = product.getPrice()-cost;
+                if(rentability<0){
+                    rentability=0;
+                }
+                arraux.add(new ProductSaleV2(product.getCode(),amountint));
+            }else{
+                double cost =0;
+                double rentability = product.getPrice()-cost;
+                if(rentability<0){
+                    rentability=0;
+                }
+                arraux.add(new ProductSaleV2(product.getCode(),amount));
 
-            arraux.add(new ProductSaleV2(product.getCode(),1));
+            }
         }
         RequestCreateSale requestCreateSale = new RequestCreateSale(arraux);
 
