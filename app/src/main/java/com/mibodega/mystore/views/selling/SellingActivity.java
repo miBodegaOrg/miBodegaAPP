@@ -162,5 +162,9 @@ public class SellingActivity extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadPurchases();
+    }
 }

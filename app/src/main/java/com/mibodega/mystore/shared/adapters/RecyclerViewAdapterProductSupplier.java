@@ -149,8 +149,10 @@ public class RecyclerViewAdapterProductSupplier extends RecyclerView.Adapter<Rec
 
             @Override
             public void afterTextChanged(Editable editable) {
-                double total_price = item.getCost()*Integer.parseInt(holder.edt_amount.getText().toString());
-                holder.tv_totalPrice.setText("s/. "+total_price);
+                if(!editable.toString().equals("")) {
+                    double total_price = item.getCost() * Integer.parseInt(holder.edt_amount.getText().toString());
+                    holder.tv_totalPrice.setText("s/. " + total_price);
+                }
             }
         });
 

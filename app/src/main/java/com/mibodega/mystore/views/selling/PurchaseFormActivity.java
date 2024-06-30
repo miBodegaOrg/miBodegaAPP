@@ -29,10 +29,13 @@ import com.mibodega.mystore.models.Responses.CategoryProduct;
 import com.mibodega.mystore.models.Responses.PagesProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponseByCode;
+import com.mibodega.mystore.models.Responses.ProductResponseSupplier;
+import com.mibodega.mystore.models.Responses.ProductResponseSupplierV2;
 import com.mibodega.mystore.models.Responses.PurchaseResponse;
 import com.mibodega.mystore.models.Responses.SubCategoryResponse;
 import com.mibodega.mystore.models.Responses.SupplierResponse;
 import com.mibodega.mystore.models.Responses.SupplierResponseV2;
+import com.mibodega.mystore.models.common.ProductPurchase;
 import com.mibodega.mystore.models.common.ProductSaleV2;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.services.IPurchasesService;
@@ -42,6 +45,7 @@ import com.mibodega.mystore.shared.SaleTemporalList;
 import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSale;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSearch;
+import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSupplier;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
 
 import org.json.JSONException;
@@ -63,23 +67,20 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class PurchaseFormActivity extends AppCompatActivity {
 
     private SearchView searchProduct;
-
     private RecyclerView rv_recyclerProductList;
-    private RecyclerView rv_recyclerSearchProductList;
+
     private Button btn_vender;
     private Config config =  new Config();
     private Utils utils = new Utils();
 
-    private SaleTemporalList saleTemporalList =  new SaleTemporalList();
-    private ArrayList<ProductResponse> arrayListProduct = new ArrayList<>();
-    private ArrayList<ProductResponse> arraySearchListProduct = new ArrayList<>();
-    private PagesProductResponse pagesSearchProductResponse;
     private TextInputEditText edt_dicount, edt_shipping;
     private DrawerLayout drawerLayout;
     private FrameLayout chatFragmentContainer;
     private Spinner sp_selectSupplier;
     private ArrayList<SupplierResponseV2> arrsupplierResponses = new ArrayList<>();
+    private ArrayList<ProductResponseSupplierV2> arrProducts = new ArrayList<>();
     private Map<String,SupplierResponseV2> mapsupplierResponses = new HashMap<>();
+    private RecyclerViewAdapterProductSupplier listAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,8 +88,6 @@ public class PurchaseFormActivity extends AppCompatActivity {
         setContentView(R.layout.activity_purchase_form);
 
         searchProduct = findViewById(R.id.Sv_searchProduct_purchase);
-        rv_recyclerSearchProductList = findViewById(R.id.Rv_listSearchProduct_purchase);
-
         rv_recyclerProductList = findViewById(R.id.Rv_productAtPurchaseList_purchase);
         btn_vender = findViewById(R.id.Btn_purchaseProducts_purchase);
         sp_selectSupplier = findViewById(R.id.Sp_selectSuppier_purchase);
@@ -145,10 +144,9 @@ public class PurchaseFormActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 if(!Objects.equals(s, "")){
-                    rv_recyclerSearchProductList.setVisibility(View.VISIBLE);
-                    searchProducts(s);
+
                 }else{
-                    rv_recyclerSearchProductList.setVisibility(View.GONE);
+
                 }
 
                 return true;
@@ -157,7 +155,6 @@ public class PurchaseFormActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String s) {
                 if(Objects.equals(s, "")){
-                    rv_recyclerSearchProductList.setVisibility(View.GONE);
 
                 }
                 return true;
@@ -169,6 +166,9 @@ public class PurchaseFormActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Toast.makeText(getBaseContext(),"SELECCIONADO",Toast.LENGTH_SHORT).show();
+                arrProducts.clear();
+                arrProducts = mapsupplierResponses.get(sp_selectSupplier.getSelectedItem().toString()).getProducts();
+                loadData();
             }
 
             @Override
@@ -198,102 +198,17 @@ public class PurchaseFormActivity extends AppCompatActivity {
     }
 
     public void loadData(){
-        arrayListProduct  = saleTemporalList.getArrayList();
-        RecyclerViewAdapterProductSale listAdapter = new RecyclerViewAdapterProductSale(getBaseContext(),arrayListProduct);
+        listAdapter = new RecyclerViewAdapterProductSupplier(2, getBaseContext(), arrProducts, new RecyclerViewAdapterProductSupplier.OnDeleteItem() {
+            @Override
+            public void onClick(ProductResponseSupplierV2 item) {
+                arrProducts.remove(item);
+                loadData();
+            }
+        });
         rv_recyclerProductList.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false));
         rv_recyclerProductList.setAdapter(listAdapter);
     }
-    public void getProductByCode(String code){
-        Retrofit retrofit = new Retrofit.
-                Builder().
-                baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
-                build();
 
-        IProductServices service = retrofit.create(IProductServices.class);
-        Call<ProductResponseByCode> call = service.getProductByCode(code,"Bearer "+config.getJwt());
-        System.out.println(config.getJwt());
-        call.enqueue(new Callback<ProductResponseByCode>() {
-            @Override
-            public void onResponse(@NonNull Call<ProductResponseByCode> call, @NonNull Response<ProductResponseByCode> response) {
-                System.out.println(response.toString());
-                if(response.isSuccessful()){
-                    ProductResponseByCode product = response.body();
-                    CategoryProduct categoryProduct = new CategoryProduct(product.getCategory(),"");
-                    SubCategoryResponse subCategoryResponse = new SubCategoryResponse(product.getSubcategory(),"");
-                    if(product!=null){
-                        ProductResponse productResponse = new ProductResponse(
-                                product.get_id(),
-                                product.getName(),
-                                product.getCode(), product.getPrice(),
-                                product.getStock(),
-                                product.getImage_url(),
-                                product.getSales(),
-                                false,
-                                categoryProduct,
-                                subCategoryResponse,
-                                product.getShop(),
-                                product.getCreatedAt(),
-                                product.getUpdatedAt()
-                        );
-                        saleTemporalList.addProduct(productResponse,1);
-                        loadData();
-                    }
-                    System.out.println("successfull request");
-                }else{
-                    System.out.println("error");
-                }
-            }
-            @Override
-            public void onFailure(@NonNull Call<ProductResponseByCode> call, @NonNull Throwable t) {
-                System.out.println("errror "+t.getMessage());
-            }
-        });
-    }
-    public void searchProducts(String name){
-        Retrofit retrofit = new Retrofit.
-                Builder().
-                baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
-                build();
-
-        IProductServices service = retrofit.create(IProductServices.class);
-        Call<PagesProductResponse> call = service.getProductByName(name,20,"Bearer "+config.getJwt());
-        System.out.println(config.getJwt());
-        call.enqueue(new Callback<PagesProductResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<PagesProductResponse> call, @NonNull Response<PagesProductResponse> response) {
-                System.out.println(response.toString());
-                if(response.isSuccessful()){
-                    pagesSearchProductResponse = response.body();
-                    if(pagesSearchProductResponse!=null){
-                        System.out.println(pagesSearchProductResponse.getDocs().size());
-                        arraySearchListProduct  = (ArrayList<ProductResponse>) pagesSearchProductResponse.getDocs();
-
-                        //set arr products search list
-
-                        RecyclerViewAdapterProductSearch listAdapter = new RecyclerViewAdapterProductSearch(getBaseContext(), arraySearchListProduct, new RecyclerViewAdapterProductSearch.OnItem() {
-                            @Override
-                            public void onClick(ProductResponse product) {
-                                Toast.makeText(getBaseContext(),"Agregado",Toast.LENGTH_SHORT).show();
-                                saleTemporalList.addProduct(product,1);
-                                loadData();
-                            }
-                        });
-
-                        rv_recyclerSearchProductList.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false));
-                        rv_recyclerSearchProductList.setAdapter(listAdapter);
-                    }
-                    System.out.println("successfull request");
-
-                }
-
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<PagesProductResponse> call, @NonNull Throwable t) {
-                System.out.println("errror "+t.getMessage());
-            }
-        });
-    }
 
     public void loadSuppliers(){
         Retrofit retrofit = new Retrofit.
@@ -331,13 +246,19 @@ public class PurchaseFormActivity extends AppCompatActivity {
     }
 
     public void createPurchase(){
-        ArrayList<ProductSaleV2> arraux = new ArrayList<>();
-        for (ProductResponse product : saleTemporalList.getArrayList()){
+        ArrayList<ProductPurchase> arraux = new ArrayList<>();
+        for (ProductResponseSupplierV2 product : arrProducts){
+            int amountint = Integer.parseInt(listAdapter.getMapEditAmount().get(product.getCode()).getText().toString());
+            double amount = Double.parseDouble(listAdapter.getMapEditAmount().get(product.getCode()).getText().toString());
+            if(!product.isWeight()){
+                arraux.add(new ProductPurchase(amountint,product.getCode()));
+            }else{
+                arraux.add(new ProductPurchase(amount,product.getCode()));
+            }
 
-            arraux.add(new ProductSaleV2(product.getCode(),1));
         }
-        String ruc = "";
-        Double discount = Double.valueOf(edt_dicount.getText().toString())/100;
+        String ruc = mapsupplierResponses.get(sp_selectSupplier.getSelectedItem().toString()).getRuc();
+        Double discount = Double.valueOf(edt_dicount.getText().toString());
         Double shipping = Double.valueOf(edt_shipping.getText().toString());
         PurchaseRequest request = new PurchaseRequest(ruc,discount,shipping,arraux);
 
@@ -352,7 +273,6 @@ public class PurchaseFormActivity extends AppCompatActivity {
             public void onResponse(Call<PurchaseResponse> call, Response<PurchaseResponse> response) {
                 Log.e("error", response.toString());
                 if (response.isSuccessful()) {
-                    saleTemporalList.cleanAll();
                     edt_dicount.setText("");
                     edt_shipping.setText("");
                     loadData();
