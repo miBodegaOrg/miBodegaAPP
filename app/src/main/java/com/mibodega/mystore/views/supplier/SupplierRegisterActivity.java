@@ -413,16 +413,14 @@ public class SupplierRegisterActivity extends AppCompatActivity {
                     build();
 
             IProductServices service = retrofit.create(IProductServices.class);
-            Call<ProductResponseByCode> call = service.getProductByCode(code,"Bearer "+config.getJwt());
-            call.enqueue(new Callback<ProductResponseByCode>() {
+            Call<ProductResponse> call = service.getProductByCode(code,"Bearer "+config.getJwt());
+            call.enqueue(new Callback<ProductResponse>() {
                 @Override
-                public void onResponse(@NonNull Call<ProductResponseByCode> call, @NonNull Response<ProductResponseByCode> response) {
+                public void onResponse(@NonNull Call<ProductResponse> call, @NonNull Response<ProductResponse> response) {
                     System.out.println(response.toString());
                     if(response.isSuccessful()){
-                        ProductResponseByCode product = response.body();
+                        ProductResponse product = response.body();
                         if(product!=null){
-                            CategoryProduct categoryProduct = new CategoryProduct(product.getCategory(),"");
-                            SubCategoryResponse subCategoryResponse = new SubCategoryResponse(product.getSubcategory(),"");
 
                             ProductResponseSupplierV2 productResponse = new ProductResponseSupplierV2(product.get_id(),
                                             product.getName(),
@@ -433,8 +431,8 @@ public class SupplierRegisterActivity extends AppCompatActivity {
                                             product.getImage_url(),
                                             product.getSales(),
                                             false,
-                                            categoryProduct.get_id(),
-                                            subCategoryResponse.get_id(),
+                                            product.getCategory().get_id(),
+                                            product.getSubcategory().get_id(),
                                             product.getShop(),
                                             product.getCreatedAt(),
                                             product.getUpdatedAt()
@@ -451,7 +449,7 @@ public class SupplierRegisterActivity extends AppCompatActivity {
                     }
                 }
                 @Override
-                public void onFailure(@NonNull Call<ProductResponseByCode> call, @NonNull Throwable t) {
+                public void onFailure(@NonNull Call<ProductResponse> call, @NonNull Throwable t) {
                     System.out.println("errror "+t.getMessage());
                 }
             });

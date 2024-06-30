@@ -37,7 +37,9 @@ import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProduct;
 import com.mibodega.mystore.shared.adapters.SubcategoryView;
+import com.mibodega.mystore.views.products.ProductDetailActivity;
 import com.mibodega.mystore.views.products.ProductEditActivity;
+import com.mibodega.mystore.views.supplier.SupplierRegisterActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -211,7 +213,11 @@ public class ProductsFragment extends Fragment {
                         RecyclerViewAdapterProduct listAdapter = new RecyclerViewAdapterProduct(getContext(), 1, productlist, new RecyclerViewAdapterProduct.OnDetailItem() {
                             @Override
                             public void onClick(ProductResponse product) {
-
+                                Bundle bundle = new Bundle();
+                                bundle.putString("product_code",product.getCode());
+                                Intent moveHMA = new Intent(getContext(), ProductDetailActivity.class);
+                                moveHMA.putExtras(bundle);
+                                startActivity(moveHMA);
                             }
                         }, new RecyclerViewAdapterProduct.OnSupplierItem() {
                             @Override

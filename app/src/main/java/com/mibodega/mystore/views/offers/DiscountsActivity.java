@@ -215,17 +215,15 @@ public class DiscountsActivity extends AppCompatActivity {
                 build();
 
         IProductServices service = retrofit.create(IProductServices.class);
-        Call<ProductResponseByCode> call = service.getProductByCode(code,"Bearer "+config.getJwt());
+        Call<ProductResponse> call = service.getProductByCode(code,"Bearer "+config.getJwt());
         System.out.println(config.getJwt());
-        call.enqueue(new Callback<ProductResponseByCode>() {
+        call.enqueue(new Callback<ProductResponse>() {
             @Override
-            public void onResponse(@NonNull Call<ProductResponseByCode> call, @NonNull Response<ProductResponseByCode> response) {
+            public void onResponse(@NonNull Call<ProductResponse> call, @NonNull Response<ProductResponse> response) {
                 System.out.println(response.toString());
                 if(response.isSuccessful()){
-                    ProductResponseByCode product = response.body();
-                    CategoryProduct categoryProduct = new CategoryProduct(product.getCategory(),"");
-                    SubCategoryResponse subCategoryResponse = new SubCategoryResponse(product.getSubcategory(),"");
-                    if(product!=null){
+                    ProductResponse product = response.body();
+                   if(product!=null){
                         ProductResponse productResponse = new ProductResponse(
                                 product.get_id(),
                                 product.getName(),
@@ -235,8 +233,7 @@ public class DiscountsActivity extends AppCompatActivity {
                                 product.getImage_url(),
                                 product.getSales(),
                                 false,
-                                categoryProduct,
-                                subCategoryResponse,
+                                product.getCategory(), product.getSubcategory(),
                                 product.getShop(),
                                 product.getCreatedAt(),
                                 product.getUpdatedAt()
@@ -250,7 +247,7 @@ public class DiscountsActivity extends AppCompatActivity {
                 }
             }
             @Override
-            public void onFailure(@NonNull Call<ProductResponseByCode> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<ProductResponse> call, @NonNull Throwable t) {
                 System.out.println("errror "+t.getMessage());
             }
         });

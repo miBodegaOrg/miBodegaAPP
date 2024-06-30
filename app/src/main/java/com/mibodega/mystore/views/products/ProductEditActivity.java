@@ -48,6 +48,7 @@ import com.mibodega.mystore.models.Requests.ProductCreateRequest;
 import com.mibodega.mystore.models.Responses.CategoryResponse;
 import com.mibodega.mystore.models.Responses.GenerateCodeResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
+import com.mibodega.mystore.models.Responses.ProductResponseByCode;
 import com.mibodega.mystore.models.Responses.SubCategoryResponse;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.shared.Config;
@@ -312,12 +313,6 @@ public class ProductEditActivity extends AppCompatActivity {
 
     }
 
-
-
-
-
-
-
     public static String generateRandomNumber() {
         Random random = new Random();
         int randomNumber = random.nextInt(900000000) + 100000000;
@@ -354,14 +349,14 @@ public class ProductEditActivity extends AppCompatActivity {
 
 
 
-        Call<ProductResponse> call = service.createProduct(requestMap,"Bearer "+config.getJwt());
+        Call<ProductResponseByCode> call = service.createProduct(requestMap,"Bearer "+config.getJwt());
         System.out.println(config.getJwt());
-        call.enqueue(new Callback<ProductResponse>() {
+        call.enqueue(new Callback<ProductResponseByCode>() {
             @Override
-            public void onResponse(@NonNull Call<ProductResponse> call, @NonNull Response<ProductResponse> response) {
+            public void onResponse(@NonNull Call<ProductResponseByCode> call, @NonNull Response<ProductResponseByCode> response) {
                 System.out.println(response.toString());
                 if(response.isSuccessful()){
-
+                    Toast.makeText(getBaseContext(),"CREADO",Toast.LENGTH_SHORT).show();
                    // pagesProductResponse = response.body();
                     System.out.println("successfull request");
                     finish();
@@ -384,7 +379,7 @@ public class ProductEditActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<ProductResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<ProductResponseByCode> call, @NonNull Throwable t) {
                 System.out.println("error de servidor");
                 System.out.println("errror "+t.getMessage());
 
@@ -575,6 +570,8 @@ public class ProductEditActivity extends AppCompatActivity {
                 .setBarcodeImageEnabled(false);
         barcodeLauncher.launch(options);
     }
+
+
 
 
 
