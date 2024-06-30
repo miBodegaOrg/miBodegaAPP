@@ -160,8 +160,7 @@ public class CreateSaleFragment extends Fragment {
                         ProductResponse productResponse = new ProductResponse(
                                 product.get_id(),
                                 product.getName(),
-                                product.getCode(),
-                                product.getPrice(),
+                                product.getCode(), product.getPrice(),
                                 product.getStock(),
                                 product.getImage_url(),
                                 product.getSales(),

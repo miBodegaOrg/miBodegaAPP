@@ -17,6 +17,7 @@ import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.PagesProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.models.Responses.SupplierResponse;
+import com.mibodega.mystore.models.Responses.SupplierResponseV2;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.services.ISupplierServices;
 import com.mibodega.mystore.shared.Config;
@@ -39,7 +40,7 @@ public class SupplierActivity extends AppCompatActivity {
     private FloatingActionButton btn_newSupplier;
     private RecyclerView rv_supplierList;
     private Config config = new Config();
-    private ArrayList<SupplierResponse> arrayListSupplier = new ArrayList<>();
+    private ArrayList<SupplierResponseV2> arrayListSupplier = new ArrayList<>();
     private DrawerLayout drawerLayout;
     private FrameLayout chatFragmentContainer;
     @Override
@@ -99,28 +100,29 @@ public class SupplierActivity extends AppCompatActivity {
                 build();
 
         ISupplierServices service = retrofit.create(ISupplierServices.class);
-        Call<List<SupplierResponse>> call = service.getSuppliers("Bearer "+config.getJwt());
+        Call<List<SupplierResponseV2>> call = service.getSuppliers("Bearer "+config.getJwt());
         System.out.println(config.getJwt());
-        call.enqueue(new Callback<List<SupplierResponse>>() {
+        call.enqueue(new Callback<List<SupplierResponseV2>>() {
             @Override
-            public void onResponse(@NonNull Call<List<SupplierResponse>> call, @NonNull Response<List<SupplierResponse>> response) {
+            public void onResponse(@NonNull Call<List<SupplierResponseV2>> call, @NonNull Response<List<SupplierResponseV2>> response) {
                 System.out.println(response.toString());
                 if(response.isSuccessful()){
-                    arrayListSupplier = (ArrayList<SupplierResponse>) response.body();
+                    arrayListSupplier = (ArrayList<SupplierResponseV2>) response.body();
                     if(arrayListSupplier!=null){
                         System.out.println(arrayListSupplier.size());
                         rv_supplierList.removeAllViews();
                         RecyclerViewAdapterSupplier listAdapter = new RecyclerViewAdapterSupplier(getBaseContext(), arrayListSupplier, new RecyclerViewAdapterSupplier.OnDetailItem() {
                             @Override
-                            public void onClick(SupplierResponse item) {
+                            public void onClick(SupplierResponseV2 item) {
                                 Intent mg = new Intent(getBaseContext(), SupplierDetailActivity.class);
                                 startActivity(mg);
                             }
                         }, new RecyclerViewAdapterSupplier.OnManageItem() {
                             @Override
-                            public void onClick(SupplierResponse item) {
+                            public void onClick(SupplierResponseV2 item) {
                                 Bundle bundle = new Bundle();
                                 bundle.putString("ruc",item.getRuc());
+                                System.out.println("ruc "+item.getRuc());
                                 Intent mg = new Intent(getBaseContext(), SupplierRegisterActivity.class);
                                 mg.putExtras(bundle);
                                 startActivity(mg);
@@ -138,7 +140,7 @@ public class SupplierActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<SupplierResponse>> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<List<SupplierResponseV2>> call, @NonNull Throwable t) {
                 System.out.println("error "+t.getMessage());
             }
         });

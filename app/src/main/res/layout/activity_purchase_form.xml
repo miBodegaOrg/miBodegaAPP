@@ -29,15 +29,6 @@ tools:context=".views.selling.PurchaseFormActivity">
             android:textAlignment="center"
             android:textSize="24sp" />
 
-        <SearchView
-            android:id="@+id/Sv_searchProduct_purchase"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/backgroun_custom_rectangle"
-            android:backgroundTint="@color/md_theme_dark_onSecondaryContainer">
-
-        </SearchView>
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
@@ -47,64 +38,44 @@ tools:context=".views.selling.PurchaseFormActivity">
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/textView55"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Selecciona el Proveedor:"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <Spinner
+                        android:id="@+id/Sp_selectSuppier_purchase"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:drawable/editbox_background_normal" />
+                </LinearLayout>
+
+                <SearchView
+                    android:id="@+id/Sv_searchProduct_purchase"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/backgroun_custom_rectangle"
+                    android:backgroundTint="@color/md_theme_dark_onSecondaryContainer"
+                    android:visibility="gone">
+
+                </SearchView>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/Rv_listSearchProduct_purchase"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:visibility="gone" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="vertical"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp">
-
-                    <TextView
-                        android:id="@+id/textView9"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Escanea codigo de barras para agregar producto:"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/textView12"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Ultimo codigo: "
-                        android:textColor="@color/md_theme_dark_inversePrimary" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:padding="5dp">
-
-                        <TextView
-                            android:id="@+id/Tv_codeScannedBar_purchase"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@drawable/borde"
-                            android:gravity="center_vertical"
-                            android:padding="2dp"
-                            android:text="3213876416468464864684"
-                            android:textAlignment="center" />
-
-                        <ImageButton
-                            android:id="@+id/Imgb_scanCodeBarProduct_purchase"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_marginLeft="5dp"
-                            android:layout_weight="4"
-                            android:background="@drawable/backgroun_custom_rectangle"
-                            android:backgroundTint="@color/md_theme_dark_inversePrimary"
-                            android:src="@drawable/ic_barcode"
-                            app:tint="@color/white" />
-                    </LinearLayout>
-                </LinearLayout>
 
                 <TextView
                     android:id="@+id/textView6"
@@ -127,19 +98,6 @@ tools:context=".views.selling.PurchaseFormActivity">
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:padding="10dp">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/Edt_rucSupplier_purchase"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Ruc  Proveedor"
-                            android:inputType="number"
-                            android:text="12348185253" />
-                    </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"

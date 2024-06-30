@@ -18,6 +18,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.models.Responses.SupplierResponse;
+import com.mibodega.mystore.models.Responses.SupplierResponseV2;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.Utils;
 
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 public class RecyclerViewAdapterSupplier extends RecyclerView.Adapter<RecyclerViewAdapterSupplier.ViewHolder> implements View.OnClickListener {
     private Utils utils = new Utils();
     private Config config = new Config();
-    private ArrayList<SupplierResponse> supplierList = new ArrayList<>();
+    private ArrayList<SupplierResponseV2> supplierList = new ArrayList<>();
 
     private int viewType_;
     private Context context;
@@ -44,20 +45,20 @@ public class RecyclerViewAdapterSupplier extends RecyclerView.Adapter<RecyclerVi
     }
 
     public interface OnDetailItem {
-        void onClick(SupplierResponse item);
+        void onClick(SupplierResponseV2 item);
     }
     public interface OnManageItem {
-        void onClick(SupplierResponse item);
+        void onClick(SupplierResponseV2 item);
     }
 
-    public RecyclerViewAdapterSupplier(Context context, ArrayList<SupplierResponse> supplierList, RecyclerViewAdapterSupplier.OnDetailItem onDetailItem, RecyclerViewAdapterSupplier.OnManageItem onManageItem) {
+    public RecyclerViewAdapterSupplier(Context context, ArrayList<SupplierResponseV2> supplierList, RecyclerViewAdapterSupplier.OnDetailItem onDetailItem, RecyclerViewAdapterSupplier.OnManageItem onManageItem) {
         this.context = context;
         this.supplierList = supplierList;
         this.onDetailItem = onDetailItem;
         this.onManageItem = onManageItem;
     }
 
-    public void setFilteredList(ArrayList<SupplierResponse> filteredList) {
+    public void setFilteredList(ArrayList<SupplierResponseV2> filteredList) {
         this.supplierList = filteredList;
         notifyDataSetChanged();
     }
@@ -73,7 +74,7 @@ public class RecyclerViewAdapterSupplier extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapterSupplier.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        SupplierResponse supplier = supplierList.get(position);
+        SupplierResponseV2 supplier = supplierList.get(position);
 /*
         Glide.with(context)
                 .asBitmap()

@@ -8,13 +8,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,9 +31,12 @@ import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponseByCode;
 import com.mibodega.mystore.models.Responses.PurchaseResponse;
 import com.mibodega.mystore.models.Responses.SubCategoryResponse;
+import com.mibodega.mystore.models.Responses.SupplierResponse;
+import com.mibodega.mystore.models.Responses.SupplierResponseV2;
 import com.mibodega.mystore.models.common.ProductSaleV2;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.services.IPurchasesService;
+import com.mibodega.mystore.services.ISupplierServices;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.SaleTemporalList;
 import com.mibodega.mystore.shared.Utils;
@@ -44,6 +49,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -55,8 +63,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class PurchaseFormActivity extends AppCompatActivity {
 
     private SearchView searchProduct;
-    private TextView tv_codeScanned;
-    private ImageButton btn_scanCodeBar;
+
     private RecyclerView rv_recyclerProductList;
     private RecyclerView rv_recyclerSearchProductList;
     private Button btn_vender;
@@ -66,24 +73,14 @@ public class PurchaseFormActivity extends AppCompatActivity {
     private SaleTemporalList saleTemporalList =  new SaleTemporalList();
     private ArrayList<ProductResponse> arrayListProduct = new ArrayList<>();
     private ArrayList<ProductResponse> arraySearchListProduct = new ArrayList<>();
-
-
     private PagesProductResponse pagesSearchProductResponse;
-    private TextInputEditText edt_ruc, edt_dicount, edt_shipping;
+    private TextInputEditText edt_dicount, edt_shipping;
     private DrawerLayout drawerLayout;
     private FrameLayout chatFragmentContainer;
+    private Spinner sp_selectSupplier;
+    private ArrayList<SupplierResponseV2> arrsupplierResponses = new ArrayList<>();
+    private Map<String,SupplierResponseV2> mapsupplierResponses = new HashMap<>();
 
-    private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
-            result -> {
-                if (result.getContents() == null) {
-                    Toast.makeText(getBaseContext(), "Escaneo cancelado", Toast.LENGTH_LONG).show();
-                } else {
-                    String barcodeValue = result.getContents();
-                    // Procesa el valor del código de barras
-                    tv_codeScanned.setText(barcodeValue);
-                    getProductByCode(barcodeValue);
-                }
-            });
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,11 +88,10 @@ public class PurchaseFormActivity extends AppCompatActivity {
 
         searchProduct = findViewById(R.id.Sv_searchProduct_purchase);
         rv_recyclerSearchProductList = findViewById(R.id.Rv_listSearchProduct_purchase);
-        tv_codeScanned = findViewById(R.id.Tv_codeScannedBar_purchase);
-        btn_scanCodeBar = findViewById(R.id.Imgb_scanCodeBarProduct_purchase);
+
         rv_recyclerProductList = findViewById(R.id.Rv_productAtPurchaseList_purchase);
         btn_vender = findViewById(R.id.Btn_purchaseProducts_purchase);
-        edt_ruc = findViewById(R.id.Edt_rucSupplier_purchase);
+        sp_selectSupplier = findViewById(R.id.Sp_selectSuppier_purchase);
         edt_dicount = findViewById(R.id.Edt_discount_purchase);
         edt_shipping = findViewById(R.id.Edt_shipping_purchase);
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -131,12 +127,7 @@ public class PurchaseFormActivity extends AppCompatActivity {
             }
         });
 
-        btn_scanCodeBar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startBarcodeScanner();
-            }
-        });
+
         btn_vender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -149,6 +140,7 @@ public class PurchaseFormActivity extends AppCompatActivity {
         });
 
         loadData();
+        loadSuppliers();
         searchProduct.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -172,13 +164,22 @@ public class PurchaseFormActivity extends AppCompatActivity {
 
             }
         });
+
+        sp_selectSupplier.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(getBaseContext(),"SELECCIONADO",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     public String valiteFields(){
             String message = "ok";
-            if(edt_ruc.getText().toString().trim().length() == 0){
-                message += "😨 Debe ingresar ruc \n";
-            }
             if(edt_shipping.getText().toString().trim().length() == 0){
                 message += "😨 Debe ingresar precio envio \n";
             }
@@ -223,8 +224,7 @@ public class PurchaseFormActivity extends AppCompatActivity {
                         ProductResponse productResponse = new ProductResponse(
                                 product.get_id(),
                                 product.getName(),
-                                product.getCode(),
-                                product.getPrice(),
+                                product.getCode(), product.getPrice(),
                                 product.getStock(),
                                 product.getImage_url(),
                                 product.getSales(),
@@ -295,6 +295,40 @@ public class PurchaseFormActivity extends AppCompatActivity {
         });
     }
 
+    public void loadSuppliers(){
+        Retrofit retrofit = new Retrofit.
+                Builder().
+                baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
+                build();
+        ISupplierServices service = retrofit.create(ISupplierServices.class);
+        Call<List<SupplierResponseV2>> call = service.getSuppliers("Bearer "+config.getJwt());
+        call.enqueue(new Callback<List<SupplierResponseV2>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<SupplierResponseV2>> call, @NonNull Response<List<SupplierResponseV2>> response) {
+                System.out.println(response.toString());
+                if(response.isSuccessful()){
+                    arrsupplierResponses = (ArrayList<SupplierResponseV2>) response.body();
+                    if(arrsupplierResponses!=null){
+                        ArrayList<String> suppliers = new ArrayList<>();
+                        for (SupplierResponseV2 item:arrsupplierResponses) {
+                            suppliers.add(item.getName());
+                            mapsupplierResponses.put(item.getName(),item);
+                        }
+                        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_spinner_item, suppliers);
+                        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        sp_selectSupplier.setAdapter(adapter2);
+                        System.out.println("successfull request");
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<SupplierResponseV2>> call, @NonNull Throwable t) {
+                System.out.println("errror "+t.getMessage());
+            }
+        });
+    }
 
     public void createPurchase(){
         ArrayList<ProductSaleV2> arraux = new ArrayList<>();
@@ -302,7 +336,7 @@ public class PurchaseFormActivity extends AppCompatActivity {
 
             arraux.add(new ProductSaleV2(product.getCode(),1));
         }
-        String ruc = edt_ruc.getText().toString();
+        String ruc = "";
         Double discount = Double.valueOf(edt_dicount.getText().toString())/100;
         Double shipping = Double.valueOf(edt_shipping.getText().toString());
         PurchaseRequest request = new PurchaseRequest(ruc,discount,shipping,arraux);
@@ -319,7 +353,6 @@ public class PurchaseFormActivity extends AppCompatActivity {
                 Log.e("error", response.toString());
                 if (response.isSuccessful()) {
                     saleTemporalList.cleanAll();
-                    edt_ruc.setText("");
                     edt_dicount.setText("");
                     edt_shipping.setText("");
                     loadData();
@@ -345,16 +378,5 @@ public class PurchaseFormActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-
-    private void startBarcodeScanner() {
-        ScanOptions options = new ScanOptions()
-                .setDesiredBarcodeFormats(ScanOptions.ALL_CODE_TYPES)
-                .setPrompt("Escanea un código de barras")
-                .setCameraId(0)
-                .setBeepEnabled(false)
-                .setBarcodeImageEnabled(false);
-        barcodeLauncher.launch(options);
     }
 }

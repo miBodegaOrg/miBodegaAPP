@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/editbox_background_normal"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/Tv_productName_product_supplier"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6"
+                android:text="PRODUCTO NOMBRE 12323"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/Imgb_deleteProduct_product_supplier"
+                android:layout_width="match_parent"
+                android:layout_height="26dp"
+                android:layout_weight="5"
+                android:background="@color/white"
+                android:src="@drawable/baseline_close_24" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/Imgv_productImage_product_supplier"
+                android:layout_width="150dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:padding="5dp"
+                app:srcCompat="@drawable/baseline_camera_alt_24" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Stock:" />
+
+                    <TextView
+                        android:id="@+id/Tv_stockProduct_product_supplier"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="10" />
+
+                    <TextView
+                        android:id="@+id/textView17"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Precio U :" />
+
+                    <TextView
+                        android:id="@+id/Tv_priceProduct_product_supplier"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="s/ 10.00" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/Ly_totalContainer_product_supplier"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView19"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Total:" />
+
+                    <TextView
+                        android:id="@+id/Tv_totalPrice_product_supplier"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="S/100.000"
+                        android:textColor="@color/md_theme_dark_inversePrimary" />
+
+                    <TextView
+                        android:id="@+id/textView58"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Costo:" />
+
+                    <TextView
+                        android:id="@+id/Tv_cost_product_supplier"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="s/ 20.00" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/Ly_containerInputs_supplier"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/backgroun_custom_rectangle"
+                    android:backgroundTint="@color/md_theme_dark_inversePrimary"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <LinearLayout
+                        android:id="@+id/Ly_containerPrice_product_supplier"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/textView57"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="Precio:"
+                            android:textAlignment="center"
+                            android:textColor="@color/md_theme_light_onTertiary" />
+
+                        <EditText
+                            android:id="@+id/edt_pricetProduct_supplier"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/borde"
+                            android:backgroundTint="@color/white"
+                            android:ems="10"
+                            android:inputType="number"
+                            android:text="12"
+                            android:textAlignment="center"
+                            android:textColor="@color/md_theme_dark_onBackground" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/Ly_containerAmount_product_supplier"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/textView20"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="Cantidad:"
+                            android:textAlignment="center"
+                            android:textColor="@color/md_theme_light_onTertiary" />
+
+                        <EditText
+                            android:id="@+id/Edt_amountProduct_supplier"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/borde"
+                            android:backgroundTint="@color/white"
+                            android:ems="10"
+                            android:inputType="number"
+                            android:text="12"
+                            android:textAlignment="center"
+                            android:textColor="@color/md_theme_dark_onBackground" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

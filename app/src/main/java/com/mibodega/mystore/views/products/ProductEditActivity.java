@@ -360,7 +360,6 @@ public class ProductEditActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<ProductResponse> call, @NonNull Response<ProductResponse> response) {
                 System.out.println(response.toString());
-
                 if(response.isSuccessful()){
 
                    // pagesProductResponse = response.body();
@@ -388,6 +387,7 @@ public class ProductEditActivity extends AppCompatActivity {
             public void onFailure(@NonNull Call<ProductResponse> call, @NonNull Throwable t) {
                 System.out.println("error de servidor");
                 System.out.println("errror "+t.getMessage());
+
 
             }
         });

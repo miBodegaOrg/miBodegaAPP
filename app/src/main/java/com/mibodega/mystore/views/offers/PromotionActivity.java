@@ -10,10 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.SearchView;
@@ -25,18 +23,14 @@ import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.PromotionRequest;
-import com.mibodega.mystore.models.Requests.PurchaseRequest;
 import com.mibodega.mystore.models.Responses.CategoryProduct;
 import com.mibodega.mystore.models.Responses.PagesProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponseByCode;
 import com.mibodega.mystore.models.Responses.PromotionResponse;
-import com.mibodega.mystore.models.Responses.PurchaseResponse;
 import com.mibodega.mystore.models.Responses.SubCategoryResponse;
-import com.mibodega.mystore.models.common.ProductSaleV2;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.services.IPromotionService;
-import com.mibodega.mystore.services.IPurchasesService;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.SaleTemporalList;
 import com.mibodega.mystore.shared.Utils;
@@ -230,8 +224,7 @@ public class PromotionActivity extends AppCompatActivity {
                         ProductResponse productResponse = new ProductResponse(
                                 product.get_id(),
                                 product.getName(),
-                                product.getCode(),
-                                product.getPrice(),
+                                product.getCode(), product.getPrice(),
                                 product.getStock(),
                                 product.getImage_url(),
                                 product.getSales(),
