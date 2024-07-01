@@ -1,15 +1,13 @@
 package com.mibodega.mystore.models.common;
 
-public class ProductSaleV2 {
-
-    private String code;
+public class ProductPurchase {
     private Number quantity;
+    private String code;
 
-    public ProductSaleV2(String code, Number quantity) {
-        this.code = code;
+    public ProductPurchase(Number quantity, String code) {
         this.quantity = quantity;
+        this.code = code;
     }
-
 
     public Number getQuantity() {
         return quantity;
@@ -35,8 +33,4 @@ public class ProductSaleV2 {
     public int getQuantityAsInt() {
         return quantity.intValue();
     }
-
-
-
-
 }

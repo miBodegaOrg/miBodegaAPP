@@ -3,16 +3,16 @@ package com.mibodega.mystore.views.offers;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -23,23 +23,20 @@ import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.PromotionRequest;
-import com.mibodega.mystore.models.Requests.PurchaseRequest;
 import com.mibodega.mystore.models.Responses.CategoryProduct;
 import com.mibodega.mystore.models.Responses.PagesProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponseByCode;
 import com.mibodega.mystore.models.Responses.PromotionResponse;
-import com.mibodega.mystore.models.Responses.PurchaseResponse;
 import com.mibodega.mystore.models.Responses.SubCategoryResponse;
-import com.mibodega.mystore.models.common.ProductSaleV2;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.services.IPromotionService;
-import com.mibodega.mystore.services.IPurchasesService;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.SaleTemporalList;
 import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSale;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSearch;
+import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -76,6 +73,8 @@ public class PromotionActivity extends AppCompatActivity {
     private TextInputEditText edt_name, edt_dateInit, edt_dateEnd,edt_buy,edt_receiv;
     private Calendar startCalendar, endCalendar;
     private ImageButton btn_start,btn_end;
+    private DrawerLayout drawerLayout;
+    private FrameLayout chatFragmentContainer;
 
     private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
             result -> {
@@ -109,6 +108,37 @@ public class PromotionActivity extends AppCompatActivity {
 
         startCalendar = Calendar.getInstance();
         endCalendar = Calendar.getInstance();
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        chatFragmentContainer = findViewById(R.id.chat_fragment_container);
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+                // No es necesario hacer nada aquí
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                // Mostrar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.chat_fragment_container, new ChatBotGlobalFragment())
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                // Ocultar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .remove(getSupportFragmentManager().findFragmentById(R.id.chat_fragment_container))
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                // No es necesario hacer nada aquí
+            }
+        });
+        
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -180,28 +210,25 @@ public class PromotionActivity extends AppCompatActivity {
                 build();
 
         IProductServices service = retrofit.create(IProductServices.class);
-        Call<ProductResponseByCode> call = service.getProductByCode(code,"Bearer "+config.getJwt());
+        Call<ProductResponse> call = service.getProductByCode(code,"Bearer "+config.getJwt());
         System.out.println(config.getJwt());
-        call.enqueue(new Callback<ProductResponseByCode>() {
+        call.enqueue(new Callback<ProductResponse>() {
             @Override
-            public void onResponse(@NonNull Call<ProductResponseByCode> call, @NonNull Response<ProductResponseByCode> response) {
+            public void onResponse(@NonNull Call<ProductResponse> call, @NonNull Response<ProductResponse> response) {
                 System.out.println(response.toString());
                 if(response.isSuccessful()){
-                    ProductResponseByCode product = response.body();
-                    CategoryProduct categoryProduct = new CategoryProduct(product.getCategory(),"");
-                    SubCategoryResponse subCategoryResponse = new SubCategoryResponse(product.getSubcategory(),"");
+                    ProductResponse product = response.body();
                     if(product!=null){
                         ProductResponse productResponse = new ProductResponse(
                                 product.get_id(),
                                 product.getName(),
-                                product.getCode(),
-                                product.getPrice(),
+                                product.getCode(), product.getPrice(),
                                 product.getStock(),
                                 product.getImage_url(),
                                 product.getSales(),
                                 false,
-                                categoryProduct,
-                                subCategoryResponse,
+                                product.getCategory(),
+                                product.getSubcategory(),
                                 product.getShop(),
                                 product.getCreatedAt(),
                                 product.getUpdatedAt()
@@ -215,7 +242,7 @@ public class PromotionActivity extends AppCompatActivity {
                 }
             }
             @Override
-            public void onFailure(@NonNull Call<ProductResponseByCode> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<ProductResponse> call, @NonNull Throwable t) {
                 System.out.println("errror "+t.getMessage());
             }
         });

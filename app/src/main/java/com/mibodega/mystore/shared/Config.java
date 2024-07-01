@@ -10,10 +10,17 @@ public class Config {
     private static String userName;
     private static String user_ruc;
     private static String URL_API ="http://34.168.45.44/api/v1/";
-
     private static ArrayList<CategoryResponse> arrCategories =  new ArrayList<>();
-
+    private static ArrayList<String> arrPermises = new ArrayList<>();
     private static ArrayList<CategoryResponseWithProducts> arrCategoriesWithProducts =  new ArrayList<>();
+
+    public ArrayList<String> getArrPermises() {
+        return arrPermises;
+    }
+
+    public void setArrPermises(ArrayList<String> arrPermises) {
+        Config.arrPermises = arrPermises;
+    }
 
     public ArrayList<CategoryResponseWithProducts> getArrCategoriesWithProducts() {
         return arrCategoriesWithProducts;

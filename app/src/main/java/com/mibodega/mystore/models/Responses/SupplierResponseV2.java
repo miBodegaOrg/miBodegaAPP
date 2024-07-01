@@ -1,21 +1,19 @@
 package com.mibodega.mystore.models.Responses;
 
-import com.mibodega.mystore.models.common.ProductSupplier;
-
 import java.util.ArrayList;
 
-public class SupplierResponse {
+public class SupplierResponseV2 {
     private String _id;
     private String name;
     private String phone;
     private String ruc;
     private String shop;
-    private ArrayList<ProductResponseSupplier> products;
+    private ArrayList<ProductResponseSupplierV2> products;
     private String createdAt;
     private String updatedAt;
     private int __v;
 
-    public SupplierResponse(String _id, String name, String phone, String ruc, String shop, ArrayList<ProductResponseSupplier> products, String createdAt, String updatedAt, int __v) {
+    public SupplierResponseV2(String _id, String name, String phone, String ruc, String shop, ArrayList<ProductResponseSupplierV2> products, String createdAt, String updatedAt) {
         this._id = _id;
         this.name = name;
         this.phone = phone;
@@ -24,7 +22,6 @@ public class SupplierResponse {
         this.products = products;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.__v = __v;
     }
 
     public String get_id() {
@@ -67,11 +64,11 @@ public class SupplierResponse {
         this.shop = shop;
     }
 
-    public ArrayList<ProductResponseSupplier> getProducts() {
+    public ArrayList<ProductResponseSupplierV2> getProducts() {
         return products;
     }
 
-    public void setProducts(ArrayList<ProductResponseSupplier> products) {
+    public void setProducts(ArrayList<ProductResponseSupplierV2> products) {
         this.products = products;
     }
 

@@ -6,6 +6,7 @@ import com.mibodega.mystore.models.Responses.SaleResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class SaleTemporalList {
     private static ArrayList<ProductResponse> arrayList = new ArrayList<>();
@@ -79,6 +80,21 @@ public class SaleTemporalList {
             calculateTotalPrice();
         }
     }
+    public void removeProductByCode(String productCode) {
+        Optional<ProductResponse> productOptional = arrayList.stream()
+                .filter(p -> p.getCode().equals(productCode))
+                .findFirst();
+
+        if (productOptional.isPresent()) {
+            ProductResponse product = productOptional.get();
+            arrayList.remove(product);
+            mapAmountProduct.remove(productCode);
+            calculateTotalPrice();
+        }
+    }
+
+
+
 
     public void updateAmountProduct(String productCode, int newAmount) {
         if (mapAmountProduct.containsKey(productCode)) {

@@ -23,8 +23,10 @@ import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.CategoryResponse;
 import com.mibodega.mystore.models.Responses.CategoryResponseWithProducts;
 import com.mibodega.mystore.models.Responses.PagesProductResponse;
+import com.mibodega.mystore.models.Responses.PermissionResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.services.ICategoryServices;
+import com.mibodega.mystore.services.IEmployeeServices;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProduct;
@@ -129,6 +131,7 @@ public class HomeFragment extends Fragment {
 
 
         initProductsData(root);
+        initPermises();
         initCategoryData(root);
         chart.invalidate();
         return root;
@@ -163,6 +166,35 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+    private void initPermises(){
+        Retrofit retrofit = new Retrofit.
+                Builder().
+                baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
+                build();
+
+        IEmployeeServices service = retrofit.create(IEmployeeServices.class);
+        Call<PermissionResponse> call = service.getPermises("Bearer "+config.getJwt());
+        System.out.println(config.getJwt());
+        call.enqueue(new Callback<PermissionResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<PermissionResponse> call, @NonNull Response<PermissionResponse> response) {
+                System.out.println(response.toString());
+                if(response.isSuccessful()){
+                    PermissionResponse permissionResponse = response.body();
+                    if(permissionResponse!=null){
+                        config.setArrPermises(permissionResponse.getPermissions());
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<PermissionResponse> call, @NonNull Throwable t) {
+                System.out.println("errror "+t.getMessage());
+            }
+        });
+    }
+
     private void initCategoryData(View root) {
         Retrofit retrofit = new Retrofit.
                 Builder().
@@ -193,4 +225,5 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
 }

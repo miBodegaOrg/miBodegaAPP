@@ -2,13 +2,13 @@ package com.mibodega.mystore.views.employers;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.drawerlayout.widget.DrawerLayout;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -18,10 +18,11 @@ import com.mibodega.mystore.models.Requests.RequestEmployee;
 import com.mibodega.mystore.models.Responses.EmployeeResponse;
 import com.mibodega.mystore.services.IEmployeeServices;
 import com.mibodega.mystore.shared.Config;
-import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterEmployee;
+import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -33,11 +34,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ManageEmployerActivity extends AppCompatActivity {
     private TextInputEditText edt_name, edt_lastname,edt_email,edt_dni,edt_phone,edt_password;
     private LinearLayout ly_permisesContainer, ly_permisesCheckList;
-    private Button btn_savePermises;
-    private Button btn_desactive,btn_delete,btn_active,btn_create,btn_back;
+    private Button btn_saveChangesEmployee;
+    private Button btn_update,btn_delete,btn_create,btn_back;
     private String id_employee="";
     private Config config = new Config();
     private EmployeeResponse employeeResponse=null;
+    private DrawerLayout drawerLayout;
+    private FrameLayout chatFragmentContainer;
+    private Map<String,CheckBox> mapEsPermisses = new HashMap<>();
+    private ArrayList<String> curremtPermises = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,56 +57,123 @@ public class ManageEmployerActivity extends AppCompatActivity {
 
         ly_permisesContainer = findViewById(R.id.Ly_permisesContainer_employee);
         ly_permisesCheckList = findViewById(R.id.Ly_permisesListCheck_employee);
-        btn_savePermises = findViewById(R.id.Btn_savePrivilegiesEmployee_employee);
-        btn_desactive = findViewById(R.id.Btn_desactiveEmployee_employee);
+        btn_saveChangesEmployee = findViewById(R.id.Btn_savePrivilegiesEmployee_employee);
+        btn_update = findViewById(R.id.Btn_updateEmployee_employee);
         btn_delete = findViewById(R.id.Btn_deleteEmployee_employee);
-        btn_active = findViewById(R.id.Btn_activeEmployee_employee);
         btn_create = findViewById(R.id.Btn_createEmployee_employee);
         btn_back = findViewById(R.id.Btn_back_employee);
 
         id_employee = getIntent().getExtras().getString("employee_id");
+        drawerLayout = findViewById(R.id.drawer_layout);
+        chatFragmentContainer = findViewById(R.id.chat_fragment_container);
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+                // No es necesario hacer nada aquí
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                // Mostrar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.chat_fragment_container, new ChatBotGlobalFragment())
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                // Ocultar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .remove(getSupportFragmentManager().findFragmentById(R.id.chat_fragment_container))
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                // No es necesario hacer nada aquí
+            }
+        });
         if(Objects.equals(id_employee, "0")){
-            btn_active.setVisibility(View.GONE);
-            btn_desactive.setVisibility(View.GONE);
+            btn_saveChangesEmployee.setVisibility(View.GONE);
+            btn_update.setVisibility(View.GONE);
             btn_delete.setVisibility(View.GONE);
-            ly_permisesContainer.setVisibility(View.GONE);
         }else {
-            btn_active.setVisibility(View.VISIBLE);
-            btn_desactive.setVisibility(View.VISIBLE);
+
+            btn_update.setVisibility(View.VISIBLE);
             btn_delete.setVisibility(View.VISIBLE);
             btn_create.setVisibility(View.GONE);
-            ly_permisesContainer.setVisibility(View.VISIBLE);
+            edt_name.setEnabled(false);
+            edt_lastname.setEnabled(false);
+            edt_email.setEnabled(false);
+            edt_dni.setEnabled(false);
+            edt_phone.setEnabled(false);
+            edt_password.setEnabled(false);
             loadEmployee(id_employee);
 
         }
-        btn_savePermises.setOnClickListener(new View.OnClickListener() {
+        btn_saveChangesEmployee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(btn_saveChangesEmployee.getText()=="Editar"){
+                    edt_name.setEnabled(true);
+                    edt_lastname.setEnabled(true);
+                    edt_email.setEnabled(true);
+                    edt_dni.setEnabled(true);
+                    edt_phone.setEnabled(true);
+                    edt_password.setEnabled(true);
+                    ly_permisesCheckList.setEnabled(true);
+                    btn_saveChangesEmployee.setText("Guardar");
 
+                }else{
+                    edt_name.setEnabled(false);
+                    edt_lastname.setEnabled(false);
+                    edt_email.setEnabled(false);
+                    edt_dni.setEnabled(false);
+                    edt_phone.setEnabled(false);
+                    edt_password.setEnabled(false);
+                    ly_permisesCheckList.setEnabled(false);
+
+                    ArrayList<String> aux = new ArrayList<>();
+                    for (String item : config.getArrPermises()) {
+                        CheckBox checkBox = mapEsPermisses.get(item);
+                        assert checkBox != null;
+                        if(checkBox.isChecked()){
+                            aux.add(item);
+                        }
+                    }
+                    curremtPermises = aux;
+                    btn_saveChangesEmployee.setText("Editar");
+
+                }
             }
         });
-        btn_desactive.setOnClickListener(new View.OnClickListener() {
+        btn_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                updateEmployee(id_employee);
             }
         });
-        btn_active.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-            }
-        });
         btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                // agregar dialog para preguntar si esta seguro de eliminar el empleado
+                deleteEmployee(id_employee);
             }
         });
         btn_create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(Objects.equals(valiteFields(), "ok")){
+                    ArrayList<String> aux = new ArrayList<>();
+                    for (String item : config.getArrPermises()) {
+                        CheckBox checkBox = mapEsPermisses.get(item);
+                        assert checkBox != null;
+                        if(checkBox.isChecked()){
+                            aux.add(item);
+                        }
+                    }
+                    curremtPermises = aux;
                     createEmployee();
                 }else{
                     Toast.makeText(getBaseContext(),valiteFields(),Toast.LENGTH_SHORT).show();
@@ -115,8 +187,95 @@ public class ManageEmployerActivity extends AppCompatActivity {
             }
         });
 
+        ly_permisesCheckList.removeAllViews();
+        ly_permisesContainer.setVisibility(View.VISIBLE);
+        for (String item : config.getArrPermises()) {
+            CheckBox checkBox = new CheckBox(getBaseContext());
+            checkBox.setText(item); // Establecer el texto del CheckBox con el valor del permiso
+            ly_permisesCheckList.addView(checkBox); // Agregar el CheckBox al LinearLayout
+            mapEsPermisses.put(item,checkBox);
+        }
+
     }
 
+    public void updateEmployee(String id){
+        Retrofit retrofit = new Retrofit.
+                Builder().
+                baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
+                build();
+
+        IEmployeeServices service = retrofit.create(IEmployeeServices.class);
+
+        RequestEmployee requestEmployee =  new RequestEmployee(
+                edt_name.getText().toString(),
+                edt_lastname.getText().toString(),
+                edt_email.getText().toString(),
+                edt_dni.getText().toString(),
+                edt_phone.getText().toString(),
+                edt_password.getText().toString(),
+                curremtPermises);
+        Call<EmployeeResponse> call = service.updateEmployeeById(id,requestEmployee,"Bearer "+config.getJwt());
+        System.out.println(config.getJwt());
+        call.enqueue(new Callback<EmployeeResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<EmployeeResponse> call, @NonNull Response<EmployeeResponse> response) {
+                System.out.println(response.toString());
+                if(response.isSuccessful()){
+                    employeeResponse = response.body();
+                    if(employeeResponse!=null){
+                        edt_name.setText(employeeResponse.getName());
+                        edt_lastname.setText(employeeResponse.getLastname());
+                        edt_email.setText(employeeResponse.getEmail());
+                        edt_dni.setText(employeeResponse.getDni());
+                        edt_phone.setText(employeeResponse.getPhone());
+                        edt_password.setText("");
+                        curremtPermises = employeeResponse.getPermissions();
+                        for (String item:
+                                employeeResponse.getPermissions()) {
+                            CheckBox checkBox = mapEsPermisses.get(item);
+                            checkBox.setChecked(true);
+                        }
+                        Toast.makeText(getBaseContext(),"EMPLEADO ACTUALIZADO",Toast.LENGTH_SHORT).show();
+                        System.out.println("successfull request");
+                    }
+                }else{
+                    //manejar el error de dni que ya existe,
+                    Toast.makeText(getBaseContext(),"Mensaje: DNI ya fue registrado, usa ono distinto",Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<EmployeeResponse> call, @NonNull Throwable t) {
+                System.out.println("errror "+t.getMessage());
+            }
+        });
+    }
+
+    public void deleteEmployee(String id){
+        Retrofit retrofit = new Retrofit.
+                Builder().
+                baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
+                build();
+
+        IEmployeeServices service = retrofit.create(IEmployeeServices.class);
+        Call<EmployeeResponse> call = service.deleteEmployeeById(id,"Bearer "+config.getJwt());
+        call.enqueue(new Callback<EmployeeResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<EmployeeResponse> call, @NonNull Response<EmployeeResponse> response) {
+                System.out.println(response.toString());
+                if(response.isSuccessful()){
+                    employeeResponse = response.body();
+                    if(employeeResponse!=null){
+                        Toast.makeText(getBaseContext(),"Empleado Eliminado",Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<EmployeeResponse> call, @NonNull Throwable t) {
+                System.out.println("errror "+t.getMessage());
+            }
+        });
+    }
     public void loadEmployee(String id){
         Retrofit retrofit = new Retrofit.
                 Builder().
@@ -138,13 +297,14 @@ public class ManageEmployerActivity extends AppCompatActivity {
                         edt_dni.setText(employeeResponse.getDni());
                         edt_phone.setText(employeeResponse.getPhone());
                         edt_email.setText(employeeResponse.getEmail());
-                        edt_password.setText(employeeResponse.getPassword());
-                        ly_permisesCheckList.removeAllViews();
-                        for (String item : employeeResponse.getPermissions()) {
-                            CheckBox checkBox = new CheckBox(getBaseContext());
-                            checkBox.setText(item); // Establecer el texto del CheckBox con el valor del permiso
-                            ly_permisesCheckList.addView(checkBox); // Agregar el CheckBox al LinearLayout
+                        edt_password.setText("");
+                        curremtPermises = employeeResponse.getPermissions();
+                        for (String item:
+                             employeeResponse.getPermissions()) {
+                            CheckBox checkBox = mapEsPermisses.get(item);
+                            checkBox.setChecked(true);
                         }
+
                         System.out.println("successfull request");
                     }
                 }
@@ -169,7 +329,8 @@ public class ManageEmployerActivity extends AppCompatActivity {
                 edt_email.getText().toString(),
                 edt_dni.getText().toString(),
                 edt_phone.getText().toString(),
-                edt_password.getText().toString());
+                edt_password.getText().toString(),
+                curremtPermises);
         Call<EmployeeResponse> call = service.createEmployee(requestEmployee,"Bearer "+config.getJwt());
         System.out.println(config.getJwt());
         call.enqueue(new Callback<EmployeeResponse>() {

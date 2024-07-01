@@ -2,6 +2,7 @@ package com.mibodega.mystore.views.employers;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -21,6 +23,7 @@ import com.mibodega.mystore.services.IPurchasesService;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterEmployee;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterPurchase;
+import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
 import com.mibodega.mystore.views.supplier.SupplierRegisterActivity;
 
 import java.util.ArrayList;
@@ -40,6 +43,8 @@ public class EmployerActivity extends AppCompatActivity {
     private ArrayList<EmployeeResponse> arrEmployeeList;
     private Config config = new Config();
     private RecyclerViewAdapterEmployee adapter;
+    private DrawerLayout drawerLayout;
+    private FrameLayout chatFragmentContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +53,36 @@ public class EmployerActivity extends AppCompatActivity {
         searchEmployer = findViewById(R.id.Edt_searchEmployee_employee);
         btn_newEmployee = findViewById(R.id.Btn_addNewEmployee_employee);
         rv_employeeList = findViewById(R.id.Rv_employeeList_employee);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        chatFragmentContainer = findViewById(R.id.chat_fragment_container);
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+                // No es necesario hacer nada aquí
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                // Mostrar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.chat_fragment_container, new ChatBotGlobalFragment())
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                // Ocultar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .remove(getSupportFragmentManager().findFragmentById(R.id.chat_fragment_container))
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                // No es necesario hacer nada aquí
+            }
+        });
         btn_newEmployee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,6 +152,12 @@ public class EmployerActivity extends AppCompatActivity {
                 System.out.println("errror "+t.getMessage());
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
     @Override

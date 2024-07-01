@@ -1,67 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/drawer_layout"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context=".views.employers.EmployerActivity">
+
+<!-- Contenido principal -->
+<FrameLayout
+    android:id="@+id/content_frame"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".views.employers.EmployerActivity">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView51"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="Gestion de Empleados"
-        android:textAlignment="center"
-        android:textSize="34sp" />
-
+    <!-- Tu contenido principal aquí -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/Txly_layoutSearch_employee"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <TextView
+            android:id="@+id/textView51"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="5dp"
-            android:layout_weight="1"
-            app:endIconMode="clear_text"
-            app:startIconDrawable="@drawable/baseline_search_24">
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Gestion de Empleados"
+            android:textAlignment="center"
+            android:textSize="34sp" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/Edt_searchEmployee_employee"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/Txly_layoutSearch_employee"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:backgroundTint="@color/white"
-                android:hint="Buscar empleados"
-                android:imeOptions="actionSearch"
-                android:inputType="text"
-                android:maxLines="1" />
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                app:endIconMode="clear_text"
+                app:startIconDrawable="@drawable/baseline_search_24">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/Edt_searchEmployee_employee"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="@color/white"
+                    android:hint="Buscar empleados"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:maxLines="1" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/Btn_addNewEmployee_employee"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="5dp"
-            android:src="@drawable/baseline_add_24"
-            app:backgroundTint="?attr/colorPrimary"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:tint="@color/white" />
+            </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/Btn_addNewEmployee_employee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:src="@drawable/baseline_add_24"
+                app:backgroundTint="?attr/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:tint="@color/white" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/Rv_employeeList_employee"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/Rv_employeeList_employee"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+</FrameLayout>
 
-</LinearLayout>
+<!-- Chatbot -->
+<FrameLayout
+    android:id="@+id/chat_fragment_container"
+    android:layout_width="370dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="end"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+</androidx.drawerlayout.widget.DrawerLayout>
+
+

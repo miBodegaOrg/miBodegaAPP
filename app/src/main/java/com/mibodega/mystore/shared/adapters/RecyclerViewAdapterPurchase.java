@@ -67,6 +67,7 @@ public class RecyclerViewAdapterPurchase extends RecyclerView.Adapter<RecyclerVi
         holder.date.setText(formattedDate);
         holder.status.setText(item.getStatus());
         holder.amount.setText("Cantidad: "+item.getProducts().size());
+        holder.total.setText("Total: "+item.getTotal());
         holder.btn_validatePurchase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

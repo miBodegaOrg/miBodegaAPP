@@ -1,5 +1,6 @@
 package com.mibodega.mystore.models.Requests;
 
+import com.mibodega.mystore.models.common.ProductPurchase;
 import com.mibodega.mystore.models.common.ProductSaleV2;
 
 import java.util.ArrayList;
@@ -8,9 +9,9 @@ public class PurchaseRequest {
     private String ruc;
     private double discount;
     private double shipping;
-    private ArrayList<ProductSaleV2> products = new ArrayList<>();
+    private ArrayList<ProductPurchase> products = new ArrayList<>();
 
-    public PurchaseRequest(String ruc, double discount, double shipping, ArrayList<ProductSaleV2> products) {
+    public PurchaseRequest(String ruc, double discount, double shipping, ArrayList<ProductPurchase> products) {
         this.ruc = ruc;
         this.discount = discount;
         this.shipping = shipping;
@@ -41,11 +42,11 @@ public class PurchaseRequest {
         this.shipping = shipping;
     }
 
-    public ArrayList<ProductSaleV2> getProducts() {
+    public ArrayList<ProductPurchase> getProducts() {
         return products;
     }
 
-    public void setProducts(ArrayList<ProductSaleV2> products) {
+    public void setProducts(ArrayList<ProductPurchase> products) {
         this.products = products;
     }
 }

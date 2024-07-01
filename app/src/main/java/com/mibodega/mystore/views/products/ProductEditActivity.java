@@ -6,10 +6,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -31,6 +33,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -46,9 +49,13 @@ import com.mibodega.mystore.models.Requests.ProductCreateRequest;
 import com.mibodega.mystore.models.Responses.CategoryResponse;
 import com.mibodega.mystore.models.Responses.GenerateCodeResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
+import com.mibodega.mystore.models.Responses.ProductResponseByCode;
 import com.mibodega.mystore.models.Responses.SubCategoryResponse;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.Utils;
+import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
+import com.mibodega.mystore.views.signIn.SignInActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -82,6 +89,7 @@ public class ProductEditActivity extends AppCompatActivity {
 
     private Uri imageUri;
     private MultipartBody.Part imagePart;
+    private Utils utils= new Utils();
 
     private ImageButton btnCamera ;
     private ImageButton btnGallery;
@@ -106,6 +114,8 @@ public class ProductEditActivity extends AppCompatActivity {
 
     private ImageView imgProduct;
     private RequestBody finalImageBody;
+    private DrawerLayout drawerLayout;
+    private FrameLayout chatFragmentContainer;
 
     private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
             result -> {
@@ -134,6 +144,37 @@ public class ProductEditActivity extends AppCompatActivity {
         tv_fileName = findViewById(R.id.Tv_productFileName_product);
         btnScanProduct = findViewById(R.id.Btn_scanProductCode_product);
         btnGenerateCode = findViewById(R.id.Btn_generateProductCode_product);
+
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        chatFragmentContainer = findViewById(R.id.chat_fragment_container);
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+                // No es necesario hacer nada aquí
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                // Mostrar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.chat_fragment_container, new ChatBotGlobalFragment())
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                // Ocultar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .remove(getSupportFragmentManager().findFragmentById(R.id.chat_fragment_container))
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                // No es necesario hacer nada aquí
+            }
+        });
 
 
         tv_fileName.setText("");
@@ -276,12 +317,6 @@ public class ProductEditActivity extends AppCompatActivity {
 
     }
 
-
-
-
-
-
-
     public static String generateRandomNumber() {
         Random random = new Random();
         int randomNumber = random.nextInt(900000000) + 100000000;
@@ -318,20 +353,29 @@ public class ProductEditActivity extends AppCompatActivity {
 
 
 
-        Call<ProductResponse> call = service.createProduct(requestMap,"Bearer "+config.getJwt());
+        Call<ProductResponseByCode> call = service.createProduct(requestMap,"Bearer "+config.getJwt());
         System.out.println(config.getJwt());
-        call.enqueue(new Callback<ProductResponse>() {
+        call.enqueue(new Callback<ProductResponseByCode>() {
             @Override
-            public void onResponse(@NonNull Call<ProductResponse> call, @NonNull Response<ProductResponse> response) {
+            public void onResponse(@NonNull Call<ProductResponseByCode> call, @NonNull Response<ProductResponseByCode> response) {
                 System.out.println(response.toString());
-
                 if(response.isSuccessful()){
 
-                   // pagesProductResponse = response.body();
-                    System.out.println("successfull request");
-                    finish();
+                    ProductResponseByCode productResponseByCode = response.body();
+                    if(productResponseByCode!=null){
+                        Dialog dialog = utils.getAlertCustom(ProductEditActivity.this, "success", "Creado", "Producto creado", false);
+                        dialog.show();
+                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialogInterface) {
+                                finish();
+                            }
+                        });
+                    }
+
                 }else {
-                    System.out.println("error de respuesta");
+                    Dialog dialog = utils.getAlertCustom(ProductEditActivity.this, "warning", "No creado", "Asegurece de ingresar bien los datos", false);
+                    dialog.show();
                     try {
                         String errorBody = response.errorBody().string();
                         System.out.println("Error response body: " + errorBody);
@@ -349,9 +393,10 @@ public class ProductEditActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<ProductResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<ProductResponseByCode> call, @NonNull Throwable t) {
                 System.out.println("error de servidor");
                 System.out.println("errror "+t.getMessage());
+
 
             }
         });
@@ -539,6 +584,8 @@ public class ProductEditActivity extends AppCompatActivity {
                 .setBarcodeImageEnabled(false);
         barcodeLauncher.launch(options);
     }
+
+
 
 
 

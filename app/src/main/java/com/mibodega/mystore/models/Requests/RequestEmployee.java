@@ -1,5 +1,7 @@
 package com.mibodega.mystore.models.Requests;
 
+import java.util.ArrayList;
+
 public class RequestEmployee {
     private String name;
     private String lastname;
@@ -7,15 +9,18 @@ public class RequestEmployee {
     private String dni;
     private String phone;
     private String password;
+    private ArrayList<String> permissions = new ArrayList<>();
 
-    public RequestEmployee(String name, String lastname, String email, String dni, String phone, String password) {
+    public RequestEmployee(String name, String lastname, String email, String dni, String phone, String password, ArrayList<String> permissions) {
         this.name = name;
         this.lastname = lastname;
         this.email = email;
         this.dni = dni;
         this.phone = phone;
         this.password = password;
+        this.permissions = permissions;
     }
+
 
     public String getName() {
         return name;
@@ -63,5 +68,13 @@ public class RequestEmployee {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public ArrayList<String> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(ArrayList<String> permissions) {
+        this.permissions = permissions;
     }
 }

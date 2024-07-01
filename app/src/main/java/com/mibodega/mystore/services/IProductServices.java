@@ -5,6 +5,7 @@ import com.mibodega.mystore.models.Responses.PagesProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponseByCode;
 
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.RequestBody;
@@ -25,10 +26,10 @@ public interface IProductServices {
     Call<PagesProductResponse> getProducts(@Header("Authorization") String token);
     @Multipart()
     @POST("products")
-    Call<ProductResponse> createProduct(@PartMap Map<String, RequestBody> request, @Header("Authorization") String token );
+    Call<ProductResponseByCode> createProduct(@PartMap Map<String, RequestBody> request, @Header("Authorization") String token );
 
     @GET("products/{code}")
-    Call<ProductResponseByCode> getProductByCode(@Path("code") String code, @Header("Authorization") String token);
+    Call<ProductResponse> getProductByCode(@Path("code") String code, @Header("Authorization") String token);
 
     @GET("products")
     Call<PagesProductResponse> getProductByName(@Query("search") String name, @Query("limit") int limit, @Header("Authorization") String token);
@@ -46,7 +47,7 @@ public interface IProductServices {
 
     @Multipart()
     @PUT("products/{id}")
-    Call<ProductResponse> updateProduct(@Path("id") String id,@PartMap Map<String, RequestBody> request, @Header("Authorization") String token );
+    Call<ProductResponseByCode> updateProduct(@Path("id") String id, @PartMap Map<String, RequestBody> request, @Header("Authorization") String token );
 
     @DELETE("products/{id}")
     Call<ProductResponse> deleteProductById(@Path("id") String id, @Header("Authorization") String token);
