@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.RequestMessage;
@@ -50,6 +51,7 @@ public class ChatBotGlobalFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private EditText editTextMessage;
+    private ProgressBar pgr_loadMessage;
     private Button buttonSend;
     private List<MessageResponse> messageList = new ArrayList<>();
     private ChatResponse chatData;
@@ -64,6 +66,7 @@ public class ChatBotGlobalFragment extends Fragment {
         // Inflate the layout for this fragment
         View root =  inflater.inflate(R.layout.fragment_chat_bot_global, container, false);
 
+        pgr_loadMessage = root.findViewById(R.id.pbar_loadBotMessage_chatbot_global);
         loadChats();
         recyclerView = root.findViewById(R.id.recyclerView);
         editTextMessage = root.findViewById(R.id.editTextMessage);
@@ -95,6 +98,7 @@ public class ChatBotGlobalFragment extends Fragment {
     }
 
     public void loadMessages(String id){
+
         Retrofit retrofit = new Retrofit.
                 Builder().
                 baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
@@ -116,7 +120,10 @@ public class ChatBotGlobalFragment extends Fragment {
                         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                         recyclerView.setAdapter(messageAdapter);
                         recyclerView.scrollToPosition(messageAdapter.getItemCount() - 1);
+                        pgr_loadMessage.setVisibility(View.GONE);
                     }
+
+
                     System.out.println("successfull request");
                 }
 
@@ -129,6 +136,8 @@ public class ChatBotGlobalFragment extends Fragment {
         });
     }
     public void askChatGPT(String id, String msg){
+        pgr_loadMessage.setIndeterminate(true);
+        pgr_loadMessage.setVisibility(View.VISIBLE);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(config.getURL_API())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -152,6 +161,7 @@ public class ChatBotGlobalFragment extends Fragment {
                         messageList.add(message);
                         messageAdapter.notifyItemInserted(messageList.size() - 1);
                         recyclerView.scrollToPosition(messageList.size() - 1);
+                        pgr_loadMessage.setVisibility(View.GONE);
                     }
                     System.out.println("successfull request");
                 }
@@ -166,6 +176,8 @@ public class ChatBotGlobalFragment extends Fragment {
     }
 
     public void loadChats(){
+        pgr_loadMessage.setIndeterminate(true);
+        pgr_loadMessage.setVisibility(View.VISIBLE);
         Retrofit retrofit = new Retrofit.
                 Builder().
                 baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).

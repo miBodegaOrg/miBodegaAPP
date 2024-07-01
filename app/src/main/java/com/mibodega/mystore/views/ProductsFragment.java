@@ -285,6 +285,11 @@ public class ProductsFragment extends Fragment {
                         RecyclerViewAdapterProduct listAdapter = new RecyclerViewAdapterProduct(getContext(), 1, productlist, new RecyclerViewAdapterProduct.OnDetailItem() {
                             @Override
                             public void onClick(ProductResponse product) {
+                                Bundle bundle = new Bundle();
+                                bundle.putString("product_code",product.getCode());
+                                Intent moveHMA = new Intent(getContext(), ProductDetailActivity.class);
+                                moveHMA.putExtras(bundle);
+                                startActivity(moveHMA);
 
                             }
                         }, new RecyclerViewAdapterProduct.OnSupplierItem() {
@@ -314,6 +319,7 @@ public class ProductsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        initProductsData(_root);
+        //initProductsData(_root);
+        searchProductWithDifferentCategoriesSubcategories();
     }
 }

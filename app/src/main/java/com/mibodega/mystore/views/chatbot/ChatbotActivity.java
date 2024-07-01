@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.RequestMessage;
@@ -44,6 +45,7 @@ public class ChatbotActivity extends AppCompatActivity {
     private MessageAdapter messageAdapter;
     private String chatID;
     private Config config = new Config();
+    private ProgressBar pgr_loadMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,7 @@ public class ChatbotActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         editTextMessage = findViewById(R.id.editTextMessage);
         buttonSend = findViewById(R.id.buttonSend);
+        pgr_loadMessage = findViewById(R.id.Pbar_loadBotMessage_chatbot);
 
         messageAdapter = new MessageAdapter(this,messageList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -85,6 +88,8 @@ public class ChatbotActivity extends AppCompatActivity {
     }
 
     public void loadMessages(String id){
+        pgr_loadMessage.setIndeterminate(true);
+        pgr_loadMessage.setVisibility(View.VISIBLE);
         Retrofit retrofit = new Retrofit.
                 Builder().
                 baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
@@ -105,6 +110,8 @@ public class ChatbotActivity extends AppCompatActivity {
                         messageAdapter = new MessageAdapter(getBaseContext(),messageList);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
                         recyclerView.setAdapter(messageAdapter);
+
+                        pgr_loadMessage.setVisibility(View.GONE);
                     }
                     System.out.println("successfull request");
                 }

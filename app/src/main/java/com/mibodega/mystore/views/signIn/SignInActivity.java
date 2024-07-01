@@ -2,6 +2,7 @@ package com.mibodega.mystore.views.signIn;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -85,6 +86,8 @@ public class SignInActivity extends AppCompatActivity {
                     startActivity(moveHMA);
 
                 }else{
+                    Dialog dialog = utils.getAlertCustom(SignInActivity.this, "danger", "Alerta", "Usuario o Contraseña incorrecta", false);
+                    dialog.show();
                     System.out.println("error");
                 }
             }
@@ -93,7 +96,8 @@ public class SignInActivity extends AppCompatActivity {
             public void onFailure(Call<SignInResponse> call, Throwable t) {
                 System.out.println(t.toString());
                 System.out.println(t.getMessage());
-                Toast.makeText(getApplicationContext(), "Error en el Servidor Off", Toast.LENGTH_LONG).show();
+                Dialog dialog = utils.getAlertCustom(SignInActivity.this, "danger", "Alerta", "Error en servicios", false);
+                dialog.show();
             }
         });
     }

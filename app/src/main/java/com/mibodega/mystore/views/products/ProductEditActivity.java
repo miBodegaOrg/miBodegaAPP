@@ -11,6 +11,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -52,7 +53,9 @@ import com.mibodega.mystore.models.Responses.ProductResponseByCode;
 import com.mibodega.mystore.models.Responses.SubCategoryResponse;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
+import com.mibodega.mystore.views.signIn.SignInActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -86,6 +89,7 @@ public class ProductEditActivity extends AppCompatActivity {
 
     private Uri imageUri;
     private MultipartBody.Part imagePart;
+    private Utils utils= new Utils();
 
     private ImageButton btnCamera ;
     private ImageButton btnGallery;
@@ -356,12 +360,22 @@ public class ProductEditActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<ProductResponseByCode> call, @NonNull Response<ProductResponseByCode> response) {
                 System.out.println(response.toString());
                 if(response.isSuccessful()){
-                    Toast.makeText(getBaseContext(),"CREADO",Toast.LENGTH_SHORT).show();
-                   // pagesProductResponse = response.body();
-                    System.out.println("successfull request");
-                    finish();
+
+                    ProductResponseByCode productResponseByCode = response.body();
+                    if(productResponseByCode!=null){
+                        Dialog dialog = utils.getAlertCustom(ProductEditActivity.this, "success", "Creado", "Producto creado", false);
+                        dialog.show();
+                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialogInterface) {
+                                finish();
+                            }
+                        });
+                    }
+
                 }else {
-                    System.out.println("error de respuesta");
+                    Dialog dialog = utils.getAlertCustom(ProductEditActivity.this, "warning", "No creado", "Asegurece de ingresar bien los datos", false);
+                    dialog.show();
                     try {
                         String errorBody = response.errorBody().string();
                         System.out.println("Error response body: " + errorBody);

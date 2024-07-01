@@ -12,6 +12,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -53,6 +54,7 @@ import com.mibodega.mystore.models.Responses.ProductResponseByCode;
 import com.mibodega.mystore.models.Responses.SubCategoryResponse;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
 
 import org.json.JSONException;
@@ -85,6 +87,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private static final int CAMERA_PERMISSION_REQUEST = 101;
 
     private Uri imageUri;
+    private Utils utils = new Utils();
     private MultipartBody.Part imagePart;
 
     private ImageButton btnCamera ;
@@ -432,13 +435,21 @@ public class ProductDetailActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<ProductResponseByCode> call, @NonNull Response<ProductResponseByCode> response) {
                 System.out.println(response.toString());
                 if(response.isSuccessful()){
-                    // pagesProductResponse = response.body();
 
-                    Toast.makeText(getBaseContext(),"ACTUALIZADO",Toast.LENGTH_SHORT).show();
-                    System.out.println("successfull request");
-                    finish();
+                    ProductResponseByCode productResponseByCode = response.body();
+                    if(productResponseByCode!=null){
+                        Dialog dialog = utils.getAlertCustom(ProductDetailActivity.this, "success", "Actualizado", "Producto se actualizo correctamente", false);
+                        dialog.show();
+                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialogInterface) {
+                                finish();
+                            }
+                        });
+                    }
                 }else {
-                    System.out.println("error de respuesta");
+                    Dialog dialog = utils.getAlertCustom(ProductDetailActivity.this, "warning", "No Actualizado", "Asegurece de ingresar bien los datos", false);
+                    dialog.show();
                     try {
                         String errorBody = response.errorBody().string();
                         System.out.println("Error response body: " + errorBody);
