@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.RequestMessage;
@@ -22,6 +23,10 @@ import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.adapters.MessageAdapter;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterChat;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -150,10 +155,19 @@ public class ChatbotActivity extends AppCompatActivity {
                         loadMessages(messageRptContext.get_id());
                     }
                     System.out.println("successfull request");
+                }else{
+                    try {
+                        String errorBody = response.errorBody().string();
+                        System.out.println("Error response body: " + errorBody);
+                        JSONObject errorJson = new JSONObject(errorBody);
+                        String errorMessage = errorJson.getString("message");
+                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                        System.out.println(errorMessage);
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-
             }
-
             @Override
             public void onFailure(@NonNull Call<MessageResponseGpt> call, @NonNull Throwable t) {
                 System.out.println("errror "+t.getMessage());

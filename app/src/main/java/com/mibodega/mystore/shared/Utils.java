@@ -89,36 +89,9 @@ public class Utils {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-
-
         SimpleDateFormat desiredFormat = new SimpleDateFormat("EEEE d MMM h:mm a", new Locale("es", "ES"));
         String formattedDate = desiredFormat.format(createdAtDate);
         return formattedDate;
-    }
-
-
-    public static void getAlertDialog(Context context, String title, String message, String color) {
-        Resources resources = context.getResources();
-        String colorTitle = "";
-        if (color.equals("verde")) {
-            colorTitle = Integer.toString(resources.getColor(R.color.toast_success));
-        } else if (color.equals("rojo")) {
-            colorTitle = Integer.toString(resources.getColor(R.color.toast_error));
-        } else if (color.equals("amarillo")) {
-            colorTitle = Integer.toString(resources.getColor(R.color.toast_alert));
-        }
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setCancelable(true);
-        builder.setTitle(Html.fromHtml("<font color='" + colorTitle + "'>" + title + "</font>"));
-        builder.setMessage(message);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-        builder.show();
     }
     public Dialog getAlertCustom(Context context, String type, String title, String message, boolean hasButtons) {
         Dialog dialog = new Dialog(context);
@@ -207,7 +180,31 @@ public class Utils {
         }
         return dialog;
     }
+    public static void getAlertDialog(Context context, String title, String message, String color) {
+        Resources resources = context.getResources();
+        String colorTitle = "";
+        if (color.equals("verde")) {
+            colorTitle = Integer.toString(resources.getColor(R.color.toast_success));
+        } else if (color.equals("rojo")) {
+            colorTitle = Integer.toString(resources.getColor(R.color.toast_error));
+        } else if (color.equals("amarillo")) {
+            colorTitle = Integer.toString(resources.getColor(R.color.toast_alert));
+        }
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setCancelable(true);
+        builder.setTitle(Html.fromHtml("<font color='" + colorTitle + "'>" + title + "</font>"));
+        builder.setMessage(message);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    //notificaction section functions
     public void getNotificacionPush(Activity activity, String message, String title, RemoteViews view) {
         if (ContextCompat.checkSelfPermission(activity.getApplicationContext(),
                 Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
@@ -222,7 +219,6 @@ public class Utils {
             showNewNotification(activity, message, title, view);
         }
     }
-
     private void showNotification(Activity activity, String message, String title, RemoteViews view) {
         NotificationChannel channel = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -237,7 +233,6 @@ public class Utils {
         }
         showNewNotification(activity, message, title, view);
     }
-
     private void showNewNotification(Activity activity, String message, String title, RemoteViews view) {
         setPedingIntent(activity);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(activity.getApplicationContext(), MY_CHANNEL_ID)
@@ -262,7 +257,6 @@ public class Utils {
         }
         NotificationManagerCompat.from(activity.getApplicationContext()).notify(1, builder.build());
     }
-
     private void setPedingIntent(Activity activity) {
         Class<? extends SignInActivity> classe = new SignInActivity().getClass();
 
@@ -273,6 +267,7 @@ public class Utils {
         int flag = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_IMMUTABLE : 0;
         pendingIntent = stackBuilder.getPendingIntent(1, flag);
     }
+    //***********
 
 
 
