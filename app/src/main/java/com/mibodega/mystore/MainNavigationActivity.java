@@ -6,11 +6,13 @@ import android.os.Bundle;
 
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -20,10 +22,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.mibodega.mystore.databinding.ActivityMainNavigationBinding;
 
+import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.views.DashboardsFragment;
 import com.mibodega.mystore.views.HomeFragment;
 import com.mibodega.mystore.views.ProductsFragment;
 import com.mibodega.mystore.views.ProfileFragment;
+import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
 import com.mibodega.mystore.views.chatbot.ChatListActivity;
 import com.mibodega.mystore.views.products.ProductEditActivity;
 import com.mibodega.mystore.views.sales.SaleProductsActivity;
@@ -35,7 +39,9 @@ public class MainNavigationActivity extends AppCompatActivity {
     private FloatingActionButton btn_moveSale;
     private FloatingActionButton btn_moveChat;
 
-
+    private DrawerLayout drawerLayout;
+    private FrameLayout chatFragmentContainer;
+    private Utils utils = new Utils();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +54,42 @@ public class MainNavigationActivity extends AppCompatActivity {
         binding = ActivityMainNavigationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        utils.getNotificacionPush(this,"Te recomiendo esta oferta","Mi Bodega",null);
+
         binding.topAppBar.setTitle("Hola, Bodeguero");
 
         replaceFragment(new HomeFragment());
         binding.bottomNavigationView.setBackground(null);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        chatFragmentContainer = findViewById(R.id.chat_fragment_container);
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+                // No es necesario hacer nada aquí
+            }
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                // Mostrar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.chat_fragment_container, new ChatBotGlobalFragment())
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                // Ocultar el ChatFragment
+                getSupportFragmentManager().beginTransaction()
+                        .remove(getSupportFragmentManager().findFragmentById(R.id.chat_fragment_container))
+                        .commit();
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                // No es necesario hacer nada aquí
+            }
+        });
+
 
         binding.bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override

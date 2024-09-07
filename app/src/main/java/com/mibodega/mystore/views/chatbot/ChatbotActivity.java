@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.RequestMessage;
@@ -21,6 +23,10 @@ import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.adapters.MessageAdapter;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterChat;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -44,6 +50,7 @@ public class ChatbotActivity extends AppCompatActivity {
     private MessageAdapter messageAdapter;
     private String chatID;
     private Config config = new Config();
+    private ProgressBar pgr_loadMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +63,9 @@ public class ChatbotActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         editTextMessage = findViewById(R.id.editTextMessage);
         buttonSend = findViewById(R.id.buttonSend);
+        pgr_loadMessage = findViewById(R.id.Pbar_loadBotMessage_chatbot);
 
-        messageAdapter = new MessageAdapter(messageList);
+        messageAdapter = new MessageAdapter(this,messageList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(messageAdapter);
 
@@ -85,6 +93,8 @@ public class ChatbotActivity extends AppCompatActivity {
     }
 
     public void loadMessages(String id){
+        pgr_loadMessage.setIndeterminate(true);
+        pgr_loadMessage.setVisibility(View.VISIBLE);
         Retrofit retrofit = new Retrofit.
                 Builder().
                 baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
@@ -102,9 +112,11 @@ public class ChatbotActivity extends AppCompatActivity {
                     if(chatData!=null){
                         recyclerView.removeAllViews();
                         messageList = chatData.getMessages();
-                        messageAdapter = new MessageAdapter(messageList);
+                        messageAdapter = new MessageAdapter(getBaseContext(),messageList);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
                         recyclerView.setAdapter(messageAdapter);
+
+                        pgr_loadMessage.setVisibility(View.GONE);
                     }
                     System.out.println("successfull request");
                 }
@@ -143,10 +155,19 @@ public class ChatbotActivity extends AppCompatActivity {
                         loadMessages(messageRptContext.get_id());
                     }
                     System.out.println("successfull request");
+                }else{
+                    try {
+                        String errorBody = response.errorBody().string();
+                        System.out.println("Error response body: " + errorBody);
+                        JSONObject errorJson = new JSONObject(errorBody);
+                        String errorMessage = errorJson.getString("message");
+                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                        System.out.println(errorMessage);
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-
             }
-
             @Override
             public void onFailure(@NonNull Call<MessageResponseGpt> call, @NonNull Throwable t) {
                 System.out.println("errror "+t.getMessage());

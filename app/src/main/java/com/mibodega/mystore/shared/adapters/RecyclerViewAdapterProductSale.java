@@ -2,6 +2,8 @@ package com.mibodega.mystore.shared.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,31 +93,54 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
                     .centerCrop()
                     .transform(new RoundedCorners(20))
                     .into(holder.image);
-
+            arrEdtAmount.put(product.getCode(),holder.edt_amount);
             holder.productDescription.setText(product.getName());
             holder.productStock.setText(String.valueOf(product.getStock()));
             holder.buyPrice.setText("s/ " +String.valueOf(product.getPrice()));
             holder.edt_amount.setText("1");
             double total_price = product.getPrice()*Integer.parseInt(holder.edt_amount.getText().toString());
             holder.total_price.setText("s/. "+total_price);
-
-            holder.btn_cancel.setOnClickListener(new View.OnClickListener() {
+            holder.edt_amount.setEnabled(false);
+            holder.edt_amount.addTextChangedListener(new TextWatcher() {
                 @Override
-                public void onClick(View view) {
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    if(!editable.toString().equals("")) {
+                        double total_price = product.getPrice() * Integer.parseInt(holder.edt_amount.getText().toString());
+                        holder.total_price.setText("s/. " + total_price);
+                    }
+                }
             });
+
             holder.btn_edit_save.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if(Boolean.TRUE.equals(arrIsEdit.get(product.getCode()))){
                         int amount = Integer.parseInt(holder.edt_amount.getText().toString());
-                        saleTemporalList.updateAmountProduct(product.getCode(),amount);
-                        notifyDataSetChanged();
-                        arrIsEdit.put(product.getCode(),false);
+                        if(amount>0){
+                            holder.edt_amount.setEnabled(false);
+
+                            saleTemporalList.updateAmountProduct(product.getCode(),amount);
+
+                            holder.btn_edit_save.setImageResource(R.drawable.baseline_edit_24);
+                            arrIsEdit.put(product.getCode(),false);
+                            //notifyDataSetChanged();
+                        }
                     }else {
+                        holder.edt_amount.setEnabled(true);
+                        holder.btn_edit_save.setImageResource(R.drawable.baseline_save_24);
                         arrIsEdit.put(product.getCode(),true);
                     }
+
 
                 }
             });
@@ -131,7 +156,9 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
 
 
         }
-
+        public Map<String,EditText> getMapEditAmount(){
+            return arrEdtAmount;
+        }
         public void setOnClickListener(View.OnClickListener listener) {
             this.listener = listener;
         }

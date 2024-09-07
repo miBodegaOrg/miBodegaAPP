@@ -23,12 +23,16 @@ import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.CategoryResponse;
 import com.mibodega.mystore.models.Responses.CategoryResponseWithProducts;
 import com.mibodega.mystore.models.Responses.PagesProductResponse;
+import com.mibodega.mystore.models.Responses.PermissionResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.services.ICategoryServices;
+import com.mibodega.mystore.services.IEmployeeServices;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProduct;
 import com.mibodega.mystore.views.employers.EmployerActivity;
+import com.mibodega.mystore.views.offers.OffersActivity;
+import com.mibodega.mystore.views.selling.SellingActivity;
 import com.mibodega.mystore.views.supplier.SupplierActivity;
 
 import java.util.ArrayList;
@@ -45,7 +49,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class HomeFragment extends Fragment {
 
     private Config config = new Config();
-    private Button btn_employe,btn_supplier;
+    private Button btn_employe,btn_supplier, btn_buying, btn_discountPromotion;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -53,6 +57,9 @@ public class HomeFragment extends Fragment {
         View root =  inflater.inflate(R.layout.fragment_home, container, false);
         btn_employe = root.findViewById(R.id.Btn_manageEmployes_home);
         btn_supplier = root.findViewById(R.id.Btn_manageSupplier_home);
+        btn_buying = root.findViewById(R.id.Btn_managePurchases_home);
+        btn_discountPromotion = root.findViewById(R.id.Btn_manageDiscountsOferts_home);
+
 
         btn_employe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +75,21 @@ public class HomeFragment extends Fragment {
                 startActivity(su);
             }
         });
+        btn_buying.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent su = new Intent(getContext(), SellingActivity.class);
+                startActivity(su);
+            }
+        });
+        btn_discountPromotion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent su = new Intent(getContext(), OffersActivity.class);
+                startActivity(su);
+            }
+        });
+
 
         BarChart chart = root.findViewById(R.id.chart);
 
@@ -109,6 +131,7 @@ public class HomeFragment extends Fragment {
 
 
         initProductsData(root);
+        initPermises();
         initCategoryData(root);
         chart.invalidate();
         return root;
@@ -143,6 +166,35 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+    private void initPermises(){
+        Retrofit retrofit = new Retrofit.
+                Builder().
+                baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
+                build();
+
+        IEmployeeServices service = retrofit.create(IEmployeeServices.class);
+        Call<PermissionResponse> call = service.getPermises("Bearer "+config.getJwt());
+        System.out.println(config.getJwt());
+        call.enqueue(new Callback<PermissionResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<PermissionResponse> call, @NonNull Response<PermissionResponse> response) {
+                System.out.println(response.toString());
+                if(response.isSuccessful()){
+                    PermissionResponse permissionResponse = response.body();
+                    if(permissionResponse!=null){
+                        config.setArrPermises(permissionResponse.getPermissions());
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<PermissionResponse> call, @NonNull Throwable t) {
+                System.out.println("errror "+t.getMessage());
+            }
+        });
+    }
+
     private void initCategoryData(View root) {
         Retrofit retrofit = new Retrofit.
                 Builder().
@@ -173,4 +225,5 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
 }

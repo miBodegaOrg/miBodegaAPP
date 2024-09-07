@@ -2,12 +2,13 @@ package com.mibodega.mystore.models.common;
 
 public class ProductSupplier {
     private String code;
-    private Double price;
+    private Double cost;
 
-    public ProductSupplier(String code, Double price) {
+    public ProductSupplier(String code, Double cost) {
         this.code = code;
-        this.price = price;
+        this.cost = cost;
     }
+
 
     public String getCode() {
         return code;
@@ -17,11 +18,12 @@ public class ProductSupplier {
         this.code = code;
     }
 
-    public Double getPrice() {
-        return price;
+    public Double getCost() {
+        return cost;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setCost(Double cost) {
+        this.cost = cost;
     }
+
 }

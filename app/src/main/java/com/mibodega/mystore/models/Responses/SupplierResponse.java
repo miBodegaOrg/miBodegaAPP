@@ -10,12 +10,12 @@ public class SupplierResponse {
     private String phone;
     private String ruc;
     private String shop;
-    private ArrayList<ProductSupplier> products;
+    private ArrayList<ProductResponseSupplier> products;
     private String createdAt;
     private String updatedAt;
     private int __v;
 
-    public SupplierResponse(String _id, String name, String phone, String ruc, String shop, ArrayList<ProductSupplier> products, String createdAt, String updatedAt, int __v) {
+    public SupplierResponse(String _id, String name, String phone, String ruc, String shop, ArrayList<ProductResponseSupplier> products, String createdAt, String updatedAt, int __v) {
         this._id = _id;
         this.name = name;
         this.phone = phone;
@@ -67,11 +67,11 @@ public class SupplierResponse {
         this.shop = shop;
     }
 
-    public ArrayList<ProductSupplier> getProducts() {
+    public ArrayList<ProductResponseSupplier> getProducts() {
         return products;
     }
 
-    public void setProducts(ArrayList<ProductSupplier> products) {
+    public void setProducts(ArrayList<ProductResponseSupplier> products) {
         this.products = products;
     }
 
