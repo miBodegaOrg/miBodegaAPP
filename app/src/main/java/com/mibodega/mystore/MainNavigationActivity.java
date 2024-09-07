@@ -22,6 +22,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.mibodega.mystore.databinding.ActivityMainNavigationBinding;
 
+import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.views.DashboardsFragment;
 import com.mibodega.mystore.views.HomeFragment;
 import com.mibodega.mystore.views.ProductsFragment;
@@ -40,7 +41,7 @@ public class MainNavigationActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private FrameLayout chatFragmentContainer;
-
+    private Utils utils = new Utils();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,8 @@ public class MainNavigationActivity extends AppCompatActivity {
 
         binding = ActivityMainNavigationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        utils.getNotificacionPush(this,"Te recomiendo esta oferta","Mi Bodega",null);
 
         binding.topAppBar.setTitle("Hola, Bodeguero");
 
