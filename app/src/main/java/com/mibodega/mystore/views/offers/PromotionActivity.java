@@ -23,12 +23,9 @@ import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.PromotionRequest;
-import com.mibodega.mystore.models.Responses.CategoryProduct;
 import com.mibodega.mystore.models.Responses.PagesProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
-import com.mibodega.mystore.models.Responses.ProductResponseByCode;
 import com.mibodega.mystore.models.Responses.PromotionResponse;
-import com.mibodega.mystore.models.Responses.SubCategoryResponse;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.services.IPromotionService;
 import com.mibodega.mystore.shared.Config;
@@ -199,7 +196,17 @@ public class PromotionActivity extends AppCompatActivity {
 
     public void loadData(){
         arrayListProduct  = saleTemporalList.getArrayList();
-        RecyclerViewAdapterProductSale listAdapter = new RecyclerViewAdapterProductSale(getBaseContext(),arrayListProduct);
+        RecyclerViewAdapterProductSale listAdapter = new RecyclerViewAdapterProductSale(getBaseContext(), arrayListProduct, new RecyclerViewAdapterProductSale.OnEdit() {
+            @Override
+            public void onClick(ProductResponse product) {
+
+            }
+        }, new RecyclerViewAdapterProductSale.OnDelete() {
+            @Override
+            public void onClick(ProductResponse product) {
+
+            }
+        });
         rv_recyclerProductList.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false));
         rv_recyclerProductList.setAdapter(listAdapter);
     }

@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -25,13 +24,9 @@ import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.RequestCreateSale;
-import com.mibodega.mystore.models.Responses.CategoryProduct;
 import com.mibodega.mystore.models.Responses.PagesProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
-import com.mibodega.mystore.models.Responses.ProductResponseByCode;
 import com.mibodega.mystore.models.Responses.SaleResponse;
-import com.mibodega.mystore.models.Responses.SubCategoryResponse;
-import com.mibodega.mystore.models.common.ProductPurchase;
 import com.mibodega.mystore.models.common.ProductSaleV2;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.services.ISaleServices;
@@ -70,6 +65,7 @@ public class CreateSaleFragment extends Fragment {
     private ArrayList<ProductResponse> arraySearchListProduct = new ArrayList<>();
     private RecyclerViewAdapterProductSale listAdapter;
 
+    private TextView tv_subTotal;
 
     private PagesProductResponse pagesSearchProductResponse;
 
@@ -95,6 +91,7 @@ public class CreateSaleFragment extends Fragment {
         btn_scanCodeBar = root.findViewById(R.id.Imgb_scanCodeBarProduct_sale);
         rv_recyclerProductList = root.findViewById(R.id.Rv_productAtSaleList_sale);
         btn_vender = root.findViewById(R.id.Btn_saleProducts_sale);
+        tv_subTotal = root.findViewById(R.id.Tv_subTotal_sale);
 
         btn_scanCodeBar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,7 +135,17 @@ public class CreateSaleFragment extends Fragment {
 
     public void loadData(){
         arrayListProduct  = saleTemporalList.getArrayList();
-        listAdapter = new RecyclerViewAdapterProductSale(getContext(),arrayListProduct);
+        listAdapter = new RecyclerViewAdapterProductSale(getContext(), arrayListProduct, new RecyclerViewAdapterProductSale.OnEdit() {
+            @Override
+            public void onClick(ProductResponse product) {
+                tv_subTotal.setText("S/. "+saleTemporalList.getTotalPrice().toString());
+            }
+        }, new RecyclerViewAdapterProductSale.OnDelete() {
+            @Override
+            public void onClick(ProductResponse product) {
+                tv_subTotal.setText("S/. "+saleTemporalList.getTotalPrice().toString());
+            }
+        });
         rv_recyclerProductList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         rv_recyclerProductList.setAdapter(listAdapter);
     }
@@ -212,6 +219,8 @@ public class CreateSaleFragment extends Fragment {
                             public void onClick(ProductResponse product) {
                                 Toast.makeText(getContext(),"Agregado",Toast.LENGTH_SHORT).show();
                                 saleTemporalList.addProduct(product,1);
+                                tv_subTotal.setText("S/. "+saleTemporalList.getTotalPrice().toString());
+                                utils.getAlertDialog(getContext(),"Producto","Se agrego "+product.getName()+"a la lista","verde");
                                 loadData();
                             }
                         });
@@ -310,6 +319,11 @@ public class CreateSaleFragment extends Fragment {
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
+        tv_subTotal.setText("S/. "+saleTemporalList.getTotalPrice().toString());
 
+    }
 }

@@ -180,7 +180,7 @@ public class Utils {
         }
         return dialog;
     }
-    public static void getAlertDialog(Context context, String title, String message, String color) {
+    public void getAlertDialog(Context context, String title, String message, String color) {
         Resources resources = context.getResources();
         String colorTitle = "";
         if (color.equals("verde")) {

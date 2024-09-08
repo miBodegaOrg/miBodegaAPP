@@ -11,7 +11,7 @@ import java.util.Optional;
 public class SaleTemporalList {
     private static ArrayList<ProductResponse> arrayList = new ArrayList<>();
     private static Map<String,Integer> mapAmountProduct = new HashMap<>();
-    private static Double totalPrice;
+    private static Double totalPrice=0.0;
 
     private static SaleResponse saleCurrent=null;
 
@@ -32,7 +32,7 @@ public class SaleTemporalList {
         SaleTemporalList.arrayList = arrayList;
     }
 
-    public static Map<String, Integer> getMapAmountProduct() {
+    public Map<String, Integer> getMapAmountProduct() {
         return mapAmountProduct;
     }
 
@@ -62,9 +62,13 @@ public class SaleTemporalList {
         String productCode = product.getCode();
         if (mapAmountProduct.containsKey(productCode)) {
             int currentAmount = mapAmountProduct.get(productCode);
+            System.out.println("actualiza old amount "+currentAmount);
             int newAmount = currentAmount + amount;
             mapAmountProduct.put(productCode, newAmount);
+            System.out.println("actualiza new amount "+newAmount);
         } else {
+            System.out.println("agrega "+product.getName());
+            System.out.println("agrega "+amount);
             arrayList.add(product);
             mapAmountProduct.put(productCode, amount);
         }

@@ -42,7 +42,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/Rv_listSearchProduct_sale"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:visibility="gone" />
 
             </LinearLayout>
@@ -120,6 +120,31 @@
                     android:id="@+id/Rv_productAtSaleList_sale"
                     android:layout_width="match_parent"
                     android:layout_height="399dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/background_custom_rectangle_shadow"
+                    android:gravity="right"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/textView65"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:text="Sub Total: "
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/Tv_subTotal_sale"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="S/. 0.0"
+                        android:textAlignment="viewEnd"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
                 <Button
                     android:id="@+id/Btn_saleProducts_sale"

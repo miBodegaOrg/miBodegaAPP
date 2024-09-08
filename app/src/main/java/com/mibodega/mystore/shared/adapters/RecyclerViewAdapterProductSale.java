@@ -8,7 +8,6 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -37,8 +36,9 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
     private SaleTemporalList saleTemporalList  = new SaleTemporalList();
     private Map<String,Boolean> arrIsEdit = new HashMap<>();
     private Map<String,EditText> arrEdtAmount = new HashMap<>();
-
     private View.OnClickListener listener;
+    final RecyclerViewAdapterProductSale.OnEdit onEdit;
+    final RecyclerViewAdapterProductSale.OnDelete onDelete;
 
 
 
@@ -50,16 +50,19 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
             }
     }
 
-    public interface OnDetailItem {
+    public interface OnDelete {
         void onClick(ProductResponse product);
     }
-    public interface OnSupplierItem {
+    public interface OnEdit {
         void onClick(ProductResponse product);
     }
 
-        public RecyclerViewAdapterProductSale(Context context, ArrayList<ProductResponse> productList) {
+
+        public RecyclerViewAdapterProductSale(Context context, ArrayList<ProductResponse> productList, OnEdit onEdit, OnDelete onDelete) {
             this.context = context;
             this.productList = productList;
+            this.onEdit = onEdit;
+            this.onDelete = onDelete;
             for (ProductResponse product:productList){
                 arrIsEdit.put(product.getCode(),false);
             }
@@ -97,7 +100,7 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
             holder.productDescription.setText(product.getName());
             holder.productStock.setText(String.valueOf(product.getStock()));
             holder.buyPrice.setText("s/ " +String.valueOf(product.getPrice()));
-            holder.edt_amount.setText("1");
+            holder.edt_amount.setText(saleTemporalList.getMapAmountProduct().get(product.getCode()).toString());
             double total_price = product.getPrice()*Integer.parseInt(holder.edt_amount.getText().toString());
             holder.total_price.setText("s/. "+total_price);
             holder.edt_amount.setEnabled(false);
@@ -140,8 +143,7 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
                         holder.btn_edit_save.setImageResource(R.drawable.baseline_save_24);
                         arrIsEdit.put(product.getCode(),true);
                     }
-
-
+                    onEdit.onClick(product);
                 }
             });
             holder.btn_delete.setOnClickListener(new View.OnClickListener() {
@@ -149,6 +151,7 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
                 public void onClick(View view) {
                     saleTemporalList.removeProduct(product);
                     productList.remove(product);
+                    onDelete.onClick(product);
                     notifyDataSetChanged();
                 }
             });
