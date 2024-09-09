@@ -1,6 +1,7 @@
 package com.mibodega.mystore.services;
 
 import com.mibodega.mystore.models.Responses.CategoryResponse;
+import com.mibodega.mystore.models.Responses.ProductRentabilityResponse;
 import com.mibodega.mystore.models.Responses.SaleCategoryDataDashboardResponse;
 import com.mibodega.mystore.models.Responses.SaleTimeDataDashboardResponse;
 
@@ -18,5 +19,8 @@ public interface IDashboardServices {
             @Header("Authorization") String token);
     @GET("dashboards/categories")
     Call<List<SaleCategoryDataDashboardResponse>> getDataCategoriesSales(@Header("Authorization") String token);
+
+    @GET("dashboards/rentability")
+    Call<List<ProductRentabilityResponse>> getDataProductRentability(@Header("Authorization") String token);
 
 }

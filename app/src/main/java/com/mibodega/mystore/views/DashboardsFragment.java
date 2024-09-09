@@ -11,22 +11,31 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mibodega.mystore.R;
+import com.mibodega.mystore.views.dashboards.RentabilityDataActivity;
 import com.mibodega.mystore.views.dashboards.SalesDataActivity;
 
 
 public class DashboardsFragment extends Fragment {
 
-    private CardView Cv_SaleOption_dashboard;
+    private CardView Cv_SaleOption_dashboard, Cv_Rentability_dashboard;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_dashboards, container, false);
         Cv_SaleOption_dashboard = root.findViewById(R.id.Cv_SaleOption_dashboard);
+        Cv_Rentability_dashboard = root.findViewById(R.id.Cv_RentabilityOption_dashboard);
         Cv_SaleOption_dashboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent mg  = new Intent(getContext(), SalesDataActivity.class);
+                startActivity(mg);
+            }
+        });
+        Cv_Rentability_dashboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mg  = new Intent(getContext(), RentabilityDataActivity.class);
                 startActivity(mg);
             }
         });

@@ -19,25 +19,40 @@ tools:context=".views.dashboards.RentabilityDataActivity">
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:padding="10dp"
         tools:ignore="UselessParent">
 
         <TextView
             android:id="@+id/textView48"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="DASHboard" />
+            android:text="Rentabilidad:"
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/textView49"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="rentabilidad de cada producto" />
 
-        <Button
-            android:id="@+id/button"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Button" />
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/Edt_searchProductRentability_dashboard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Buscar producto" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/Rv_productRentabiltyData_dashboard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:padding="4dp" />
+
     </LinearLayout>
 
 </FrameLayout>
