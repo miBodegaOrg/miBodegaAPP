@@ -50,10 +50,14 @@ import com.mibodega.mystore.models.Responses.CategoryResponse;
 import com.mibodega.mystore.models.Responses.GenerateCodeResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponseByCode;
+import com.mibodega.mystore.models.Responses.ProductResponseSupplier;
 import com.mibodega.mystore.models.Responses.SubCategoryResponse;
+import com.mibodega.mystore.models.Responses.SupplierResponseV2;
 import com.mibodega.mystore.services.IProductServices;
+import com.mibodega.mystore.services.ISupplierServices;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.Utils;
+import com.mibodega.mystore.shared.adapters.LoadingDialogAdapter;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
 import com.mibodega.mystore.views.signIn.SignInActivity;
 
@@ -98,6 +102,7 @@ public class ProductEditActivity extends AppCompatActivity {
     private TextInputEditText txt_price_product;
     private TextInputEditText txt_stock_product;
     private TextInputEditText txt_code_product;
+    private TextInputEditText txt_saleprice_product;
 
     private Spinner sp_category_product;
     private TextView tv_fileName;
@@ -105,6 +110,8 @@ public class ProductEditActivity extends AppCompatActivity {
     private Button btnGenerateCode;
     private Spinner getSp_category_product;
     private Spinner getSp_subcategory_product;
+    private Spinner getSp_proveedor_product;
+    private Spinner getSp_Type_product;
 
     private Button btn_saveProduct;
     private Config config = new Config();
@@ -117,6 +124,8 @@ public class ProductEditActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private FrameLayout chatFragmentContainer;
 
+    private LoadingDialogAdapter loadingDialog = new LoadingDialogAdapter();
+
     private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
             result -> {
                 if (result.getContents() == null) {
@@ -128,6 +137,11 @@ public class ProductEditActivity extends AppCompatActivity {
                 }
             });
 
+    private ArrayList<SupplierResponseV2> arrsupplierResponses = new ArrayList<>();
+    private Map<String,SupplierResponseV2> mapsupplierResponses = new HashMap<>();
+    private Map<String,CategoryResponse> mapcategoryResponses = new HashMap<>();
+    private Map<String,SubCategoryResponse> mapsupcategoriesResponses = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,8 +151,11 @@ public class ProductEditActivity extends AppCompatActivity {
         txt_price_product = findViewById(R.id.Edt_price_product);
         txt_stock_product = findViewById(R.id.Edt_stock_product);
         txt_code_product = findViewById(R.id.Edt_productCode_product);
+        txt_saleprice_product = findViewById(R.id.Edt_saleprice_product);
         getSp_category_product = findViewById(R.id.Sp_selectProductCategory_product);
         getSp_subcategory_product = findViewById(R.id.Sp_selectProductSubCategory_product);
+        getSp_proveedor_product = findViewById(R.id.Sp_selectProveedor_product);
+        getSp_Type_product = findViewById(R.id.Sp_selectUnidad_product);
 
         btn_saveProduct = findViewById(R.id.Btn_saveProduct_product);
         tv_fileName = findViewById(R.id.Tv_productFileName_product);
@@ -177,16 +194,26 @@ public class ProductEditActivity extends AppCompatActivity {
         });
 
 
+        ArrayList<String> type = new ArrayList<>();
+        type.add("UN");
+        type.add("KG");
+        ArrayAdapter<String> adapter4 = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_spinner_item, type);
+        adapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        getSp_Type_product.setAdapter(adapter4);
+        getSp_Type_product.setSelection(0);
+
         tv_fileName.setText("");
         setDialogs(this);
-
+        mapcategoryResponses.clear();
         ArrayList<String> categories = new ArrayList<>();
         for (CategoryResponse item : config.getArrCategories()){
             categories.add(item.getName());
+            mapcategoryResponses.put(item.getName(), item);
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         getSp_category_product.setAdapter(adapter);
+        getSp_category_product.setSelection(0);
 
         getSp_category_product.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -200,10 +227,8 @@ public class ProductEditActivity extends AppCompatActivity {
 
             }
         });
-
-
-
         setupButtons();
+
         btn_saveProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -239,7 +264,7 @@ public class ProductEditActivity extends AppCompatActivity {
                   generateCodeBars();
             }
         });
-
+        loadSuppliers();
 
     }
     private void setupButtons() {
@@ -266,17 +291,20 @@ public class ProductEditActivity extends AppCompatActivity {
     }
 
     public void setSelectSubCategories(String category){
+        mapsupcategoriesResponses.clear();
         ArrayList<String> subcategories = new ArrayList<>();
         for(CategoryResponse item : config.getArrCategories()){
             if(Objects.equals(item.getName(), category)){
                 for (SubCategoryResponse subcategory : item.getSubcategories()){
                     subcategories.add(subcategory.getName());
+                    mapsupcategoriesResponses.put(subcategory.getName(), subcategory);
                 }
             }
         }
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_spinner_item, subcategories);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         getSp_subcategory_product.setAdapter(adapter2);
+        getSp_category_product.setSelection(0);
     }
 
     public void setDialogs(Context context){
@@ -324,6 +352,9 @@ public class ProductEditActivity extends AppCompatActivity {
     }
 
     private void postProductsData() {
+        View dialogView = getLayoutInflater().from(getBaseContext()).inflate(R.layout.progress_dialog, null);
+        loadingDialog.startLoadingDialog(this, dialogView, "Cargando","Porfavor espere...");
+
         Retrofit retrofit = new Retrofit.
                 Builder().
                 baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
@@ -332,13 +363,23 @@ public class ProductEditActivity extends AppCompatActivity {
         IProductServices service = retrofit.create(IProductServices.class);
 
         ArrayList<String> categoryList = new ArrayList<>();
-        categoryList.add(getSp_category_product.getSelectedItem().toString());
+        categoryList.add(mapcategoryResponses.get(getSp_category_product.getSelectedItem().toString()).getName());
+        ArrayList<String> subcategoryList = new ArrayList<>();
+        subcategoryList.add(mapsupcategoriesResponses.get(getSp_subcategory_product.getSelectedItem().toString()).getName());
 
         String category = getSp_category_product.getSelectedItem().toString();
         String subcategory = getSp_subcategory_product.getSelectedItem().toString();
 
         String code = txt_code_product.getText().toString();
+        String selectType = "";
+        if(getSp_Type_product.getSelectedItem().toString().equals("UN")){selectType = "false";}else{selectType = "true";}
+        SupplierResponseV2 selectSupplier = mapsupplierResponses.get(getSp_proveedor_product.getSelectedItem().toString());
+        String selectsupplierid = "";
+        if(selectSupplier!=null){
+            selectsupplierid = selectSupplier.get_id();
+        }
 
+        System.out.println(categoryList.toString());
         System.out.println(category);
         System.out.println(subcategory);
         Map<String, RequestBody> requestMap = new HashMap<>();
@@ -347,32 +388,36 @@ public class ProductEditActivity extends AppCompatActivity {
         requestMap.put("price", RequestBody.create(MediaType.parse("text/plain"), txt_price_product.getText().toString()));
         requestMap.put("stock", RequestBody.create(MediaType.parse("text/plain"), txt_stock_product.getText().toString()));
         requestMap.put("category", RequestBody.create(MediaType.parse("text/plain"), category));
-        requestMap.put("subcategory", RequestBody.create(MediaType.parse("text/plain"), subcategory));
-        requestMap.put("weight", RequestBody.create(MediaType.parse("text/plain"), "false"));
+        requestMap.put("subcategory", RequestBody.create(MediaType.parse("text/plain"), subcategory.toString()));
+        requestMap.put("weight", RequestBody.create(MediaType.parse("text/plain"), selectType));
         requestMap.put("image\"; filename=\"" + "image", finalImageBody);
+        requestMap.put("supplier", RequestBody.create(MediaType.parse("text/plain"), selectsupplierid));
+        requestMap.put("cost", RequestBody.create(MediaType.parse("text/plain"), txt_saleprice_product.getText().toString()));
 
 
 
-        Call<ProductResponseByCode> call = service.createProduct(requestMap,"Bearer "+config.getJwt());
+        Call<ProductResponseSupplier> call = service.createProduct(requestMap,"Bearer "+config.getJwt());
         System.out.println(config.getJwt());
-        call.enqueue(new Callback<ProductResponseByCode>() {
+        call.enqueue(new Callback<ProductResponseSupplier>() {
             @Override
-            public void onResponse(@NonNull Call<ProductResponseByCode> call, @NonNull Response<ProductResponseByCode> response) {
+            public void onResponse(@NonNull Call<ProductResponseSupplier> call, @NonNull Response<ProductResponseSupplier> response) {
                 System.out.println(response.toString());
                 if(response.isSuccessful()){
-
-                    ProductResponseByCode productResponseByCode = response.body();
+                    System.out.println("creado");
+                    Dialog dialog = utils.getAlertCustom(ProductEditActivity.this, "success", "Creado", "Producto creado", false);
+                    ProductResponseSupplier productResponseByCode = response.body();
                     if(productResponseByCode!=null){
-                        Dialog dialog = utils.getAlertCustom(ProductEditActivity.this, "success", "Creado", "Producto creado", false);
+                        //Dialog dialog = utils.getAlertCustom(ProductEditActivity.this, "success", "Creado", "Producto creado", false);
                         dialog.show();
                         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                             @Override
                             public void onDismiss(DialogInterface dialogInterface) {
+                                loadingDialog.dismissDialog();
                                 finish();
                             }
                         });
                     }
-
+                    loadingDialog.dismissDialog();
                 }else {
                     Dialog dialog = utils.getAlertCustom(ProductEditActivity.this, "warning", "No creado", "Asegurece de ingresar bien los datos", false);
                     dialog.show();
@@ -387,13 +432,21 @@ public class ProductEditActivity extends AppCompatActivity {
                     } catch (IOException | JSONException e) {
                         e.printStackTrace();
                     }
-                    finish();
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            loadingDialog.dismissDialog();
+                            finish();
+                        }
+                    });
+
                 }
 
             }
 
             @Override
-            public void onFailure(@NonNull Call<ProductResponseByCode> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<ProductResponseSupplier> call, @NonNull Throwable t) {
+                loadingDialog.dismissDialog();
                 System.out.println("error de servidor");
                 System.out.println("errror "+t.getMessage());
 
@@ -489,8 +542,6 @@ public class ProductEditActivity extends AppCompatActivity {
                 PERMISSION_REQUEST_CODE);
     }
 
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -573,8 +624,6 @@ public class ProductEditActivity extends AppCompatActivity {
         }
         return null;
     }
-
-
     private void startBarcodeScanner() {
         ScanOptions options = new ScanOptions()
                 .setDesiredBarcodeFormats(ScanOptions.ALL_CODE_TYPES)
@@ -583,6 +632,43 @@ public class ProductEditActivity extends AppCompatActivity {
                 .setBeepEnabled(false)
                 .setBarcodeImageEnabled(false);
         barcodeLauncher.launch(options);
+    }
+
+    public void loadSuppliers(){
+        Retrofit retrofit = new Retrofit.
+                Builder().
+                baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
+                build();
+        ISupplierServices service = retrofit.create(ISupplierServices.class);
+        Call<List<SupplierResponseV2>> call = service.getSuppliers("Bearer "+config.getJwt());
+        call.enqueue(new Callback<List<SupplierResponseV2>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<SupplierResponseV2>> call, @NonNull Response<List<SupplierResponseV2>> response) {
+                System.out.println(response.toString());
+                if(response.isSuccessful()){
+                    arrsupplierResponses = (ArrayList<SupplierResponseV2>) response.body();
+                    if(arrsupplierResponses!=null){
+                        ArrayList<String> suppliers = new ArrayList<>();
+                        for (SupplierResponseV2 item:arrsupplierResponses) {
+                            suppliers.add(item.getName());
+                            mapsupplierResponses.put(item.getName(),item);
+                        }
+                        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_spinner_item, suppliers);
+                        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        getSp_proveedor_product.setAdapter(adapter2);
+                        System.out.println("obtuvo proveedores");
+                        System.out.println("a "+arrsupplierResponses.size());
+
+
+                    }
+                }
+
+            }
+            @Override
+            public void onFailure(@NonNull Call<List<SupplierResponseV2>> call, @NonNull Throwable t) {
+                System.out.println("errror "+t.getMessage());
+            }
+        });
     }
 
 

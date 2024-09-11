@@ -17,22 +17,15 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.RequestSupplier;
-import com.mibodega.mystore.models.Responses.CategoryProduct;
 import com.mibodega.mystore.models.Responses.PagesProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
-import com.mibodega.mystore.models.Responses.ProductResponseByCode;
-import com.mibodega.mystore.models.Responses.ProductResponseSupplier;
 import com.mibodega.mystore.models.Responses.ProductResponseSupplierV2;
-import com.mibodega.mystore.models.Responses.SubCategoryResponse;
-import com.mibodega.mystore.models.Responses.SupplierResponse;
 import com.mibodega.mystore.models.Responses.SupplierResponseV2;
 import com.mibodega.mystore.models.common.ProductSupplier;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.services.ISupplierServices;
 import com.mibodega.mystore.shared.Config;
-import com.mibodega.mystore.shared.SupplierProductList;
 import com.mibodega.mystore.shared.Utils;
-import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSale;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSearch;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSupplier;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
@@ -273,7 +266,7 @@ public class SupplierRegisterActivity extends AppCompatActivity {
                                         product.getSubcategory().get_id(),
                                         product.getShop(),
                                         product.getCreatedAt(),
-                                        product.getUpdatedAt()));
+                                        product.getUpdatedAt(),"otros"));
                                 updateDATA();
                             }
                         });
@@ -435,8 +428,8 @@ public class SupplierRegisterActivity extends AppCompatActivity {
                                             product.getSubcategory().get_id(),
                                             product.getShop(),
                                             product.getCreatedAt(),
-                                            product.getUpdatedAt()
-                            );
+                                            product.getUpdatedAt(),
+                                    "otros");
                             arrayListProduct.add(productResponse);
                             if(index>0) {
                                 getProductByCode(supplierResponse.getProducts().get(index-1).getCode(), index - 1);

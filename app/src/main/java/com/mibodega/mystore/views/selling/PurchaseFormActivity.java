@@ -82,6 +82,7 @@ public class PurchaseFormActivity extends AppCompatActivity {
     private Map<String,SupplierResponseV2> mapsupplierResponses = new HashMap<>();
     private RecyclerViewAdapterProductSupplier listAdapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
