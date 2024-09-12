@@ -92,7 +92,7 @@ public class SignUpShopActivity extends AppCompatActivity {
         }
         if(edt_rucSignUp_shop.getText().toString().trim().length() != 0){
             int aux = edt_rucSignUp_shop.getText().toString().length();
-            if(aux != 11){
+            if(aux != 11&&aux!=8){
                 message += "😨 Debe ingresar un numero de ruc con minimo 8 digitos\n";
             }
         }
@@ -132,7 +132,6 @@ public class SignUpShopActivity extends AppCompatActivity {
 
 
         Call<SignUpResponse> call = service.post_signup(request);
-        System.out.println(config.getJwt());
         call.enqueue(new Callback<SignUpResponse>() {
             @Override
             public void onResponse(@NonNull Call<SignUpResponse> call, @NonNull Response<SignUpResponse> response) {

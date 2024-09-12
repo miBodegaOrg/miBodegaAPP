@@ -19,6 +19,7 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.google.android.material.card.MaterialCardView;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.CategoryResponse;
 import com.mibodega.mystore.models.Responses.CategoryResponseWithProducts;
@@ -49,16 +50,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class HomeFragment extends Fragment {
 
     private Config config = new Config();
-    private Button btn_employe,btn_supplier, btn_buying, btn_discountPromotion;
+    private MaterialCardView btn_employe,btn_supplier, btn_buying, btn_discountPromotion;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root =  inflater.inflate(R.layout.fragment_home, container, false);
-        btn_employe = root.findViewById(R.id.Btn_manageEmployes_home);
-        btn_supplier = root.findViewById(R.id.Btn_manageSupplier_home);
-        btn_buying = root.findViewById(R.id.Btn_managePurchases_home);
-        btn_discountPromotion = root.findViewById(R.id.Btn_manageDiscountsOferts_home);
+        btn_employe = root.findViewById(R.id.MBtn_manageEmployes_home);
+        btn_supplier = root.findViewById(R.id.MBtn_manageSupplier_home);
+        btn_buying = root.findViewById(R.id.MBtn_managePurchases_home);
+        btn_discountPromotion = root.findViewById(R.id.MBtn_manageDiscountsOferts_home);
 
 
         btn_employe.setOnClickListener(new View.OnClickListener() {
@@ -90,50 +91,9 @@ public class HomeFragment extends Fragment {
             }
         });
 
-
-        BarChart chart = root.findViewById(R.id.chart);
-
-        chart.setTouchEnabled(false);
-        chart.setDragEnabled(false);
-        chart.setScaleEnabled(false);
-        chart.setPinchZoom(false);
-        chart.setDoubleTapToZoomEnabled(false);
-        chart.getXAxis().setDrawGridLines(false);
-        chart.getAxisLeft().setDrawGridLines(false);
-        chart.getAxisRight().setDrawGridLines(false);
-
-
-        List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0f, 500f)); // Ejemplo de dato: 500 ventas en enero
-        entries.add(new BarEntry(1f, 750f));
-        entries.add(new BarEntry(2f, 1000f));
-        entries.add(new BarEntry(3f, 500f));
-        entries.add(new BarEntry(4f, 580f));
-        entries.add(new BarEntry(5f, 800f));
-
-
-        BarDataSet dataSet = new BarDataSet(entries, "Ventas mensuales soles");
-
-
-
-        dataSet.setColor(Color.GRAY);
-        dataSet.setValueTextColor(Color.BLACK);
-        dataSet.setValueTextSize(12f);
-        BarData data = new BarData(dataSet);
-        chart.setData(data);
-
-
-        chart.getDescription().setEnabled(false);
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setGranularity(1f);
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(Arrays.asList("Ene", "Feb", "Mar","Abr","May","Jun"))); // Etiquetas del eje X
-
-
         initProductsData(root);
         initPermises();
         initCategoryData(root);
-        chart.invalidate();
         return root;
     }
     private void initProductsData(View root) {
@@ -194,7 +154,6 @@ public class HomeFragment extends Fragment {
             }
         });
     }
-
     private void initCategoryData(View root) {
         Retrofit retrofit = new Retrofit.
                 Builder().

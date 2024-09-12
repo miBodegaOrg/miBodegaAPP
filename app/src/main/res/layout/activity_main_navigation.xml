@@ -57,6 +57,7 @@ tools:context=".MainNavigationActivity">
                 android:layout_marginBottom="70dp"
                 android:clickable="true"
                 android:src="@drawable/ic_chat_ia"
+                android:visibility="gone"
                 app:fabSize="auto" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
