@@ -81,12 +81,9 @@ public class MainNavigationActivity extends AppCompatActivity {
         Activity HomeMenuActivity = this;
 
         //dbconfig = new DBConfig(getApplicationContext());
-
         binding = ActivityMainNavigationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         utils.getNotificacionPush(this,"Te recomiendo esta oferta","Mi Bodega",null);
-
         binding.topAppBar.setTitle("Hola, Bodeguero");
         replaceFragment(new HomeFragment());
         binding.bottomNavigationView.setBackground(null);
@@ -171,35 +168,28 @@ public class MainNavigationActivity extends AppCompatActivity {
         });
 
         preferencesHelper = new SharedPreferencesHelper(this);
-
+        /*
         // Verificar si ha pasado 1 día desde la última vez que se mostró el diálogo
         if (preferencesHelper.hasIntervalPassed(KEY_LAST_DIALOG_DATE, 1)) {
             loadCreateChat();
             // Guardar la fecha actual
             preferencesHelper.putCurrentDate(KEY_LAST_DIALOG_DATE);
-        }
-/*
-        if (preferencesHelper.isNewDay(KEY_LAST_DIALOG_DATE)) {
-            showDialog();
-            //loadCreateChat();
-            // Guardar la fecha actual en la zona horaria de Perú
-            preferencesHelper.putCurrentDate(KEY_LAST_DIALOG_DATE);
         }*/
 
-        if (preferencesHelper.hasIntervalPassedInMinutes(KEY_LAST_SEND_TIMESTAMP, INTERVAL_MINUTES)) {
-            sendData();
-            // Guardar el timestamp actual
-            preferencesHelper.putCurrentTimestamp(KEY_LAST_SEND_TIMESTAMP);
+        //si la fecha cambio, entonces crea un nuevo chat
+        if (preferencesHelper.isNewDay(KEY_LAST_DIALOG_DATE)) {
+            //showDialog();
+            loadCreateChat();
+            // Guardar la fecha actual en la zona horaria de Perú
+            preferencesHelper.putCurrentDate(KEY_LAST_DIALOG_DATE);
         }
     }
-
     private void replaceFragment(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
     }
-
     private void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Bienvenido");
@@ -256,9 +246,6 @@ public class MainNavigationActivity extends AppCompatActivity {
             }
         });
     }
-    private void sendData() {
-        // Aquí puedes agregar tu lógica para enviar datos
-        Toast.makeText(getBaseContext(),"RECOMENDACION",Toast.LENGTH_SHORT).show();
-    }
+
 
 }

@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -30,6 +31,7 @@ import com.mibodega.mystore.services.ICategoryServices;
 import com.mibodega.mystore.services.IEmployeeServices;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.SharedPreferencesHelper;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProduct;
 import com.mibodega.mystore.views.employers.EmployerActivity;
 import com.mibodega.mystore.views.offers.OffersActivity;
@@ -51,6 +53,12 @@ public class HomeFragment extends Fragment {
 
     private Config config = new Config();
     private MaterialCardView btn_employe,btn_supplier, btn_buying, btn_discountPromotion;
+    private SharedPreferencesHelper preferencesHelper;
+
+    //por rango tiempo minutos
+    private static final String KEY_LAST_SEND_TIMESTAMP = "lastSendTimestamp";
+    private static final int INTERVAL_MINUTES = 2; // Intervalo de 30 minutos
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -61,6 +69,7 @@ public class HomeFragment extends Fragment {
         btn_buying = root.findViewById(R.id.MBtn_managePurchases_home);
         btn_discountPromotion = root.findViewById(R.id.MBtn_manageDiscountsOferts_home);
 
+        preferencesHelper = new SharedPreferencesHelper(getContext());
 
         btn_employe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,10 +99,14 @@ public class HomeFragment extends Fragment {
                 startActivity(su);
             }
         });
-
         initProductsData(root);
         initPermises();
         initCategoryData(root);
+        if (preferencesHelper.hasIntervalPassedInMinutes(KEY_LAST_SEND_TIMESTAMP, INTERVAL_MINUTES)) {
+            sendData();
+            // Guardar el timestamp actual
+            preferencesHelper.putCurrentTimestamp(KEY_LAST_SEND_TIMESTAMP);
+        }
         return root;
     }
     private void initProductsData(View root) {
@@ -183,6 +196,11 @@ public class HomeFragment extends Fragment {
                 System.out.println("errror "+t.getMessage());
             }
         });
+    }
+
+    private void sendData() {
+        // Aquí puedes agregar tu lógica para enviar datos
+        Toast.makeText(getContext(),"RECOMENDACION",Toast.LENGTH_SHORT).show();
     }
 
 }
