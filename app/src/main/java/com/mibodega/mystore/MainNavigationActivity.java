@@ -174,8 +174,7 @@ public class MainNavigationActivity extends AppCompatActivity {
 
         // Verificar si ha pasado 1 día desde la última vez que se mostró el diálogo
         if (preferencesHelper.hasIntervalPassed(KEY_LAST_DIALOG_DATE, 1)) {
-            //loadCreateChat();
-            showDialog();
+            loadCreateChat();
             // Guardar la fecha actual
             preferencesHelper.putCurrentDate(KEY_LAST_DIALOG_DATE);
         }
