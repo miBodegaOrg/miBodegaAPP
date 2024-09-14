@@ -8,7 +8,7 @@ public class ProductResponse {
     private String name;
     private String code;
     private double price;
-    private int stock;
+    private Number stock;
     private String image_url;
     private int sales;
     private boolean weight;
@@ -17,9 +17,11 @@ public class ProductResponse {
     private String shop;
     private String createdAt;
     private String updatedAt;
+    private Double cost;
+    private String supplier;
     private int __v;
 
-    public ProductResponse(String _id, String name, String code, double price, int stock, String image_url, int sales, boolean weight, CategoryProduct category, SubCategoryResponse subcategory, String shop, String createdAt, String updatedAt) {
+    public ProductResponse(String _id, String name, String code, double price, Number stock, String image_url, int sales, boolean weight, CategoryProduct category, SubCategoryResponse subcategory, String shop, String createdAt, String updatedAt, Double cost, String supplier) {
         this._id = _id;
         this.name = name;
         this.code = code;
@@ -33,7 +35,10 @@ public class ProductResponse {
         this.shop = shop;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.cost = cost;
+        this.supplier = supplier;
     }
+
 
     public String get_id() {
         return _id;
@@ -67,13 +72,10 @@ public class ProductResponse {
         this.price = price;
     }
 
-    public int getStock() {
+    public Number getStock() {
         return stock;
     }
 
-    public void setStock(int stock) {
-        this.stock = stock;
-    }
 
     public String getImage_url() {
         return image_url;
@@ -137,5 +139,25 @@ public class ProductResponse {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public void setStock(Number stock) {
+        this.stock = stock;
+    }
+
+    public Double getCost() {
+        return cost;
+    }
+
+    public void setCost(Double cost) {
+        this.cost = cost;
+    }
+
+    public String getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(String supplier) {
+        this.supplier = supplier;
     }
 }

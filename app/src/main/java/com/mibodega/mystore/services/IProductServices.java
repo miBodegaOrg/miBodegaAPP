@@ -5,6 +5,7 @@ import com.mibodega.mystore.models.Responses.PagesProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponseByCode;
 import com.mibodega.mystore.models.Responses.ProductResponseSupplier;
+import com.mibodega.mystore.models.Responses.ProductResponseSupplierV2;
 
 import java.util.List;
 import java.util.Map;
@@ -48,7 +49,7 @@ public interface IProductServices {
 
     @Multipart()
     @PUT("products/{id}")
-    Call<ProductResponseByCode> updateProduct(@Path("id") String id, @PartMap Map<String, RequestBody> request, @Header("Authorization") String token );
+    Call<ProductResponseSupplierV2> updateProduct(@Path("id") String id, @PartMap Map<String, RequestBody> request, @Header("Authorization") String token );
 
     @DELETE("products/{id}")
     Call<ProductResponse> deleteProductById(@Path("id") String id, @Header("Authorization") String token);

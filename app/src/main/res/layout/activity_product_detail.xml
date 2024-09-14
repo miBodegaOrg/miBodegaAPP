@@ -44,73 +44,205 @@ tools:context=".views.products.ProductDetailActivity">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:padding="10dp">
+                    android:padding="2dp">
 
-                    <com.google.android.material.textfield.TextInputLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="5dp"
+                        android:background="@drawable/background_custom_rectangle_shadow"
+                        android:orientation="vertical"
+                        android:padding="5dp">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/Edt_name_product_update"
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/Edt_name_product_update"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Nombre"
+                                android:inputType="text"
+                                android:maxLength="20" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/bottomsheet_back"
+                            android:backgroundTint="@color/md_theme_dark_inversePrimary"
+                            android:orientation="horizontal"
+                            android:padding="2dp">
+
+                            <TextView
+                                android:id="@+id/textView77"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Precio Compra"
+                                android:textAlignment="center"
+                                android:textColor="@color/ic_launcher_background"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView78"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.1"
+                                android:text="Stock inicial"
+                                android:textColor="@color/ic_launcher_background"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView76"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Precio Venta"
+                                android:textAlignment="viewStart"
+                                android:textColor="@color/ic_launcher_background"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView75"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.1"
+                                android:text="Tipo"
+                                android:textAlignment="center"
+                                android:textColor="@color/ic_launcher_background"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginRight="2dp"
+                                android:layout_weight="1">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/Edt_saleprice_product_update"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Compra"
+                                    android:inputType="numberDecimal" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.1">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/Edt_stock_product_update"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="2dp"
+                                    android:hint="Stock"
+                                    android:inputType="numberDecimal" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.1">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/Edt_price_product_update"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Precio"
+                                    android:inputType="numberDecimal" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <Spinner
+                                android:id="@+id/Sp_selectUnidad_product_update"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_custom_rectangle_shadow"
+                        android:orientation="vertical"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:id="@+id/textView11"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Nombre"
-                            android:inputType="text"
-                            android:maxLength="20" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:layout_marginTop="10dp"
+                            android:text="Selecciona categoria:"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        <Spinner
+                            android:id="@+id/Sp_selectProductCategory_product_update"
+                            android:layout_width="match_parent"
+                            android:layout_height="39dp" />
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/Edt_price_product_update"
+                        <View
+                            android:id="@+id/view5"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@drawable/divider" />
+
+                        <View
+                            android:id="@+id/view6"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@drawable/divider" />
+
+                        <TextView
+                            android:id="@+id/textView16"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Precio"
-                            android:inputType="numberDecimal" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:text="Selecciona subcategoria:"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        <Spinner
+                            android:id="@+id/Sp_selectProductSubCategory_product_update"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/Edt_stock_product_update"
+                        <View
+                            android:id="@+id/view7"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@drawable/divider" />
+
+                        <TextView
+                            android:id="@+id/textView74"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Stock"
-                            android:inputType="number" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:text="Seleccionar Proveedor"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/textView11"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Selecciona categoria:"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <Spinner
-                        android:id="@+id/Sp_selectProductCategory_product_update"
-                        android:layout_width="match_parent"
-                        android:layout_height="39dp" />
-
-                    <TextView
-                        android:id="@+id/textView16"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Selecciona subcategoria:"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <Spinner
-                        android:id="@+id/Sp_selectProductSubCategory_product_update"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        <Spinner
+                            android:id="@+id/Sp_selectProveedor_product_update"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -214,12 +346,30 @@ tools:context=".views.products.ProductDetailActivity">
 
                 <Button
                     android:id="@+id/Btn_saveProduct_product_update"
-                    android:layout_width="200dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_margin="20dp"
                     android:text="Actualizar"
                     app:icon="@drawable/baseline_save_24" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/Btn_deleteProduct_detail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/toast_error"
+                        android:text="Eliminar"
+                        android:textStyle="bold"
+                        app:icon="@drawable/baseline_delete_forever_24" />
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
 

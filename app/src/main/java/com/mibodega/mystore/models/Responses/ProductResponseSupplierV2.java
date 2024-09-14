@@ -18,7 +18,7 @@ public class ProductResponseSupplierV2 {
     private int __v;
     private String supplier;
 
-    public ProductResponseSupplierV2(String _id, String name, double cost, String code, double price, int stock, String image_url, int sales, boolean weight, String category, String subcategory, String shop, String createdAt, String updatedAt, String supplier) {
+    public ProductResponseSupplierV2(String _id, String name, double cost, String code, double price, Number stock, String image_url, int sales, boolean weight, String category, String subcategory, String shop, String createdAt, String updatedAt, String supplier) {
         this._id = _id;
         this.name = name;
         this.cost = cost;

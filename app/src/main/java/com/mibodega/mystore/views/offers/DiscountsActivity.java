@@ -236,11 +236,13 @@ public class DiscountsActivity extends AppCompatActivity {
                                 product.getStock(),
                                 product.getImage_url(),
                                 product.getSales(),
-                                false,
+                                product.isWeight(),
                                 product.getCategory(), product.getSubcategory(),
                                 product.getShop(),
                                 product.getCreatedAt(),
-                                product.getUpdatedAt()
+                                product.getUpdatedAt(),
+                                product.getCost(),
+                                product.getSupplier()
                         );
                         saleTemporalList.addProduct(productResponse,1);
                         loadData();
