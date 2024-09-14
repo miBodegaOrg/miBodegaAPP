@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.FirebaseApp;
 import com.mibodega.mystore.MainNavigationActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.RequestSignIn;
@@ -41,7 +42,7 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-
+        FirebaseApp.initializeApp(this);
         edt_user = findViewById(R.id.Tedt_user);
         edt_password = findViewById(R.id.Tedt_password);
         btn_moveToHome = findViewById(R.id.Btn_moveToHome_login);

@@ -509,8 +509,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         requestMap.put("supplier", RequestBody.create(MediaType.parse("text/plain"), selectsupplierid));
         requestMap.put("cost", RequestBody.create(MediaType.parse("text/plain"), txt_cost_product.getText().toString()));
 
-
-
         Call<ProductResponseSupplierV2> call = service.updateProduct(id,requestMap,"Bearer "+config.getJwt());
         System.out.println(config.getJwt());
         call.enqueue(new Callback<ProductResponseSupplierV2>() {

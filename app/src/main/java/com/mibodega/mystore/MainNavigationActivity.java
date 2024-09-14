@@ -21,8 +21,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.mibodega.mystore.databinding.ActivityMainNavigationBinding;
 
 import com.mibodega.mystore.models.Requests.RequestMessage;
@@ -78,6 +82,21 @@ public class MainNavigationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            return;
+                        }
+
+                        // Obtén el token de registro FCM
+                        String token = task.getResult();
+                        // Envíalo a tu servidor o guárdalo localmente
+                        System.out.println("* "+token);
+                    }
+                });
+
         Activity HomeMenuActivity = this;
 
         //dbconfig = new DBConfig(getApplicationContext());
@@ -89,6 +108,7 @@ public class MainNavigationActivity extends AppCompatActivity {
         binding.bottomNavigationView.setBackground(null);
         drawerLayout = findViewById(R.id.drawer_layout);
         chatFragmentContainer = findViewById(R.id.chat_fragment_container);
+
         drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
@@ -183,6 +203,8 @@ public class MainNavigationActivity extends AppCompatActivity {
             // Guardar la fecha actual en la zona horaria de Perú
             preferencesHelper.putCurrentDate(KEY_LAST_DIALOG_DATE);
         }
+
+
     }
     private void replaceFragment(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
