@@ -7,9 +7,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.FirebaseApp;
 import com.mibodega.mystore.MainNavigationActivity;
@@ -64,6 +67,13 @@ public class SignInActivity extends AppCompatActivity {
                 startActivity(mg);
             }
         });
+
+        ImageView imageView = findViewById(R.id.Imv_profileImageSigIn);
+        Glide.with(this)
+                .load(R.drawable.logo_size2)
+                .apply(RequestOptions.circleCropTransform())
+                .into(imageView);
+
     }
     private void postData(String user, String pass) {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(config.getURL_API())

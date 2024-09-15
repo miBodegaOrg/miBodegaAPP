@@ -43,21 +43,22 @@
                 android:layout_alignParentEnd="true"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_marginStart="129dp"
-                android:layout_marginTop="152dp"
+                android:layout_marginTop="100dp"
                 android:layout_marginEnd="130dp"
                 android:textAlignment="center"
-                app:srcCompat="@drawable/img" />
+                app:srcCompat="@drawable/logo_size2" />
 
             <TextView
                 android:id="@+id/miTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/Imv_bannerSignIn"
-                android:layout_marginBottom="5dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="false"
+                android:layout_marginTop="283dp"
                 android:gravity="center"
                 android:text="Bienvenido"
                 android:textColor="@color/md_theme_light_onPrimary"
-                android:textSize="24dp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
         </RelativeLayout>
@@ -84,7 +85,8 @@
                     android:id="@+id/TextInputLayout_user"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Ingrese Usuario">
+                    android:hint="Ingrese Usuario"
+                    app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/Tedt_user"
@@ -99,7 +101,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:hint="Ingrese Contraseña">
+                    android:hint="Ingrese Contraseña"
+                    app:endIconMode="password_toggle">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/Tedt_password"
