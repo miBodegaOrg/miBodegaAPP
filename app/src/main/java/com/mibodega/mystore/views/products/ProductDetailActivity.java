@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -277,13 +278,30 @@ public class ProductDetailActivity extends AppCompatActivity {
         btn_deleteProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if(productGeneral!=null){
+                    Dialog dialog = utils.getAlertCustom(ProductDetailActivity.this,"warning","¿Estas seguro de eliminar el producto?","Esta eliminación sera permanente",true);
+                    Button btn_accept = dialog.findViewById(R.id.btn_accept);
+                    Button btn_cancel= dialog.findViewById(R.id.btn_cancel);
+                    btn_accept.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            deleteProductById(productGeneral.get_id());
+                            dialog.dismiss();
+                        }
+                    });
+                    btn_cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.show();
+                }
             }
         });
 
         loadBarCodeImage(code);
     }
-
     public void loadBarCodeImage(String _code){
         Retrofit retrofit = new Retrofit.
                 Builder().
@@ -300,41 +318,10 @@ public class ProductDetailActivity extends AppCompatActivity {
                     Bitmap bmp = BitmapFactory.decodeStream(response.body().byteStream());
                     // Asignar el Bitmap al ImageView
                     img_barCode.setImageBitmap(bmp);
-                }
-/*
-                if(response.isSuccessful()){
-
-                    Glide.with(getBaseContext())
-                            .asBitmap()
-                            .load(productGeneral.getImage_url())
-                            .error(R.drawable.no_photo)
-                            .centerCrop()
-                            .transform(new RoundedCorners(2))
-                            .into(new CustomTarget<Bitmap>() {
-                                @Override
-                                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                    imgProduct.setImageBitmap(resource);
-                                    barcodeBitmapImage = resource;
-
-                                    // Convertir el Bitmap a un array de bytes sin compresión (manteniendo la calidad y resolución)
-                                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                                    resource.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream); // Usar PNG para mantener calidad
-                                    byte[] imageBytes = byteArrayOutputStream.toByteArray();
-
-                                    imageBodyBarCode = RequestBody.create(MediaType.parse("image/png"), imageBytes);
-
-
-                                }
-
-                                @Override
-                                public void onLoadCleared(@Nullable Drawable placeholder) {
-                                    // Este método se llama cuando la solicitud se ha cancelado
-                                }
-                            });
-
                 }else{
-                    System.out.println("error");
-                }*/
+
+                }
+
             }
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
@@ -424,8 +411,64 @@ public class ProductDetailActivity extends AppCompatActivity {
                 }
             });
     }
+    public void deleteProductById(String id){
+        View dialogView = getLayoutInflater().from(getBaseContext()).inflate(R.layout.progress_dialog, null);
+        loadingDialog.startLoadingDialog(this, dialogView, "Cargando","Porfavor espere...");
 
+        Retrofit retrofit = new Retrofit.
+                Builder().
+                baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
+                build();
 
+        IProductServices service = retrofit.create(IProductServices.class);
+        Call<ProductResponseSupplierV2> call = service.deleteProductById(id,"Bearer "+config.getJwt());
+        call.enqueue(new Callback<ProductResponseSupplierV2>() {
+            @Override
+            public void onResponse(@NonNull Call<ProductResponseSupplierV2> call, @NonNull Response<ProductResponseSupplierV2> response) {
+                if(response.isSuccessful()){
+                    Dialog dialog = utils.getAlertCustom(ProductDetailActivity.this, "success", "Eliminado", "Producto eliminado", false);
+                    ProductResponseSupplierV2 productResponseByCode = response.body();
+                    if(productResponseByCode!=null){
+                        dialog.show();
+                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialogInterface) {
+                                loadingDialog.dismissDialog();
+                                finish();
+                            }
+                        });
+                    }
+                    loadingDialog.dismissDialog();
+                }else {
+                    Dialog dialog = utils.getAlertCustom(ProductDetailActivity.this, "warning", "No eliminado", "Hubo un error", false);
+                    dialog.show();
+                    try {
+                        String errorBody = response.errorBody().string();
+                        System.out.println("Error response body: " + errorBody);
+                        JSONObject errorJson = new JSONObject(errorBody);
+                        String errorMessage = errorJson.getString("message");
+                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                        System.out.println(errorMessage);
+
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            loadingDialog.dismissDialog();
+                            finish();
+                        }
+                    });
+
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<ProductResponseSupplierV2> call, @NonNull Throwable t) {
+                System.out.println("errror "+t.getMessage());
+            }
+        });
+    }
     public void selectSpinnerItemByName(Spinner spinner, String itemName) {
         ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
         for (int position = 0; position < adapter.getCount(); position++) {
@@ -435,7 +478,6 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         }
     }
-
     private void setupButtons() {
         btnCamera = findViewById(R.id.Imgb_takeProductPhoto_product_update);
         btnGallery= findViewById(R.id.Imgb_getproductPhoto_product_update);
@@ -458,7 +500,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
 
     }
-
     public void setSelectSubCategories(String category){
         mapsupcategoriesResponses.clear();
         ArrayList<String> subcategories = new ArrayList<>();
@@ -475,7 +516,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         getSp_subcategory_product.setAdapter(adapter2);
         getSp_subcategory_product.setSelection(0);
     }
-
     public void setDialogs(Context context){
         dialogShowProductImage = new Dialog(context);
         dialogShowProductImage.setContentView(R.layout.dialog_show_product_photo);
@@ -513,13 +553,11 @@ public class ProductDetailActivity extends AppCompatActivity {
         dialogShowProductImage.getWindow().getAttributes().windowAnimations = R.style.animation;
 
     }
-
     public static String generateRandomNumber() {
         Random random = new Random();
         int randomNumber = random.nextInt(900000000) + 100000000;
         return String.valueOf(randomNumber);
     }
-
     private void updateproductData(String id) {
         View dialogView = getLayoutInflater().from(getBaseContext()).inflate(R.layout.progress_dialog, null);
         loadingDialog.startLoadingDialog(this, dialogView, "Cargando","Porfavor espere...");
@@ -629,7 +667,6 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
     }
-
     public void generateCodeBars(){
 
         Retrofit retrofit = new Retrofit.
@@ -676,8 +713,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
 
     }
-
-
     private ActivityResultLauncher<Intent> cameraLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -688,7 +723,6 @@ public class ProductDetailActivity extends AppCompatActivity {
                 }
             }
     );
-
     private ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -701,22 +735,16 @@ public class ProductDetailActivity extends AppCompatActivity {
                 }
             }
     );
-
-
-
-
     private boolean checkPermissions() {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
-
     private void requestPermissions() {
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
                 PERMISSION_REQUEST_CODE);
     }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -734,20 +762,16 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         }
     }
-
-
     private void openCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             cameraLauncher.launch(takePictureIntent);
         }
     }
-
     private void openGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         galleryLauncher.launch(galleryIntent);
     }
-
     private void saveImageFromCamera(Bitmap bitmap) {
         File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_image.jpg");
         try (FileOutputStream outputStream = new FileOutputStream(file)) {
@@ -767,7 +791,6 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         tv_fileName.setText("imageCamera.jpg");
     }
-
     private void createImagePartFromGallery() {
         String filePath = getPathFromUri(imageUri);
         if (filePath != null) {

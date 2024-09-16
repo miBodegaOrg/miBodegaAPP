@@ -52,6 +52,6 @@ public interface IProductServices {
     Call<ProductResponseSupplierV2> updateProduct(@Path("id") String id, @PartMap Map<String, RequestBody> request, @Header("Authorization") String token );
 
     @DELETE("products/{id}")
-    Call<ProductResponse> deleteProductById(@Path("id") String id, @Header("Authorization") String token);
+    Call<ProductResponseSupplierV2> deleteProductById(@Path("id") String id, @Header("Authorization") String token);
 
 }
