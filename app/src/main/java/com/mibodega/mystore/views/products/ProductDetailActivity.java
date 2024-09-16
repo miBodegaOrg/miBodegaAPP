@@ -55,6 +55,7 @@ import com.mibodega.mystore.models.Responses.ProductResponseSupplier;
 import com.mibodega.mystore.models.Responses.ProductResponseSupplierV2;
 import com.mibodega.mystore.models.Responses.SubCategoryResponse;
 import com.mibodega.mystore.models.Responses.SupplierResponseV2;
+import com.mibodega.mystore.services.IBarCodeService;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.services.ISupplierServices;
 import com.mibodega.mystore.shared.Config;
@@ -80,6 +81,7 @@ import java.util.Random;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -120,10 +122,10 @@ public class ProductDetailActivity extends AppCompatActivity {
     private Config config = new Config();
 
     private Dialog dialogShowProductImage;
-    private Bitmap paymentBitmapImg;
+    private Bitmap paymentBitmapImg, barcodeBitmapImage;
 
     private ImageView imgProduct;
-    private RequestBody finalImageBody;
+    private RequestBody finalImageBody, imageBodyBarCode;
     private DrawerLayout drawerLayout;
     private FrameLayout chatFragmentContainer;
     private String code="";
@@ -145,11 +147,13 @@ public class ProductDetailActivity extends AppCompatActivity {
     private Map<String,SupplierResponseV2> mapsupplierResponses = new HashMap<>();
     private Map<String,CategoryResponse> mapcategoryResponses = new HashMap<>();
     private Map<String,SubCategoryResponse> mapsupcategoriesResponses = new HashMap<>();
+    private ImageView img_barCode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
-
+        img_barCode = findViewById(R.id.Imv_barsCode_detail_update);
         txt_name_product = findViewById(R.id.Edt_name_product_update);
         txt_price_product = findViewById(R.id.Edt_price_product_update);
         txt_stock_product = findViewById(R.id.Edt_stock_product_update);
@@ -277,8 +281,67 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
 
+        loadBarCodeImage(code);
     }
 
+    public void loadBarCodeImage(String _code){
+        Retrofit retrofit = new Retrofit.
+                Builder().
+                baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
+                build();
+
+        IBarCodeService service = retrofit.create(IBarCodeService.class);
+        Call<ResponseBody> call = service.generateCodeProduct(_code,"Bearer "+config.getJwt());
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    // Convertir el ResponseBody a Bitmap
+                    Bitmap bmp = BitmapFactory.decodeStream(response.body().byteStream());
+                    // Asignar el Bitmap al ImageView
+                    img_barCode.setImageBitmap(bmp);
+                }
+/*
+                if(response.isSuccessful()){
+
+                    Glide.with(getBaseContext())
+                            .asBitmap()
+                            .load(productGeneral.getImage_url())
+                            .error(R.drawable.no_photo)
+                            .centerCrop()
+                            .transform(new RoundedCorners(2))
+                            .into(new CustomTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                    imgProduct.setImageBitmap(resource);
+                                    barcodeBitmapImage = resource;
+
+                                    // Convertir el Bitmap a un array de bytes sin compresión (manteniendo la calidad y resolución)
+                                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                                    resource.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream); // Usar PNG para mantener calidad
+                                    byte[] imageBytes = byteArrayOutputStream.toByteArray();
+
+                                    imageBodyBarCode = RequestBody.create(MediaType.parse("image/png"), imageBytes);
+
+
+                                }
+
+                                @Override
+                                public void onLoadCleared(@Nullable Drawable placeholder) {
+                                    // Este método se llama cuando la solicitud se ha cancelado
+                                }
+                            });
+
+                }else{
+                    System.out.println("error");
+                }*/
+            }
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                System.out.println("errror "+t.getMessage());
+            }
+        });
+    }
     public void getProductByCode(String code){
             System.out.println("busca producto");
             Retrofit retrofit = new Retrofit.
@@ -360,9 +423,9 @@ public class ProductDetailActivity extends AppCompatActivity {
                     System.out.println("errror "+t.getMessage());
                 }
             });
-
-
     }
+
+
     public void selectSpinnerItemByName(Spinner spinner, String itemName) {
         ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
         for (int position = 0; position < adapter.getCount(); position++) {

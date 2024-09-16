@@ -28,25 +28,24 @@ tools:context=".views.products.ProductDetailActivity">
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="15dp">
+                android:padding="6dp">
 
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:padding="5dp"
                     android:text="Detalles de Producto"
                     android:textAlignment="center"
                     android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/poppins_regular"
-                    />
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:padding="2dp">
+                    android:padding="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -54,7 +53,7 @@ tools:context=".views.products.ProductDetailActivity">
                         android:layout_marginBottom="5dp"
                         android:background="@drawable/background_custom_rectangle_shadow"
                         android:orientation="vertical"
-                        android:padding="5dp">
+                        android:padding="8dp">
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
@@ -105,7 +104,7 @@ tools:context=".views.products.ProductDetailActivity">
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Precio Venta"
-                                android:textAlignment="viewStart"
+                                android:textAlignment="center"
                                 android:textColor="@color/ic_launcher_background"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />
@@ -131,7 +130,7 @@ tools:context=".views.products.ProductDetailActivity">
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_marginRight="2dp"
-                                android:layout_weight="1">
+                                android:layout_weight="1.1">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/Edt_saleprice_product_update"
@@ -172,7 +171,7 @@ tools:context=".views.products.ProductDetailActivity">
                                 android:id="@+id/Sp_selectUnidad_product_update"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_weight="1" />
+                                android:layout_weight="1.1" />
 
                         </LinearLayout>
 
@@ -183,7 +182,7 @@ tools:context=".views.products.ProductDetailActivity">
                         android:layout_height="match_parent"
                         android:background="@drawable/background_custom_rectangle_shadow"
                         android:orientation="vertical"
-                        android:padding="5dp">
+                        android:padding="8dp">
 
                         <TextView
                             android:id="@+id/textView11"
@@ -205,16 +204,11 @@ tools:context=".views.products.ProductDetailActivity">
                             android:layout_height="1dp"
                             android:background="@drawable/divider" />
 
-                        <View
-                            android:id="@+id/view6"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@drawable/divider" />
-
                         <TextView
                             android:id="@+id/textView16"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
                             android:text="Selecciona subcategoria:"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -234,6 +228,7 @@ tools:context=".views.products.ProductDetailActivity">
                             android:id="@+id/textView74"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
                             android:text="Seleccionar Proveedor"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -242,6 +237,7 @@ tools:context=".views.products.ProductDetailActivity">
                             android:id="@+id/Sp_selectProveedor_product_update"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
+
                     </LinearLayout>
 
                 </LinearLayout>
@@ -299,15 +295,29 @@ tools:context=".views.products.ProductDetailActivity">
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Agregar codigo de producto:"
+                    android:text="Codigo de Barra del producto:"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="101dp"
                     android:orientation="vertical"
                     android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/Imv_barsCode_detail_update"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/ic_dimensions" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="match_parent"
