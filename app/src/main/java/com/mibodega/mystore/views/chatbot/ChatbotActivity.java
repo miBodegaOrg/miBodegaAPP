@@ -56,6 +56,7 @@ public class ChatbotActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatbot);
+        /*
         Bundle recibeDatos = getIntent().getExtras();
         chatID = recibeDatos.getString("ChatID");
 
@@ -88,10 +89,10 @@ public class ChatbotActivity extends AppCompatActivity {
                     askChatGPT(chatID,messageText);
                 }
             }
-        });
+        });*/
 
     }
-
+/*
     public void loadMessages(String id){
         pgr_loadMessage.setIndeterminate(true);
         pgr_loadMessage.setVisibility(View.VISIBLE);
@@ -211,7 +212,7 @@ public class ChatbotActivity extends AppCompatActivity {
         });
     }
 
-
+*/
     @Override
     protected void onResume() {
         super.onResume();

@@ -85,11 +85,11 @@ public class ChatListActivity extends AppCompatActivity {
             }
         });
 
-        loadChats();
+       // loadChats();
 
     }
 
-    public void loadChats(){
+    public void loadChats(){/*
         Retrofit retrofit = new Retrofit.
                 Builder().
                 baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
@@ -130,7 +130,7 @@ public class ChatListActivity extends AppCompatActivity {
             public void onFailure(@NonNull Call<List<ChatResponse>> call, @NonNull Throwable t) {
                 System.out.println("errror "+t.getMessage());
             }
-        });
+        });*/
     }
 
     @Override

@@ -37,7 +37,7 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/Btn_editProfile_profile"
                 android:layout_width="130dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -69,7 +69,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1.9"
-                        android:text="Dirección:"
+                        android:text="Correo:"
                         android:textColor="@color/md_theme_dark_outline"
                         android:textStyle="bold" />
 
@@ -147,7 +147,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1.9"
-                        android:text="Ruc:"
+                        android:text="Ruc o Dni:"
                         android:textColor="@color/md_theme_dark_outline"
                         android:textStyle="bold" />
 
@@ -232,7 +232,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="2.5"
                         android:padding="8dp"
-                        app:srcCompat="@drawable/ic_settings" />
+                        app:srcCompat="@drawable/ic_barcode" />
 
                     <TextView
                         android:id="@+id/textView642"
@@ -241,13 +241,15 @@
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:padding="10dp"
-                        android:text="Configuración avanzada" />
+                        android:text="Descargar codigos de barras" />
 
-                    <Switch
-                        android:id="@+id/c5hip4"
+                    <ImageButton
+                        android:id="@+id/IBtn_downloadCodeBars_profile"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="2.2" />
+                        android:layout_weight="2.2"
+                        android:background="@drawable/backgroun_custom_rectangle"
+                        android:src="@drawable/baseline_file_download_24" />
                 </LinearLayout>
 
                 <Space
@@ -264,40 +266,49 @@
                     android:layout_width="match_parent"
                     android:layout_height="5dp" />
 
-                <LinearLayout
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/Mc_signOut_profile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
-                    android:orientation="horizontal">
+                    android:layout_marginTop="25dp">
 
-                    <ImageView
-                        android:id="@+id/imageView453"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2.5"
-                        android:padding="8dp"
-                        app:srcCompat="@drawable/baseline_logout_24"
-                        app:tint="@color/toast_error" />
-
-                    <TextView
-                        android:id="@+id/textView4562"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:padding="10dp"
-                        android:text="Cerrar sesión"
-                        android:textColor="@color/toast_error"
-                        android:textStyle="bold" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/ch45ip4"
+                    <LinearLayout
+                        android:id="@+id/Ly_closeSesion_profile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2.2"
-                        android:visibility="invisible" />
-                </LinearLayout>
+                        android:orientation="horizontal">
 
+                        <ImageView
+                            android:id="@+id/imageView453"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2.5"
+                            android:clickable="false"
+                            android:padding="8dp"
+                            app:srcCompat="@drawable/baseline_logout_24"
+                            app:tint="@color/toast_error" />
+
+                        <TextView
+                            android:id="@+id/textView4562"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:clickable="false"
+                            android:gravity="center_vertical"
+                            android:padding="10dp"
+                            android:text="Cerrar sesión"
+                            android:textColor="@color/toast_error"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/ch45ip4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2.2"
+                            android:clickable="false"
+                            android:visibility="invisible" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

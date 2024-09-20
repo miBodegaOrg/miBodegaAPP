@@ -23,8 +23,11 @@ public interface IChatServices {
     Call<ChatResponse> getChatsById(@Path("id") String id,@Header("Authorization") String token);
     @POST("chats")
     Call<MessageResponseGpt> createContextCreateChat(@Body RequestMessage request, @Header("Authorization") String token );
-    @POST("chats/response/{id}")
-    Call<MessageResponseGpt> requestQuestionGPT(@Path("id") String id, @Body RequestMessage request, @Header("Authorization") String token );
+    @POST("chats/recommendation")
+    Call<MessageResponseGpt> createRecomendation(@Header("Authorization") String token );
 
+    /*@POST("chats/response/{id}")
+    Call<MessageResponseGpt> requestQuestionGPT(@Path("id") String id, @Body RequestMessage request, @Header("Authorization") String token );
+*/
 
 }

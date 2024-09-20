@@ -91,8 +91,9 @@ public class SignInActivity extends AppCompatActivity {
             public void onResponse(Call<SignInResponse> call, Response<SignInResponse> response) {
                 if (response.isSuccessful()) {
                     SignInResponse data = response.body();
-                        config.setJwt(data.getToken());
-                        System.out.println(config.getJwt());
+                    config.setJwt(data.getToken());
+                    config.setUserData(data);
+                    System.out.println(config.getJwt());
                     Intent moveHMA = new Intent(getApplicationContext(), MainNavigationActivity.class);
                     startActivity(moveHMA);
 

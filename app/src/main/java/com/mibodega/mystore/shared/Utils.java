@@ -49,6 +49,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -270,5 +271,39 @@ public class Utils {
     //***********
 
 
+    public String getDateDDMMYYYY() {
+        Date fechaActual = new Date();
+        // Formatear la fecha en el formato DD/MM/YYYY
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+        String fechaFormateada = formatoFecha.format(fechaActual);
+        return fechaFormateada;
+    }
+    public String getDateYesterdayDDMMYYYY() {
+        // Obtener la fecha actual
+        Date fechaActual = new Date();
+
+        // Crear un objeto Calendar con la fecha actual
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(fechaActual);
+
+        // Restar un día al Calendar
+        calendar.add(Calendar.DATE, -1);
+
+        // Obtener la fecha de ayer a partir del Calendar
+        Date fechaAyer = calendar.getTime();
+
+        // Formatear la fecha de ayer en el formato DD/MM/YYYY
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+        String fechaFormateada = formatoFecha.format(fechaAyer);
+
+        return fechaFormateada;
+    }
+    public String getDateTimeDDMMYYYYHHMMSS() {
+        Date fechaActual = new Date();
+        // Formatear la fecha en el formato DD/MM/YYYY HH:mm:ss
+        SimpleDateFormat formatoFechaTiempo = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        String fechaTiempoFormateada = formatoFechaTiempo.format(fechaActual);
+        return fechaTiempoFormateada;
+    }
 
 }

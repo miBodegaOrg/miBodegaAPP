@@ -1,47 +1,46 @@
 package com.mibodega.mystore.views;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.google.android.material.card.MaterialCardView;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.CategoryResponse;
 import com.mibodega.mystore.models.Responses.CategoryResponseWithProducts;
-import com.mibodega.mystore.models.Responses.PagesProductResponse;
+import com.mibodega.mystore.models.Responses.MessageResponseGpt;
 import com.mibodega.mystore.models.Responses.PermissionResponse;
-import com.mibodega.mystore.models.Responses.ProductResponse;
+import com.mibodega.mystore.models.common.RecomendationMessage;
 import com.mibodega.mystore.services.ICategoryServices;
+import com.mibodega.mystore.services.IChatServices;
 import com.mibodega.mystore.services.IEmployeeServices;
-import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.DBfunctionsTableData;
 import com.mibodega.mystore.shared.SharedPreferencesHelper;
-import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProduct;
+import com.mibodega.mystore.shared.TextFormaterMarkdown;
+import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.views.employers.EmployerActivity;
 import com.mibodega.mystore.views.offers.OffersActivity;
 import com.mibodega.mystore.views.selling.SellingActivity;
 import com.mibodega.mystore.views.supplier.SupplierActivity;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -52,13 +51,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class HomeFragment extends Fragment {
 
     private Config config = new Config();
+    private Utils utils= new Utils();
+    private DBfunctionsTableData dBfunctionsTableData= new DBfunctionsTableData();
     private MaterialCardView btn_employe,btn_supplier, btn_buying, btn_discountPromotion;
     private SharedPreferencesHelper preferencesHelper;
-
+    private TextView tv_recomendation;
     //por rango tiempo minutos
     private static final String KEY_LAST_SEND_TIMESTAMP = "lastSendTimestamp";
     private static final int INTERVAL_MINUTES = 2; // Intervalo de 30 minutos
-
+    private TextFormaterMarkdown textFormaterMarkdown = new TextFormaterMarkdown();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -68,7 +69,7 @@ public class HomeFragment extends Fragment {
         btn_supplier = root.findViewById(R.id.MBtn_manageSupplier_home);
         btn_buying = root.findViewById(R.id.MBtn_managePurchases_home);
         btn_discountPromotion = root.findViewById(R.id.MBtn_manageDiscountsOferts_home);
-
+        tv_recomendation = root.findViewById(R.id.Tv_recomendationGPT_home);
         preferencesHelper = new SharedPreferencesHelper(getContext());
 
         btn_employe.setOnClickListener(new View.OnClickListener() {
@@ -102,8 +103,11 @@ public class HomeFragment extends Fragment {
         initProductsData(root);
         initPermises();
         initCategoryData(root);
+        String recomendation = dBfunctionsTableData.get_recomendation_save(getContext());
+
+        tv_recomendation.setText(textFormaterMarkdown.formatText(getContext(),recomendation));
         if (preferencesHelper.hasIntervalPassedInMinutes(KEY_LAST_SEND_TIMESTAMP, INTERVAL_MINUTES)) {
-            sendData();
+            getRecomendationData();
             // Guardar el timestamp actual
             preferencesHelper.putCurrentTimestamp(KEY_LAST_SEND_TIMESTAMP);
         }
@@ -198,9 +202,60 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void sendData() {
-        // Aquí puedes agregar tu lógica para enviar datos
-        Toast.makeText(getContext(),"RECOMENDACION",Toast.LENGTH_SHORT).show();
+    private void getRecomendationData() {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(config.getURL_API())
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(new OkHttpClient.Builder()
+                        .connectTimeout(30, TimeUnit.SECONDS) // Tiempo de conexión
+                        .readTimeout(30, TimeUnit.SECONDS) // Tiempo de lectura
+                        .build())
+                .build();
+        IChatServices service = retrofit.create(IChatServices.class);
+        Call<MessageResponseGpt> call = service.createRecomendation("Bearer "+config.getJwt());
+        call.enqueue(new Callback<MessageResponseGpt>() {
+            @Override
+            public void onResponse(@NonNull Call<MessageResponseGpt> call, @NonNull Response<MessageResponseGpt> response) {
+                System.out.println(response.toString());
+                if(response.isSuccessful()){
+                    MessageResponseGpt responseGpt = response.body();
+                    if(responseGpt!=null){
+                        tv_recomendation.setText(responseGpt.getResponse());
+                        dBfunctionsTableData.insert_recomendation_sqlite(getContext(),new RecomendationMessage(1,responseGpt.getResponse(),utils.getDateTimeDDMMYYYYHHMMSS()));
+                    }
+                    System.out.println("successfull request");
+                }else{
+                    try {
+                        String errorBody = response.errorBody().string();
+                        System.out.println("Error response body: " + errorBody);
+                        JSONObject errorJson = new JSONObject(errorBody);
+                        String errorMessage = errorJson.getString("message");
+                        Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                        System.out.println(errorMessage);
+
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<MessageResponseGpt> call, @NonNull Throwable t) {
+                System.out.println("errror "+t.getMessage());
+            }
+        });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        String recomendation = dBfunctionsTableData.get_recomendation_save(getContext());
+        tv_recomendation.setText(textFormaterMarkdown.formatText(getContext(),recomendation));
+        if (preferencesHelper.hasIntervalPassedInMinutes(KEY_LAST_SEND_TIMESTAMP, INTERVAL_MINUTES)) {
+            getRecomendationData();
+            // Guardar el timestamp actual
+            preferencesHelper.putCurrentTimestamp(KEY_LAST_SEND_TIMESTAMP);
+        }
+    }
 }

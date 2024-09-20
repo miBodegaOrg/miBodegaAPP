@@ -33,6 +33,7 @@ import com.mibodega.mystore.models.Requests.RequestMessage;
 import com.mibodega.mystore.models.Responses.MessageResponseGpt;
 import com.mibodega.mystore.services.IChatServices;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.DBConfig;
 import com.mibodega.mystore.shared.SharedPreferencesHelper;
 import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.views.DashboardsFragment;
@@ -77,6 +78,7 @@ public class MainNavigationActivity extends AppCompatActivity {
     private static final String KEY_LAST_SEND_TIMESTAMP = "lastSendTimestamp";
     private static final int INTERVAL_MINUTES = 3; // Intervalo de 30 minutos
 
+    private static DBConfig dbconfig = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,11 +100,10 @@ public class MainNavigationActivity extends AppCompatActivity {
                 });
 
         Activity HomeMenuActivity = this;
-
-        //dbconfig = new DBConfig(getApplicationContext());
+        dbconfig = new DBConfig(getApplicationContext());
         binding = ActivityMainNavigationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        utils.getNotificacionPush(this,"Te recomiendo esta oferta","Mi Bodega",null);
+        utils.getNotificacionPush(this,"Bienvenido de nuevo","Mi Bodega",null);
         binding.topAppBar.setTitle("Hola, Bodeguero");
         replaceFragment(new HomeFragment());
         binding.bottomNavigationView.setBackground(null);
