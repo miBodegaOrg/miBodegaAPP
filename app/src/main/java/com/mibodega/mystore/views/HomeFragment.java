@@ -18,9 +18,11 @@ import com.mibodega.mystore.models.Responses.CategoryResponse;
 import com.mibodega.mystore.models.Responses.CategoryResponseWithProducts;
 import com.mibodega.mystore.models.Responses.MessageResponseGpt;
 import com.mibodega.mystore.models.Responses.PermissionResponse;
+import com.mibodega.mystore.models.Responses.TodayDataResponse;
 import com.mibodega.mystore.models.common.RecomendationMessage;
 import com.mibodega.mystore.services.ICategoryServices;
 import com.mibodega.mystore.services.IChatServices;
+import com.mibodega.mystore.services.IDashboardServices;
 import com.mibodega.mystore.services.IEmployeeServices;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.DBfunctionsTableData;
@@ -55,7 +57,7 @@ public class HomeFragment extends Fragment {
     private DBfunctionsTableData dBfunctionsTableData= new DBfunctionsTableData();
     private MaterialCardView btn_employe,btn_supplier, btn_buying, btn_discountPromotion;
     private SharedPreferencesHelper preferencesHelper;
-    private TextView tv_recomendation;
+    private TextView tv_recomendation, tv_cantSale,tv_amountSale;
     //por rango tiempo minutos
     private static final String KEY_LAST_SEND_TIMESTAMP = "lastSendTimestamp";
     private static final int INTERVAL_MINUTES = 2; // Intervalo de 30 minutos
@@ -70,8 +72,9 @@ public class HomeFragment extends Fragment {
         btn_buying = root.findViewById(R.id.MBtn_managePurchases_home);
         btn_discountPromotion = root.findViewById(R.id.MBtn_manageDiscountsOferts_home);
         tv_recomendation = root.findViewById(R.id.Tv_recomendationGPT_home);
+        tv_cantSale = root.findViewById(R.id.Tv_cantSaleTotal_home);
+        tv_amountSale = root.findViewById(R.id.Tv_amountSaleTotal_home);
         preferencesHelper = new SharedPreferencesHelper(getContext());
-
         btn_employe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,6 +114,7 @@ public class HomeFragment extends Fragment {
             // Guardar el timestamp actual
             preferencesHelper.putCurrentTimestamp(KEY_LAST_SEND_TIMESTAMP);
         }
+        getTodayData();
         return root;
     }
     private void initProductsData(View root) {
@@ -203,7 +207,6 @@ public class HomeFragment extends Fragment {
     }
 
     private void getRecomendationData() {
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(config.getURL_API())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -221,7 +224,7 @@ public class HomeFragment extends Fragment {
                 if(response.isSuccessful()){
                     MessageResponseGpt responseGpt = response.body();
                     if(responseGpt!=null){
-                        tv_recomendation.setText(responseGpt.getResponse());
+                        tv_recomendation.setText(textFormaterMarkdown.formatText(getContext(),responseGpt.getResponse()));
                         dBfunctionsTableData.insert_recomendation_sqlite(getContext(),new RecomendationMessage(1,responseGpt.getResponse(),utils.getDateTimeDDMMYYYYHHMMSS()));
                     }
                     System.out.println("successfull request");
@@ -247,9 +250,49 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    private void getTodayData() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(config.getURL_API())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        IDashboardServices service = retrofit.create(IDashboardServices.class);
+        Call<TodayDataResponse> call = service.getTodayData("Bearer "+config.getJwt());
+        call.enqueue(new Callback<TodayDataResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<TodayDataResponse> call, @NonNull Response<TodayDataResponse> response) {
+                System.out.println(response.toString());
+                if(response.isSuccessful()){
+                    TodayDataResponse data = response.body();
+                    if(data!=null){
+                        tv_cantSale.setText(data.getSales().toString());
+                        tv_amountSale.setText(data.getTotal().toString());
+                    }
+                    System.out.println("successfull request");
+                }else{
+                    try {
+                        String errorBody = response.errorBody().string();
+                        System.out.println("Error response body: " + errorBody);
+                        JSONObject errorJson = new JSONObject(errorBody);
+                        String errorMessage = errorJson.getString("message");
+                        Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                        System.out.println(errorMessage);
+
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<TodayDataResponse> call, @NonNull Throwable t) {
+                System.out.println("errror "+t.getMessage());
+            }
+        });
+    }
     @Override
     public void onResume() {
         super.onResume();
+        getTodayData();
         String recomendation = dBfunctionsTableData.get_recomendation_save(getContext());
         tv_recomendation.setText(textFormaterMarkdown.formatText(getContext(),recomendation));
         if (preferencesHelper.hasIntervalPassedInMinutes(KEY_LAST_SEND_TIMESTAMP, INTERVAL_MINUTES)) {

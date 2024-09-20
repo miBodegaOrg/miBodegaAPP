@@ -3,6 +3,7 @@ package com.mibodega.mystore.shared;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.mibodega.mystore.models.common.ChatMessage;
@@ -72,10 +73,10 @@ public class DBfunctionsTableData {
         if (recomendationSaved == null) recomendationSaved = "";
         return recomendationSaved;
     }
-    public boolean insertUserRemember(Context context, String user) {
+    public boolean insertUserRemember(Context context, String token) {
 
         boolean Finality = false;
-        /*DBConfig dbConfig = new DBConfig(context);
+        DBConfig dbConfig = new DBConfig(context);
         SQLiteDatabase db = dbConfig.getWritableDatabase();
         db.beginTransaction();
         try {
@@ -87,13 +88,11 @@ public class DBfunctionsTableData {
                 cursor.close();
                 if (count > 0) {
                     // Hay datos, realizar la actualización
-                    db.execSQL("UPDATE config SET usuario='"+user+"'");
+                    db.execSQL("UPDATE tokens SET token='"+token+"'");
                 } else {
-                    System.out.println("insertar" );
                     ContentValues values = new ContentValues();
-                    values.put("fechaJob", getDateYesterdayDDMMYYYY());
-                    values.put("usuario", user);
-                    db.insert("config", null, values);
+                    values.put("token", token);
+                    db.insert("tokens", null, values);
                 }
                 Finality = true;
             }
@@ -106,23 +105,39 @@ public class DBfunctionsTableData {
             db.endTransaction();
             Finality = true;
         }
-        db.close();*/
+        db.close();
         return Finality;
     }
     public String get_user_save(Context context) {
-        String userSaved = "";
-        /*DBConfig dbconfig = new DBConfig(context);
+        String _token = "";
+        DBConfig dbconfig = new DBConfig(context);
         SQLiteDatabase db = dbconfig.getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT usuario FROM config  LIMIT 1", null);
+        Cursor cursor = db.rawQuery("SELECT token FROM tokens  LIMIT 1", null);
 
         if (cursor.moveToFirst()) {
-            userSaved = cursor.getString(0);
-            System.out.println("--> "+userSaved);
+            _token = cursor.getString(0);
+            System.out.println("--> "+_token);
         }
         cursor.close();
-        if (userSaved == null) userSaved = "";*/
-        return userSaved;
+        if (_token == null) _token = "";
+        return _token;
     }
+    public void cleanTokensSignIn(Context context) {
+        DBConfig dbConfig = new DBConfig(context);
+        SQLiteDatabase db = dbConfig.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            db.execSQL("DELETE FROM tokens");
+            db.setTransactionSuccessful();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+        }
+        db.close();
+    }
+
+
     public List<ChatMessage> get_messages_sqlite(Context context) {
         List<ChatMessage> list = new ArrayList<>();
 

@@ -7,9 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -18,13 +18,15 @@ import com.google.firebase.FirebaseApp;
 import com.mibodega.mystore.MainNavigationActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.RequestSignIn;
-import com.mibodega.mystore.models.Requests.RequestSignInShop;
-import com.mibodega.mystore.models.Requests.RequestSignUp;
 import com.mibodega.mystore.models.Responses.SignInResponse;
+import com.mibodega.mystore.models.Responses.SignInResponseToken;
 import com.mibodega.mystore.services.IUserServices;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.DBfunctionsTableData;
 import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.views.signUp.SignUpShopActivity;
+
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,7 +42,8 @@ public class SignInActivity extends AppCompatActivity {
     private Config config = new Config();
     private Utils utils = new Utils();
     private TextView Tv_questionForgotPassword_login;
-
+    private CheckBox cbx_rememberUser;
+    private DBfunctionsTableData dBfunctionsTableData = new DBfunctionsTableData();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +53,7 @@ public class SignInActivity extends AppCompatActivity {
         edt_password = findViewById(R.id.Tedt_password);
         btn_moveToHome = findViewById(R.id.Btn_moveToHome_login);
         Tv_questionForgotPassword_login = findViewById(R.id.Tv_questionForgotPassword_login);
+        cbx_rememberUser = findViewById(R.id.Cbx_remenberUser_signin);
         btn_moveToHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,16 +78,19 @@ public class SignInActivity extends AppCompatActivity {
                 .apply(RequestOptions.circleCropTransform())
                 .into(imageView);
 
+        if(!Objects.equals(dBfunctionsTableData.get_user_save(getBaseContext()), "")){
+            System.out.println("remember "+dBfunctionsTableData.get_user_save(getBaseContext()));
+            postsigninToken(dBfunctionsTableData.get_user_save(getBaseContext()));
+        }
+
+
     }
     private void postData(String user, String pass) {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(config.getURL_API())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         IUserServices usersService = retrofit.create(IUserServices.class);
-        RequestSignIn modal = new RequestSignIn(user, pass);
-        System.out.println("user "+user);
-        System.out.println("password "+pass);
-
+        RequestSignIn modal = new RequestSignIn(user, pass, cbx_rememberUser.isChecked());
 
         Call<SignInResponse> call = usersService.post_signin(modal);
         call.enqueue(new Callback<SignInResponse>() {
@@ -92,12 +99,13 @@ public class SignInActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     SignInResponse data = response.body();
                     config.setJwt(data.getToken());
+                    dBfunctionsTableData.insertUserRemember(getBaseContext(),data.getToken());
                     config.setUserData(data);
-                    System.out.println(config.getJwt());
                     Intent moveHMA = new Intent(getApplicationContext(), MainNavigationActivity.class);
                     startActivity(moveHMA);
 
                 }else{
+
                     Dialog dialog = utils.getAlertCustom(SignInActivity.this, "danger", "Alerta", "Usuario o Contraseña incorrecta", false);
                     dialog.show();
                     System.out.println("error");
@@ -106,6 +114,41 @@ public class SignInActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<SignInResponse> call, Throwable t) {
+                System.out.println(t.toString());
+                System.out.println(t.getMessage());
+                Dialog dialog = utils.getAlertCustom(SignInActivity.this, "danger", "Alerta", "Error en servicios", false);
+                dialog.show();
+            }
+        });
+    }
+
+    private void postsigninToken(String token) {
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(config.getURL_API())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        IUserServices usersService = retrofit.create(IUserServices.class);
+
+        Call<SignInResponseToken> call = usersService.post_signInToken(token);
+        call.enqueue(new Callback<SignInResponseToken>() {
+            @Override
+            public void onResponse(Call<SignInResponseToken> call, Response<SignInResponseToken> response) {
+                if (response.isSuccessful()) {
+                    SignInResponseToken data = response.body();
+                    config.setJwt(token);
+                    config.setUserData(new SignInResponse(data.getName(),data.getUsername(),data.getPhone(),data.getType(),token));
+                    Intent moveHMA = new Intent(getApplicationContext(), MainNavigationActivity.class);
+                    startActivity(moveHMA);
+
+                }else{
+                    /*
+                   Dialog dialog = utils.getAlertCustom(SignInActivity.this, "danger", "Alerta", "Token expirado", false);
+                    dialog.show();
+                    System.out.println("error");*/
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SignInResponseToken> call, Throwable t) {
                 System.out.println(t.toString());
                 System.out.println(t.getMessage());
                 Dialog dialog = utils.getAlertCustom(SignInActivity.this, "danger", "Alerta", "Error en servicios", false);

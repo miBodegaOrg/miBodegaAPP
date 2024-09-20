@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBConfig extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private  static final String DATABASE_NOMBRE ="DBConfigMB";
 
     public DBConfig(Context context) {
@@ -31,6 +31,10 @@ public class DBConfig extends SQLiteOpenHelper {
                         " message TEXT,\n" +
                         " fecha VARCHAR (250)\n" +
                         ")\n",
+                "CREATE TABLE tokens (\n" +
+                        " ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                        " token TEXT\n" +
+                        ")\n",
         };
         for(String table : tables){
             db.execSQL(table);
@@ -42,6 +46,7 @@ public class DBConfig extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS config");
         db.execSQL("DROP TABLE IF EXISTS chat");
         db.execSQL("DROP TABLE IF EXISTS recomendation");
+        db.execSQL("DROP TABLE IF EXISTS tokens");
         onCreate(db);
     }
 }

@@ -16,6 +16,7 @@ import com.google.android.material.card.MaterialCardView;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.SignInResponse;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.DBfunctionsTableData;
 
 
 public class ProfileFragment extends Fragment {
@@ -64,6 +65,8 @@ public class ProfileFragment extends Fragment {
         btn_signOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DBfunctionsTableData dBfunctionsTableData = new DBfunctionsTableData();
+                dBfunctionsTableData.cleanTokensSignIn(getContext());
                 Activity activity = getActivity();
                 activity.finish();
             }
