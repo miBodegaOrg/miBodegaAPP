@@ -125,7 +125,6 @@ public class HomeFragment extends Fragment {
 
         ICategoryServices service = retrofit.create(ICategoryServices.class);
         Call<List<CategoryResponse>> call = service.getCategories("Bearer "+config.getJwt());
-        System.out.println(config.getJwt());
         call.enqueue(new Callback<List<CategoryResponse>>() {
             @Override
             public void onResponse(@NonNull Call<List<CategoryResponse>> call, @NonNull Response<List<CategoryResponse>> response) {
@@ -155,11 +154,9 @@ public class HomeFragment extends Fragment {
 
         IEmployeeServices service = retrofit.create(IEmployeeServices.class);
         Call<PermissionResponse> call = service.getPermises("Bearer "+config.getJwt());
-        System.out.println(config.getJwt());
         call.enqueue(new Callback<PermissionResponse>() {
             @Override
             public void onResponse(@NonNull Call<PermissionResponse> call, @NonNull Response<PermissionResponse> response) {
-                System.out.println(response.toString());
                 if(response.isSuccessful()){
                     PermissionResponse permissionResponse = response.body();
                     if(permissionResponse!=null){
@@ -183,7 +180,6 @@ public class HomeFragment extends Fragment {
 
         ICategoryServices service = retrofit.create(ICategoryServices.class);
         Call<List<CategoryResponseWithProducts>> call = service.getCategoriesWithProducts("Bearer "+config.getJwt());
-        System.out.println(config.getJwt());
         call.enqueue(new Callback<List<CategoryResponseWithProducts>>() {
             @Override
             public void onResponse(@NonNull Call<List<CategoryResponseWithProducts>> call, @NonNull Response<List<CategoryResponseWithProducts>> response) {
@@ -220,14 +216,13 @@ public class HomeFragment extends Fragment {
         call.enqueue(new Callback<MessageResponseGpt>() {
             @Override
             public void onResponse(@NonNull Call<MessageResponseGpt> call, @NonNull Response<MessageResponseGpt> response) {
-                System.out.println(response.toString());
+
                 if(response.isSuccessful()){
                     MessageResponseGpt responseGpt = response.body();
                     if(responseGpt!=null){
                         tv_recomendation.setText(textFormaterMarkdown.formatText(getContext(),responseGpt.getResponse()));
                         dBfunctionsTableData.insert_recomendation_sqlite(getContext(),new RecomendationMessage(1,responseGpt.getResponse(),utils.getDateTimeDDMMYYYYHHMMSS()));
                     }
-                    System.out.println("successfull request");
                 }else{
                     try {
                         String errorBody = response.errorBody().string();
@@ -260,14 +255,13 @@ public class HomeFragment extends Fragment {
         call.enqueue(new Callback<TodayDataResponse>() {
             @Override
             public void onResponse(@NonNull Call<TodayDataResponse> call, @NonNull Response<TodayDataResponse> response) {
-                System.out.println(response.toString());
+
                 if(response.isSuccessful()){
                     TodayDataResponse data = response.body();
                     if(data!=null){
                         tv_cantSale.setText(data.getSales().toString());
                         tv_amountSale.setText(data.getTotal().toString());
                     }
-                    System.out.println("successfull request");
                 }else{
                     try {
                         String errorBody = response.errorBody().string();

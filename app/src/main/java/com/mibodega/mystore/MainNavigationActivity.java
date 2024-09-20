@@ -95,7 +95,7 @@ public class MainNavigationActivity extends AppCompatActivity {
                         // Obtén el token de registro FCM
                         String token = task.getResult();
                         // Envíalo a tu servidor o guárdalo localmente
-                        System.out.println("* "+token);
+
                     }
                 });
 
@@ -239,17 +239,14 @@ public class MainNavigationActivity extends AppCompatActivity {
         IChatServices service = retrofit.create(IChatServices.class);
         RequestMessage message = new RequestMessage("soy un bodeguero, quiero hacer consultas sobre gestion y deseo que  respondas de forma concreta");
         Call<MessageResponseGpt> call = service.createContextCreateChat(message,"Bearer "+config.getJwt());
-        System.out.println(config.getJwt());
         call.enqueue(new Callback<MessageResponseGpt>() {
             @Override
             public void onResponse(@NonNull Call<MessageResponseGpt> call, @NonNull Response<MessageResponseGpt> response) {
-                System.out.println(response.toString());
                 if(response.isSuccessful()){
                     MessageResponseGpt messageRptContext =response.body();
                     if(messageRptContext!=null){
                         showDialog();
                     }
-                    System.out.println("successfull request");
                 }else{
                     try {
                         String errorBody = response.errorBody().string();

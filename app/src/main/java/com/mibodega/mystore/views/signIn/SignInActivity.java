@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -26,6 +27,10 @@ import com.mibodega.mystore.shared.DBfunctionsTableData;
 import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.views.signUp.SignUpShopActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -99,6 +104,7 @@ public class SignInActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     SignInResponse data = response.body();
                     config.setJwt(data.getToken());
+                    System.out.println("*"+data.getToken()+"*");
                     dBfunctionsTableData.insertUserRemember(getBaseContext(),data.getToken());
                     config.setUserData(data);
                     Intent moveHMA = new Intent(getApplicationContext(), MainNavigationActivity.class);
@@ -128,7 +134,7 @@ public class SignInActivity extends AppCompatActivity {
                 .build();
         IUserServices usersService = retrofit.create(IUserServices.class);
 
-        Call<SignInResponseToken> call = usersService.post_signInToken(token);
+        Call<SignInResponseToken> call = usersService.post_signInToken("Bearer "+token);
         call.enqueue(new Callback<SignInResponseToken>() {
             @Override
             public void onResponse(Call<SignInResponseToken> call, Response<SignInResponseToken> response) {
@@ -140,6 +146,18 @@ public class SignInActivity extends AppCompatActivity {
                     startActivity(moveHMA);
 
                 }else{
+                    try {
+                        String errorBody = response.errorBody().string();
+                        System.out.println("Error response body: " + errorBody);
+                        JSONObject errorJson = new JSONObject(errorBody);
+                        String errorMessage = errorJson.getString("message");
+                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                        System.out.println(errorMessage);
+
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+                   dBfunctionsTableData.cleanTokensSignIn(getBaseContext());
                     /*
                    Dialog dialog = utils.getAlertCustom(SignInActivity.this, "danger", "Alerta", "Token expirado", false);
                     dialog.show();
