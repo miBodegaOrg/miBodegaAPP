@@ -39,7 +39,8 @@ tools:context=".views.products.ProductDetailActivity">
                     android:text="Detalles de Producto"
                     android:textAlignment="center"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

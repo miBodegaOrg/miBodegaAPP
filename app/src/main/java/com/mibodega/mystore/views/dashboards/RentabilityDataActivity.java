@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.ProductRentabilityResponse;
 import com.mibodega.mystore.models.Responses.SaleCategoryDataDashboardResponse;
@@ -31,7 +32,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RentabilityDataActivity extends AppCompatActivity {
+public class RentabilityDataActivity extends MainActivity {
 
     private DrawerLayout drawerLayout;
     private FrameLayout chatFragmentContainer;
@@ -44,7 +45,12 @@ public class RentabilityDataActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rentability_data);
+        //setContentView(R.layout.activity_rentability_data);
+        setContentLayout(R.layout.activity_rentability_data);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Rentabilidad");
+        }
+
         drawerLayout = findViewById(R.id.drawer_layout);
         chatFragmentContainer = findViewById(R.id.chat_fragment_container);
         rv_dataListProduct = findViewById(R.id.Rv_productRentabiltyData_dashboard);

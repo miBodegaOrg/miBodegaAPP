@@ -28,11 +28,13 @@ tools:context=".views.employers.EmployerActivity">
             android:padding="10dp"
             android:text="Gestion de Empleados"
             android:textAlignment="center"
-            android:textSize="34sp" />
+            android:textSize="34sp"
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp">
 
             <com.google.android.material.textfield.TextInputLayout

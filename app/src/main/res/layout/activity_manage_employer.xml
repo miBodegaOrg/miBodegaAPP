@@ -29,7 +29,8 @@ tools:context=".views.employers.ManageEmployerActivity">
             android:layout_weight="2.2"
             android:text="Gestion de empleados"
             android:textAlignment="center"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:visibility="gone" />
 
         <ScrollView
             android:layout_width="match_parent"

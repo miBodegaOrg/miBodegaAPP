@@ -45,6 +45,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
+import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.ProductCreateRequest;
 import com.mibodega.mystore.models.Responses.CategoryResponse;
@@ -85,7 +86,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ProductEditActivity extends AppCompatActivity {
+public class ProductEditActivity extends MainActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_GALLERY = 2;
@@ -146,8 +147,11 @@ public class ProductEditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_edit);
-
+       // setContentView(R.layout.activity_product_edit);
+        setContentLayout(R.layout.activity_product_edit);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Nuevo Producto");
+        }
         txt_name_product = findViewById(R.id.Edt_name_product);
         txt_price_product = findViewById(R.id.Edt_price_product);
         txt_stock_product = findViewById(R.id.Edt_stock_product);

@@ -20,6 +20,7 @@ tools:context=".views.selling.PurchaseFormActivity">
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:ignore="UselessParent">
+
         <TextView
             android:id="@+id/textView26"
             android:layout_width="match_parent"
@@ -27,7 +28,8 @@ tools:context=".views.selling.PurchaseFormActivity">
             android:padding="10dp"
             android:text="Crear Compra"
             android:textAlignment="center"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:visibility="gone" />
 
         <ScrollView
             android:layout_width="match_parent"

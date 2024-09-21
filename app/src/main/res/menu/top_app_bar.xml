@@ -3,10 +3,10 @@
 
     <item
         android:id="@+id/favorite"
-        android:icon="@drawable/img"
-        app:showAsAction="ifRoom"
         android:enabled="false"
-        android:title="TODO" />
+        android:icon="@drawable/img"
+        android:title="TODO"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/singoff"

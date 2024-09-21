@@ -29,7 +29,8 @@ tools:context=".views.offers.OffersActivity">
             android:text="Descuentos y Promociones"
             android:textAlignment="center"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
 
         <ScrollView
             android:layout_width="match_parent"

@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.RequestMessage;
 import com.mibodega.mystore.models.Responses.ChatResponse;
@@ -39,7 +40,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ChatbotActivity extends AppCompatActivity {
+public class ChatbotActivity extends MainActivity {
 
 
     private RecyclerView recyclerView;
@@ -55,7 +56,12 @@ public class ChatbotActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chatbot);
+        //setContentView(R.layout.activity_chatbot);
+        setContentLayout(R.layout.activity_chatbot);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Chat Bot");
+        }
+
         /*
         Bundle recibeDatos = getIntent().getExtras();
         chatID = recibeDatos.getString("ChatID");

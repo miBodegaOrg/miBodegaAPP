@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
+import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.PurchaseRequest;
 import com.mibodega.mystore.models.Responses.CategoryProduct;
@@ -68,7 +69,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class PurchaseFormActivity extends AppCompatActivity {
+public class PurchaseFormActivity extends MainActivity {
 
     private SearchView searchProduct;
     private RecyclerView rv_recyclerProductList;
@@ -91,7 +92,11 @@ public class PurchaseFormActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_purchase_form);
+        //setContentView(R.layout.activity_purchase_form);
+        setContentLayout(R.layout.activity_purchase_form);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Realiza tu Compra");
+        }
 
         searchProduct = findViewById(R.id.Sv_searchProduct_purchase);
         rv_recyclerProductList = findViewById(R.id.Rv_productAtPurchaseList_purchase);
@@ -101,6 +106,8 @@ public class PurchaseFormActivity extends AppCompatActivity {
         edt_shipping = findViewById(R.id.Edt_shipping_purchase);
         drawerLayout = findViewById(R.id.drawer_layout);
         chatFragmentContainer = findViewById(R.id.chat_fragment_container);
+
+
 
         // Configura el deslizable desde el lado derecho
         //drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);

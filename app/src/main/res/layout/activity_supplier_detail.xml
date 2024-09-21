@@ -27,7 +27,8 @@
                 android:layout_height="wrap_content"
                 android:text="Detalles"
                 android:textAlignment="center"
-                android:textSize="34sp" />
+                android:textSize="34sp"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"

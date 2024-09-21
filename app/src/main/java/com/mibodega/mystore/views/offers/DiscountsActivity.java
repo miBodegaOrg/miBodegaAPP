@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
+import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.DiscountRequest;
 import com.mibodega.mystore.models.Responses.DiscountResponse;
@@ -51,7 +52,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class DiscountsActivity extends AppCompatActivity {
+public class DiscountsActivity extends MainActivity {
     private SearchView searchProduct;
     private TextView tv_codeScanned;
     private ImageButton btn_scanCodeBar;
@@ -89,8 +90,11 @@ public class DiscountsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_discounts);
-
+        //setContentView(R.layout.activity_discounts);
+        setContentLayout(R.layout.activity_discounts);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Nuevo Descuento");
+        }
         searchProduct = findViewById(R.id.Sv_searchProduct_discount);
         rv_recyclerSearchProductList = findViewById(R.id.Rv_listSearchProduct_discount);
         tv_codeScanned = findViewById(R.id.Tv_codeScannedBar_discount);

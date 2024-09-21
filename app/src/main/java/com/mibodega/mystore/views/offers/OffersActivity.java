@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
+import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.DiscountResponse;
 import com.mibodega.mystore.models.Responses.PromotionResponse;
@@ -35,7 +36,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class OffersActivity extends AppCompatActivity {
+public class OffersActivity extends MainActivity {
     private Button btn_newDiscount,btn_newPromotion;
     private RecyclerView rv_discountList,rv_promotionList;
     private ArrayList<DiscountResponse> arrDiscount = new ArrayList<>();
@@ -48,7 +49,11 @@ public class OffersActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_offers);
+        //setContentView(R.layout.activity_offers);
+        setContentLayout(R.layout.activity_offers);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Descuentos y Promociones");
+        }
         btn_newDiscount = findViewById(R.id.Btn_newDiscount_discount);
         btn_newPromotion = findViewById(R.id.Btn_newPromotion_promotion);
         rv_discountList = findViewById(R.id.Rv_discountList_discount);

@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.RequestEmployee;
 import com.mibodega.mystore.models.Responses.EmployeeResponse;
@@ -31,7 +32,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ManageEmployerActivity extends AppCompatActivity {
+public class ManageEmployerActivity extends MainActivity {
     private TextInputEditText edt_name, edt_lastname,edt_email,edt_dni,edt_phone,edt_password;
     private LinearLayout ly_permisesContainer, ly_permisesCheckList;
     private Button btn_saveChangesEmployee;
@@ -46,7 +47,8 @@ public class ManageEmployerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manage_employer);
+        //setContentView(R.layout.activity_manage_employer);
+        setContentLayout(R.layout.activity_manage_employer);
 
         edt_name = findViewById(R.id.Edt_nameEmployee_employee);
         edt_lastname = findViewById(R.id.Edt_lastnameEmployee_employee);
@@ -97,8 +99,13 @@ public class ManageEmployerActivity extends AppCompatActivity {
             btn_saveChangesEmployee.setVisibility(View.GONE);
             btn_update.setVisibility(View.GONE);
             btn_delete.setVisibility(View.GONE);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle("Nuevo Empleado");
+            }
         }else {
-
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle("Detalles Empleado");
+            }
             btn_update.setVisibility(View.VISIBLE);
             btn_delete.setVisibility(View.VISIBLE);
             btn_create.setVisibility(View.GONE);

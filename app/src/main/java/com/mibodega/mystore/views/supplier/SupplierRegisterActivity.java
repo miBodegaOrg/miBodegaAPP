@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.RequestSupplier;
 import com.mibodega.mystore.models.Responses.PagesProductResponse;
@@ -39,7 +40,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class SupplierRegisterActivity extends AppCompatActivity {
+public class SupplierRegisterActivity extends MainActivity {
 
     private TextInputEditText edt_name, edt_ruc, edt_phone, search;
     private RecyclerView rv_products, rv_products_supplier;
@@ -62,7 +63,10 @@ public class SupplierRegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_supplier_register);
+        //setContentView(R.layout.activity_supplier_register);
+        setContentLayout(R.layout.activity_supplier_register);
+
+
         edt_name = findViewById(R.id.Edt_nameSupplier_supplier);
         edt_ruc = findViewById(R.id.Edt_rucSupplier_supplier);
         edt_phone = findViewById(R.id.Edt_phoneSupplier_supplier);
@@ -170,12 +174,18 @@ public class SupplierRegisterActivity extends AppCompatActivity {
 
 
         if(!Objects.equals(ruc, "0")){
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle("Detalle de Proveedor");
+            }
             arrayListProduct.clear();
             btn_update.setVisibility(View.VISIBLE);
             btn_delete.setVisibility(View.VISIBLE);
             btn_save.setVisibility(View.GONE);
             loadData(ruc);
         }else {
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle("Nuevo Proveedor");
+            }
             arrayListProduct.clear();
             btn_update.setVisibility(View.GONE);
             btn_delete.setVisibility(View.GONE);

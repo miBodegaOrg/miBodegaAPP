@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.ChatResponse;
 import com.mibodega.mystore.models.Responses.PurchaseResponse;
@@ -33,7 +34,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class SellingActivity extends AppCompatActivity {
+public class SellingActivity extends MainActivity {
     private FloatingActionButton btn_newPurchase;
     private RecyclerView rv_purchaseList;
     private RecyclerViewAdapterPurchase recyclerViewAdapterPurchase;
@@ -45,7 +46,12 @@ public class SellingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_selling);
+        //setContentView(R.layout.activity_selling);
+        setContentLayout(R.layout.activity_selling);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("TUS COMPRAS");
+        }
+
         btn_newPurchase = findViewById(R.id.Btn_addNewPurchase_purchases);
         rv_purchaseList = findViewById(R.id.Rv_purchaseList_purchases);
 

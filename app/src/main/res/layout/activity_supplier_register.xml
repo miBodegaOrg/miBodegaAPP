@@ -37,7 +37,8 @@ tools:context=".views.supplier.SupplierRegisterActivity">
                     android:layout_height="wrap_content"
                     android:text="Registro"
                     android:textAlignment="center"
-                    android:textSize="34sp" />
+                    android:textSize="34sp"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -185,7 +186,8 @@ tools:context=".views.supplier.SupplierRegisterActivity">
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Regresar" />
+                    android:text="Regresar"
+                    android:visibility="gone" />
 
                 <Button
                     android:id="@+id/Btn_acceptRegister_supplier"
