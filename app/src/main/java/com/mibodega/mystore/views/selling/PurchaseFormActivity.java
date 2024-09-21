@@ -7,6 +7,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -43,10 +45,12 @@ import com.mibodega.mystore.services.ISupplierServices;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.SaleTemporalList;
 import com.mibodega.mystore.shared.Utils;
+import com.mibodega.mystore.shared.adapters.LoadingDialogAdapter;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSale;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSearch;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSupplier;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
+import com.mibodega.mystore.views.products.ProductEditActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -69,6 +73,7 @@ public class PurchaseFormActivity extends AppCompatActivity {
     private SearchView searchProduct;
     private RecyclerView rv_recyclerProductList;
 
+    private LoadingDialogAdapter loadingDialog = new LoadingDialogAdapter();
     private Button btn_vender;
     private Config config =  new Config();
     private Utils utils = new Utils();
@@ -247,6 +252,9 @@ public class PurchaseFormActivity extends AppCompatActivity {
     }
 
     public void createPurchase(){
+        View dialogView = getLayoutInflater().from(getBaseContext()).inflate(R.layout.progress_dialog, null);
+        loadingDialog.startLoadingDialog(this, dialogView, "Cargando","Porfavor espere...");
+
         ArrayList<ProductPurchase> arraux = new ArrayList<>();
         for (ProductResponseSupplierV2 product : arrProducts){
             int amountint = Integer.parseInt(listAdapter.getMapEditAmount().get(product.getCode()).getText().toString());
@@ -272,13 +280,22 @@ public class PurchaseFormActivity extends AppCompatActivity {
         call.enqueue(new Callback<PurchaseResponse>() {
             @Override
             public void onResponse(Call<PurchaseResponse> call, Response<PurchaseResponse> response) {
-                Log.e("error", response.toString());
                 if (response.isSuccessful()) {
+                    Dialog dialog = utils.getAlertCustom(PurchaseFormActivity.this, "success", "Creado", "Compra creada", false);
                     edt_dicount.setText("");
                     edt_shipping.setText("");
                     loadData();
-                    Toast.makeText(getBaseContext(),"COMPRA CREADA",Toast.LENGTH_SHORT).show();
+                    dialog.show();
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            finish();
+                        }
+                    });
+
                 } else {
+                    Dialog dialog = utils.getAlertCustom(PurchaseFormActivity.this, "warning", "No creado", "Asegurece de ingresar bien los datos", false);
+                    dialog.show();
                     try {
                         String errorBody = response.errorBody().string();
                         System.out.println("Error response body: " + errorBody);
@@ -290,7 +307,12 @@ public class PurchaseFormActivity extends AppCompatActivity {
                     } catch (IOException | JSONException e) {
                         e.printStackTrace();
                     }
-                    Toast.makeText(getBaseContext(),"no Creado",Toast.LENGTH_SHORT).show();
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            loadingDialog.dismissDialog();
+                        }
+                    });
                 }
             }
 

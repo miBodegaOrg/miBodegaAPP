@@ -55,8 +55,7 @@ tools:context=".views.selling.PurchaseFormActivity">
                     <Spinner
                         android:id="@+id/Sp_selectSuppier_purchase"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@android:drawable/editbox_background_normal" />
+                        android:layout_height="37dp" />
                 </LinearLayout>
 
                 <SearchView
