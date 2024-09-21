@@ -287,8 +287,6 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         getTodayData();
-        String recomendation = dBfunctionsTableData.get_recomendation_save(getContext());
-        tv_recomendation.setText(textFormaterMarkdown.formatText(getContext(),recomendation));
         if (preferencesHelper.hasIntervalPassedInMinutes(KEY_LAST_SEND_TIMESTAMP, INTERVAL_MINUTES)) {
             getRecomendationData();
             // Guardar el timestamp actual

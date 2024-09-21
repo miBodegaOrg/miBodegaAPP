@@ -25,6 +25,7 @@ import com.mibodega.mystore.services.IUserServices;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.DBfunctionsTableData;
 import com.mibodega.mystore.shared.Utils;
+import com.mibodega.mystore.shared.adapters.LoadingDialogAdapter;
 import com.mibodega.mystore.views.signUp.SignUpShopActivity;
 
 import org.json.JSONException;
@@ -49,6 +50,7 @@ public class SignInActivity extends AppCompatActivity {
     private TextView Tv_questionForgotPassword_login;
     private CheckBox cbx_rememberUser;
     private DBfunctionsTableData dBfunctionsTableData = new DBfunctionsTableData();
+    private LoadingDialogAdapter loadingDialog = new LoadingDialogAdapter();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +93,9 @@ public class SignInActivity extends AppCompatActivity {
 
     }
     private void postData(String user, String pass) {
+        View dialogView = getLayoutInflater().from(getBaseContext()).inflate(R.layout.progress_dialog, null);
+        loadingDialog.startLoadingDialog(this, dialogView, "Cargando","Porfavor espere...");
+
         Retrofit retrofit = new Retrofit.Builder().baseUrl(config.getURL_API())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -102,6 +107,7 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<SignInResponse> call, Response<SignInResponse> response) {
                 if (response.isSuccessful()) {
+                    loadingDialog.dismissDialog();
                     SignInResponse data = response.body();
                     config.setJwt(data.getToken());
                     System.out.println("*"+data.getToken()+"*");
@@ -111,7 +117,7 @@ public class SignInActivity extends AppCompatActivity {
                     startActivity(moveHMA);
 
                 }else{
-
+                    loadingDialog.dismissDialog();
                     Dialog dialog = utils.getAlertCustom(SignInActivity.this, "danger", "Alerta", "Usuario o Contraseña incorrecta", false);
                     dialog.show();
                     System.out.println("error");
@@ -120,6 +126,7 @@ public class SignInActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<SignInResponse> call, Throwable t) {
+                loadingDialog.dismissDialog();
                 System.out.println(t.toString());
                 System.out.println(t.getMessage());
                 Dialog dialog = utils.getAlertCustom(SignInActivity.this, "danger", "Alerta", "Error en servicios", false);
@@ -129,6 +136,9 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void postsigninToken(String token) {
+        View dialogView = getLayoutInflater().from(getBaseContext()).inflate(R.layout.progress_dialog, null);
+        loadingDialog.startLoadingDialog(this, dialogView, "Cargando","Porfavor espere...");
+
         Retrofit retrofit = new Retrofit.Builder().baseUrl(config.getURL_API())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -139,6 +149,7 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<SignInResponseToken> call, Response<SignInResponseToken> response) {
                 if (response.isSuccessful()) {
+                    loadingDialog.dismissDialog();
                     SignInResponseToken data = response.body();
                     config.setJwt(token);
                     config.setUserData(new SignInResponse(data.getName(),data.getUsername(),data.getPhone(),data.getType(),token));
@@ -146,6 +157,7 @@ public class SignInActivity extends AppCompatActivity {
                     startActivity(moveHMA);
 
                 }else{
+                    loadingDialog.dismissDialog();
                     try {
                         String errorBody = response.errorBody().string();
                         System.out.println("Error response body: " + errorBody);
@@ -167,6 +179,7 @@ public class SignInActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<SignInResponseToken> call, Throwable t) {
+                loadingDialog.dismissDialog();
                 System.out.println(t.toString());
                 System.out.println(t.getMessage());
                 Dialog dialog = utils.getAlertCustom(SignInActivity.this, "danger", "Alerta", "Error en servicios", false);
