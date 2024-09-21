@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -54,13 +56,14 @@ public class HomeFragment extends Fragment {
 
     private Config config = new Config();
     private Utils utils= new Utils();
+    private ProgressBar pgb_loadRecomendation;
     private DBfunctionsTableData dBfunctionsTableData= new DBfunctionsTableData();
     private MaterialCardView btn_employe,btn_supplier, btn_buying, btn_discountPromotion;
     private SharedPreferencesHelper preferencesHelper;
     private TextView tv_recomendation, tv_cantSale,tv_amountSale;
     //por rango tiempo minutos
     private static final String KEY_LAST_SEND_TIMESTAMP = "lastSendTimestamp";
-    private static final int INTERVAL_MINUTES = 2; // Intervalo de 30 minutos
+    private static final int INTERVAL_MINUTES = 30; // Intervalo de 30 minutos
     private TextFormaterMarkdown textFormaterMarkdown = new TextFormaterMarkdown();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,6 +77,8 @@ public class HomeFragment extends Fragment {
         tv_recomendation = root.findViewById(R.id.Tv_recomendationGPT_home);
         tv_cantSale = root.findViewById(R.id.Tv_cantSaleTotal_home);
         tv_amountSale = root.findViewById(R.id.Tv_amountSaleTotal_home);
+        pgb_loadRecomendation = root.findViewById(R.id.Pgb_loadingRecomendation_home);
+        pgb_loadRecomendation.setVisibility(View.VISIBLE);
         preferencesHelper = new SharedPreferencesHelper(getContext());
         btn_employe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,11 +108,15 @@ public class HomeFragment extends Fragment {
                 startActivity(su);
             }
         });
+
         initProductsData(root);
         initPermises();
         initCategoryData(root);
         String recomendation = dBfunctionsTableData.get_recomendation_save(getContext());
-
+        if(!Objects.equals(recomendation, "")){
+            pgb_loadRecomendation.setVisibility(View.GONE);
+            tv_recomendation.setVisibility(View.VISIBLE);
+        }
         tv_recomendation.setText(textFormaterMarkdown.formatText(getContext(),recomendation));
         if (preferencesHelper.hasIntervalPassedInMinutes(KEY_LAST_SEND_TIMESTAMP, INTERVAL_MINUTES)) {
             getRecomendationData();
@@ -203,6 +212,8 @@ public class HomeFragment extends Fragment {
     }
 
     private void getRecomendationData() {
+        pgb_loadRecomendation.setVisibility(View.VISIBLE);
+        tv_recomendation.setVisibility(View.GONE);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(config.getURL_API())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -222,6 +233,8 @@ public class HomeFragment extends Fragment {
                     if(responseGpt!=null){
                         tv_recomendation.setText(textFormaterMarkdown.formatText(getContext(),responseGpt.getResponse()));
                         dBfunctionsTableData.insert_recomendation_sqlite(getContext(),new RecomendationMessage(1,responseGpt.getResponse(),utils.getDateTimeDDMMYYYYHHMMSS()));
+                        pgb_loadRecomendation.setVisibility(View.GONE);
+                        tv_recomendation.setVisibility(View.VISIBLE);
                     }
                 }else{
                     try {
@@ -236,11 +249,15 @@ public class HomeFragment extends Fragment {
                         e.printStackTrace();
                     }
                 }
+                pgb_loadRecomendation.setVisibility(View.GONE);
+                tv_recomendation.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onFailure(@NonNull Call<MessageResponseGpt> call, @NonNull Throwable t) {
                 System.out.println("errror "+t.getMessage());
+                pgb_loadRecomendation.setVisibility(View.GONE);
+                tv_recomendation.setVisibility(View.VISIBLE);
             }
         });
     }
