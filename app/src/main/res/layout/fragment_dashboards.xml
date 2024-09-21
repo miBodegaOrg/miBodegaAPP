@@ -10,9 +10,12 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:background="@color/md_theme_dark_inversePrimary"
+        android:padding="10dp"
         android:text="Datos de tu negocio"
-        android:textSize="24sp"
+        android:textAlignment="center"
+        android:textColor="@color/ic_launcher_background"
+        android:textSize="30sp"
         android:textStyle="bold" />
 
     <ScrollView
@@ -119,11 +122,11 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/Cv_BuyingOption_dashboard"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_margin="8dp"
-                android:visibility="gone"
                 app:cardCornerRadius="10dp">
 
                 <LinearLayout
@@ -159,11 +162,11 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/Cv_InventaryOption_dashboard"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_margin="8dp"
-                android:visibility="gone"
                 app:cardCornerRadius="10dp">
 
                 <LinearLayout
@@ -199,6 +202,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/Cv_PerformanceOption_dashboard"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"

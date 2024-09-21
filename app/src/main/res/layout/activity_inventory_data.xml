@@ -25,10 +25,29 @@ tools:context=".views.dashboards.InventoryDataActivity">
             android:id="@+id/textView53"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="INVENTARIO"
-            android:textAlignment="center"
-            android:textSize="24sp"
-            android:visibility="gone" />
+            android:padding="10dp"
+            android:text="Datos de todos los productos"
+            android:textSize="20sp" />
+
+        <ProgressBar
+            android:id="@+id/Pgb_loadInventory_inventory"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:indeterminate="true"
+            android:layout_height="wrap_content" />
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/barChart_inventory"
+            android:layout_width="match_parent"
+            android:layout_height="566dp"
+            android:layout_marginTop="20dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
     </LinearLayout>
 
 </FrameLayout>
