@@ -2,6 +2,7 @@ package com.mibodega.mystore.shared;
 
 import com.mibodega.mystore.models.Responses.CategoryResponse;
 import com.mibodega.mystore.models.Responses.CategoryResponseWithProducts;
+import com.mibodega.mystore.models.Responses.SaleResponse;
 import com.mibodega.mystore.models.Responses.SignInResponse;
 
 import java.util.ArrayList;
@@ -14,7 +15,16 @@ public class Config {
     private static ArrayList<CategoryResponse> arrCategories =  new ArrayList<>();
     private static ArrayList<String> arrPermises = new ArrayList<>();
     private static ArrayList<CategoryResponseWithProducts> arrCategoriesWithProducts =  new ArrayList<>();
+    private static SaleResponse saleResponsecurrent;
     private static SignInResponse userData;
+
+    public SaleResponse getSaleResponsecurrent() {
+        return saleResponsecurrent;
+    }
+
+    public void setSaleResponsecurrent(SaleResponse saleResponsecurrent) {
+        Config.saleResponsecurrent = saleResponsecurrent;
+    }
 
     public SignInResponse getUserData() {
         return userData;

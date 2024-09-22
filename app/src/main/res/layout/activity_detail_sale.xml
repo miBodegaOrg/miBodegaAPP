@@ -24,6 +24,7 @@
         android:padding="16dp">
 
         <TextView
+            android:id="@+id/Tv_date_sale_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="08/09/2024"
@@ -39,11 +40,53 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_custom_rectangle_shadow"
-        android:padding="10dp" />
+        android:background="@color/md_theme_dark_inversePrimary"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView71"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Codigo"
+            android:textAlignment="center"
+            android:textColor="@color/ic_launcher_background" />
+
+        <TextView
+            android:id="@+id/textView72"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Nombre"
+            android:textAlignment="center"
+            android:textColor="@color/ic_launcher_background" />
+
+        <TextView
+            android:id="@+id/textView79"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cantidad"
+            android:textAlignment="center"
+            android:textColor="@color/ic_launcher_background" />
+
+        <TextView
+            android:id="@+id/textView69"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Precio"
+            android:textAlignment="center"
+            android:textColor="@color/ic_launcher_background" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/Rv_itemsale_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -63,14 +106,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="SubTotal:" />
 
             <TextView
-                android:id="@+id/textView72"
+                android:id="@+id/Tv_subtotal_sale_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="..." />
         </LinearLayout>
 
         <LinearLayout
@@ -83,14 +126,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="Descuentos:" />
 
             <TextView
-                android:id="@+id/textView71"
+                android:id="@+id/Tv_descuento_sale_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="..." />
         </LinearLayout>
 
         <LinearLayout
@@ -103,14 +146,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="Total:" />
 
             <TextView
-                android:id="@+id/textView69"
+                android:id="@+id/Tv_total_sale_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="..." />
         </LinearLayout>
 
     </LinearLayout>
