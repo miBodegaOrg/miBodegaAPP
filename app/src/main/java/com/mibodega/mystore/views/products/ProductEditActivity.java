@@ -86,7 +86,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ProductEditActivity extends MainActivity {
+public class ProductEditActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_GALLERY = 2;
@@ -147,11 +147,11 @@ public class ProductEditActivity extends MainActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // setContentView(R.layout.activity_product_edit);
-        setContentLayout(R.layout.activity_product_edit);
-        if (getSupportActionBar() != null) {
+       setContentView(R.layout.activity_product_edit);
+        //setContentLayout(R.layout.activity_product_edit);
+        /*if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Nuevo Producto");
-        }
+        }*/
         txt_name_product = findViewById(R.id.Edt_name_product);
         txt_price_product = findViewById(R.id.Edt_price_product);
         txt_stock_product = findViewById(R.id.Edt_stock_product);
@@ -684,13 +684,13 @@ public class ProductEditActivity extends MainActivity {
         if (Objects.requireNonNull(txt_code_product.getText()).toString().equals("")) {
             message += "😨 Debe existir codigo barras \n";
         }
-        if (Objects.requireNonNull(txt_price_product.getText()).toString().equals("")||Double.parseDouble(txt_price_product.getText().toString())>0) {
+        if (Objects.requireNonNull(txt_price_product.getText()).toString().equals("")||!(Double.parseDouble(txt_price_product.getText().toString())>0)) {
             message += "😨 Debe ingresar el precio y debe ser mayor a 0 \n";
         }
-        if (Objects.requireNonNull(txt_stock_product.getText()).toString().equals("")||Double.parseDouble(txt_stock_product.getText().toString())>0) {
+        if (Objects.requireNonNull(txt_stock_product.getText()).toString().equals("")||!(Double.parseDouble(txt_stock_product.getText().toString())>0)) {
             message += "😨 Debe ingresar el stock y debe ser mayor a 0 \n";
         }
-        if (Objects.requireNonNull(txt_saleprice_product.getText()).toString().equals("")||Double.parseDouble(txt_saleprice_product.getText().toString())>0) {
+        if (Objects.requireNonNull(txt_saleprice_product.getText()).toString().equals("")||!(Double.parseDouble(txt_saleprice_product.getText().toString())>0)) {
             message += "😨 Debe ingresar el stock y debe ser mayor a 0 \n";
         }
 
