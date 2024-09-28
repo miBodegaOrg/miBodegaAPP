@@ -10,8 +10,7 @@
         android:id="@+id/Ly_itemSale_sale"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/borde"
-        android:backgroundTint="@color/md_theme_dark_error"
+        android:background="@drawable/background_custom_rectangle_shadow"
         android:orientation="vertical"
         android:padding="5dp">
 

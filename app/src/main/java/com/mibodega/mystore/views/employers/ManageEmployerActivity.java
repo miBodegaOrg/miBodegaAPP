@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,8 +21,15 @@ import com.mibodega.mystore.models.Requests.RequestEmployee;
 import com.mibodega.mystore.models.Responses.EmployeeResponse;
 import com.mibodega.mystore.services.IEmployeeServices;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.Utils;
+import com.mibodega.mystore.shared.adapters.LoadingDialogAdapter;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
+import com.mibodega.mystore.views.products.ProductEditActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,6 +53,8 @@ public class ManageEmployerActivity extends MainActivity {
     private FrameLayout chatFragmentContainer;
     private Map<String,CheckBox> mapEsPermisses = new HashMap<>();
     private ArrayList<String> curremtPermises = new ArrayList<>();
+    private LoadingDialogAdapter loadingDialog = new LoadingDialogAdapter();
+    private Utils utils = new Utils();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -258,6 +269,9 @@ public class ManageEmployerActivity extends MainActivity {
     }
 
     public void deleteEmployee(String id){
+        View dialogView = getLayoutInflater().from(getBaseContext()).inflate(R.layout.progress_dialog, null);
+        loadingDialog.startLoadingDialog(this, dialogView, "Cargando","Porfavor espere...");
+
         Retrofit retrofit = new Retrofit.
                 Builder().
                 baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
@@ -271,15 +285,45 @@ public class ManageEmployerActivity extends MainActivity {
                 System.out.println(response.toString());
                 if(response.isSuccessful()){
                     employeeResponse = response.body();
+                    Dialog dialog = utils.getAlertCustom(ManageEmployerActivity.this, "success", "Eliminado", "Empleado eliminado", false);
                     if(employeeResponse!=null){
-                        Toast.makeText(getBaseContext(),"Empleado Eliminado",Toast.LENGTH_SHORT).show();
-                        finish();
+                        dialog.show();
+                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialogInterface) {
+                                loadingDialog.dismissDialog();
+                                finish();
+                            }
+                        });
                     }
+                    loadingDialog.dismissDialog();
+                }else{
+                    Dialog dialog = utils.getAlertCustom(ManageEmployerActivity.this, "warning", "No Eliminado", "hubo un error", false);
+                    dialog.show();
+                    try {
+                        String errorBody = response.errorBody().string();
+                        System.out.println("Error response body: " + errorBody);
+                        JSONObject errorJson = new JSONObject(errorBody);
+                        String errorMessage = errorJson.getString("message");
+                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                        System.out.println(errorMessage);
+
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            loadingDialog.dismissDialog();
+                            finish();
+                        }
+                    });
                 }
             }
             @Override
             public void onFailure(@NonNull Call<EmployeeResponse> call, @NonNull Throwable t) {
                 System.out.println("errror "+t.getMessage());
+                loadingDialog.dismissDialog();
             }
         });
     }

@@ -54,6 +54,7 @@
                 android:layout_gravity="start"
                 android:layout_weight="1"
                 android:text="PENDIENTE"
+                android:textColor="@color/toast_error"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
