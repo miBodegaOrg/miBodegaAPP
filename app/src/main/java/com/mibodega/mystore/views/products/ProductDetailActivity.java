@@ -377,7 +377,7 @@ public class ProductDetailActivity extends MainActivity {
                                             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                                                 imgProduct.setImageBitmap(resource);
                                                 paymentBitmapImg = resource;
-                                                tv_fileName.setText(".jpg");
+                                                tv_fileName.setText(productGeneral.getName()+".jpg");
 
                                                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                                                 resource.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
