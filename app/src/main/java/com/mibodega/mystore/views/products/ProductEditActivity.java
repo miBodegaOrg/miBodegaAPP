@@ -209,7 +209,6 @@ public class ProductEditActivity extends AppCompatActivity {
 
         tv_fileName.setText("");
         setDialogs(this);
-        mapcategoryResponses.clear();
         ArrayList<String> categories = new ArrayList<>();
         for (CategoryResponse item : config.getArrCategories()){
             categories.add(item.getName());
@@ -418,6 +417,7 @@ public class ProductEditActivity extends AppCompatActivity {
                             @Override
                             public void onDismiss(DialogInterface dialogInterface) {
                                 loadingDialog.dismissDialog();
+                                mapcategoryResponses.clear();
                                 finish();
                             }
                         });

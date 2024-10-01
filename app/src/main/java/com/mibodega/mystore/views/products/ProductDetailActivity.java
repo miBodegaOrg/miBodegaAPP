@@ -26,6 +26,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
@@ -361,6 +362,7 @@ public class ProductDetailActivity extends MainActivity {
                                 txt_cost_product.setText(String.valueOf(productGeneral.getCost()));
                             }
 
+
                             if(!Objects.equals(productGeneral.getImage_url(), "")){
 
                                 Glide.with(getBaseContext())
@@ -368,29 +370,35 @@ public class ProductDetailActivity extends MainActivity {
                                         .load(productGeneral.getImage_url())
                                         .error(R.drawable.no_photo)
                                         .centerCrop()
+                                        .override(600, 600) // Redimensiona la imagen para evitar cargar imágenes demasiado grandes
                                         .transform(new RoundedCorners(2))
                                         .into(new CustomTarget<Bitmap>() {
                                             @Override
                                             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                                                 imgProduct.setImageBitmap(resource);
                                                 paymentBitmapImg = resource;
-                                                tv_fileName.setText("image.jpg");
+                                                tv_fileName.setText(".jpg");
 
-                                                // Convertir el Bitmap a un array de bytes sin compresión (manteniendo la calidad y resolución)
                                                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                                                resource.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream); // Usar PNG para mantener calidad
+                                                resource.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
                                                 byte[] imageBytes = byteArrayOutputStream.toByteArray();
 
                                                 finalImageBody = RequestBody.create(MediaType.parse("image/png"), imageBytes);
-
-
                                             }
 
                                             @Override
                                             public void onLoadCleared(@Nullable Drawable placeholder) {
-                                                // Este método se llama cuando la solicitud se ha cancelado
+                                                // Libera recursos aquí si es necesario
+                                            }
+
+                                            @Override
+                                            public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                                                // Manejar fallo de la carga
+                                                Log.e("GlideError", "Error al cargar la imagen: " + productGeneral.getImage_url());
+                                                Toast.makeText(getBaseContext(), "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
                                             }
                                         });
+
                             }
 
                             selectSpinnerItemByName(getSp_category_product, productGeneral.getCategory().getName());
