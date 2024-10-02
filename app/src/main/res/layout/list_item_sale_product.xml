@@ -157,7 +157,7 @@
                         android:background="@drawable/borde"
                         android:backgroundTint="@color/white"
                         android:ems="10"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:text="12"
                         android:textAlignment="center"
                         android:textColor="@color/md_theme_dark_onBackground" />

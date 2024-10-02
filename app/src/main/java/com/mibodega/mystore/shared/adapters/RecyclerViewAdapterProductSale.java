@@ -3,6 +3,7 @@ package com.mibodega.mystore.shared.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -100,10 +101,26 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
             holder.productDescription.setText(product.getName());
             holder.productStock.setText(String.valueOf(product.getStock()));
             holder.buyPrice.setText("s/ " +String.valueOf(product.getPrice()));
-            holder.edt_amount.setText(saleTemporalList.getMapAmountProduct().get(product.getCode()).toString());
-            double total_price = product.getPrice()*Integer.parseInt(holder.edt_amount.getText().toString());
-            holder.total_price.setText("s/. "+total_price);
+            if(product.isWeight()){ holder.edt_amount.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);}else{holder.edt_amount.setInputType(InputType.TYPE_CLASS_NUMBER); }
+            Number amountNum = saleTemporalList.getMapAmountProduct().get(product.getCode());
+
+
+            double _total_price=0.0;
+            if(product.isWeight()){
+                holder.edt_amount.setText(String.valueOf(amountNum.doubleValue()));
+                _total_price = product.getPrice() * Double.valueOf(holder.edt_amount.getText().toString());
+
+            }else{
+                holder.edt_amount.setText(String.valueOf(amountNum.intValue()));
+                _total_price = product.getPrice() * Integer.parseInt(holder.edt_amount.getText().toString());
+
+            }
+
+            holder.total_price.setText("s/. "+utils.formatDecimal(_total_price));
+
             holder.edt_amount.setEnabled(false);
+
+
             holder.edt_amount.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -118,8 +135,15 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
                 @Override
                 public void afterTextChanged(Editable editable) {
                     if(!editable.toString().equals("")) {
-                        double total_price = product.getPrice() * Integer.parseInt(holder.edt_amount.getText().toString());
-                        holder.total_price.setText("s/. " + total_price);
+                        double total_price =0.0;
+                        if(product.isWeight()){
+                            total_price = product.getPrice() * Double.valueOf(holder.edt_amount.getText().toString());
+
+                        }else{
+                            total_price = product.getPrice() * Integer.parseInt(holder.edt_amount.getText().toString());
+
+                        }
+                       holder.total_price.setText("s/. " + utils.formatDecimal(total_price));
                     }
                 }
             });
@@ -128,8 +152,16 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
                 @Override
                 public void onClick(View view) {
                     if(Boolean.TRUE.equals(arrIsEdit.get(product.getCode()))){
-                        int amount = Integer.parseInt(holder.edt_amount.getText().toString());
-                        if(amount>0){
+                        Double amount = 0.0;
+
+                        if(product.isWeight()){
+                            amount = Double.valueOf(holder.edt_amount.getText().toString());
+
+                        }else{
+                            amount = 1.0*Integer.parseInt(holder.edt_amount.getText().toString());
+
+                        }
+                        if(amount.doubleValue()>0){
                             holder.edt_amount.setEnabled(false);
 
                             saleTemporalList.updateAmountProduct(product.getCode(),amount);

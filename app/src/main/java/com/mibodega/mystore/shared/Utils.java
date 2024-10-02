@@ -270,7 +270,9 @@ public class Utils {
     }
     //***********
 
-
+    public String formatDecimal(double amount) {
+        return String.format("%.2f", amount);
+    }
     public String getDateDDMMYYYY() {
         Date fechaActual = new Date();
         // Formatear la fecha en el formato DD/MM/YYYY

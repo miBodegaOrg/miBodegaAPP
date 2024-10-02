@@ -248,7 +248,7 @@ public class DiscountsActivity extends MainActivity {
                                 product.getCost(),
                                 product.getSupplier()
                         );
-                        saleTemporalList.addProduct(productResponse,1);
+                        saleTemporalList.addProduct(productResponse,1.0);
                         loadData();
                     }
                     System.out.println("successfull request");
@@ -287,7 +287,7 @@ public class DiscountsActivity extends MainActivity {
                             @Override
                             public void onClick(ProductResponse product) {
                                 Toast.makeText(getBaseContext(),"Agregado",Toast.LENGTH_SHORT).show();
-                                saleTemporalList.addProduct(product,1);
+                                saleTemporalList.addProduct(product,1.0);
                                 loadData();
                             }
                         });

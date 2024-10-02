@@ -138,12 +138,12 @@ public class CreateSaleFragment extends Fragment {
         listAdapter = new RecyclerViewAdapterProductSale(getContext(), arrayListProduct, new RecyclerViewAdapterProductSale.OnEdit() {
             @Override
             public void onClick(ProductResponse product) {
-                tv_subTotal.setText("S/. "+saleTemporalList.getTotalPrice().toString());
+                tv_subTotal.setText("S/. "+utils.formatDecimal(saleTemporalList.getTotalPrice()));
             }
         }, new RecyclerViewAdapterProductSale.OnDelete() {
             @Override
             public void onClick(ProductResponse product) {
-                tv_subTotal.setText("S/. "+saleTemporalList.getTotalPrice().toString());
+                tv_subTotal.setText("S/. "+utils.formatDecimal(saleTemporalList.getTotalPrice()));
             }
         });
         rv_recyclerProductList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
@@ -181,8 +181,9 @@ public class CreateSaleFragment extends Fragment {
                                 product.getCost(),
                                 product.getSupplier()
                                 );
-                        saleTemporalList.addProduct(productResponse,1);
+                        saleTemporalList.addProduct(productResponse,1.0);
                         loadData();
+                        tv_subTotal.setText("S/. "+utils.formatDecimal(saleTemporalList.getTotalPrice()));
                     }
                     System.out.println("successfull request");
                 }else{
@@ -220,8 +221,8 @@ public class CreateSaleFragment extends Fragment {
                             @Override
                             public void onClick(ProductResponse product) {
                                 Toast.makeText(getContext(),"Agregado",Toast.LENGTH_SHORT).show();
-                                saleTemporalList.addProduct(product,1);
-                                tv_subTotal.setText("S/. "+saleTemporalList.getTotalPrice().toString());
+                                saleTemporalList.addProduct(product,1.0);
+                                tv_subTotal.setText("S/. "+utils.formatDecimal(saleTemporalList.getTotalPrice()));
                                 utils.getAlertDialog(getContext(),"Producto","Se agrego "+product.getName()+"a la lista","verde");
                                 loadData();
                             }
@@ -247,9 +248,11 @@ public class CreateSaleFragment extends Fragment {
     public void createSale(){
         ArrayList<ProductSaleV2> arraux = new ArrayList<>();
         for (ProductResponse product : saleTemporalList.getArrayList()){
-            int amountint = Integer.parseInt(listAdapter.getMapEditAmount().get(product.getCode()).getText().toString());
-            double amount = Double.parseDouble(listAdapter.getMapEditAmount().get(product.getCode()).getText().toString());
+
+            Number amountint =0.0;
+
             if(!product.isWeight()){
+                amountint =  Integer.parseInt(listAdapter.getMapEditAmount().get(product.getCode()).getText().toString());
                 double cost =0;
                 double rentability = product.getPrice()-cost;
                 if(rentability<0){
@@ -257,12 +260,13 @@ public class CreateSaleFragment extends Fragment {
                 }
                 arraux.add(new ProductSaleV2(product.getCode(),amountint));
             }else{
+                amountint =  Double.valueOf(listAdapter.getMapEditAmount().get(product.getCode()).getText().toString());
                 double cost =0;
                 double rentability = product.getPrice()-cost;
                 if(rentability<0){
                     rentability=0;
                 }
-                arraux.add(new ProductSaleV2(product.getCode(),amount));
+                arraux.add(new ProductSaleV2(product.getCode(),amountint));
 
             }
         }
@@ -325,7 +329,7 @@ public class CreateSaleFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        tv_subTotal.setText("S/. "+saleTemporalList.getTotalPrice().toString());
+        tv_subTotal.setText("S/. "+utils.formatDecimal(saleTemporalList.getTotalPrice()));
 
     }
 }
