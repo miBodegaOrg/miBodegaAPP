@@ -53,24 +53,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/bottomsheet_back"
-        android:backgroundTint="@color/md_theme_dark_onSurface"
+        android:background="@color/ic_launcher_background"
         android:orientation="horizontal"
-        android:padding="8dp">
+        android:padding="3dp">
+
 
         <EditText
             android:id="@+id/editTextMessage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Escribe un mensaje"
-            android:inputType="text"
-            android:maxLines="5" />
+            android:background="@drawable/background_custom_rectangle_shadow"
+            android:gravity="top|start"
+            android:hint="Escribe un mensaje..."
+            android:imeOptions="actionSend"
+            android:inputType="textMultiLine"
+            android:maxLines="4"
+            android:minLines="1"
+            android:overScrollMode="always"
+            android:padding="7dp"
+            android:scrollbars="vertical" />
 
         <Button
             android:id="@+id/buttonSend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
             android:text="Enviar" />
 
     </LinearLayout>

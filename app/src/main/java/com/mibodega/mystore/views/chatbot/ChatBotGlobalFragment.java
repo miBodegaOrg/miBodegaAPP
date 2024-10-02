@@ -84,6 +84,7 @@ public class ChatBotGlobalFragment extends Fragment {
         messageAdapter = new MessageAdapter(getContext(),messageList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(messageAdapter);
+        recyclerView.scrollToPosition(messageAdapter.getItemCount() - 1);
 
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
