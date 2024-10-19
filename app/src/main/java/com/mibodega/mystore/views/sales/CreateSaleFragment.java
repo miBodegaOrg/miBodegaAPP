@@ -1,5 +1,6 @@
 package com.mibodega.mystore.views.sales;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -102,7 +104,14 @@ public class CreateSaleFragment extends Fragment {
         btn_vender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createSale();
+                if(validar_datos().equals("ok")){
+                    createSale();
+                }else{
+                    Dialog dialog = utils.getAlertCustom(getContext(),"danger","Error"," No se puede generar la venta sin ningun producto agregado",false);
+                    dialog.show();
+                }
+
+
             }
         });
 
@@ -324,7 +333,14 @@ public class CreateSaleFragment extends Fragment {
         barcodeLauncher.launch(options);
     }
 
+    private String validar_datos() {
+        String message = "ok";
 
+        if (arrayListProduct.size()<1) {
+            message += "😨 Debe agregar al menos un producto a la lista \n";
+        }
+        return message;
+    }
     @Override
     public void onResume() {
         super.onResume();

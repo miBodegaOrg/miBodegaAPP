@@ -197,7 +197,7 @@ public class PurchaseFormActivity extends MainActivity {
                 message += "😨 Debe ingresar precio envio \n";
             }
             if(edt_dicount.getText().toString().trim().length() == 0){
-                message += "😨 Debe ingresar Nombre cliente \n";
+                message += "😨 Debe ingresar el descuento \n";
             }
 
              if(edt_dicount.getText().toString().trim().length() != 0){
