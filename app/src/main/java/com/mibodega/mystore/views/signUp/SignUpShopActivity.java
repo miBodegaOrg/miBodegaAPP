@@ -3,6 +3,8 @@ package com.mibodega.mystore.views.signUp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +20,8 @@ import com.mibodega.mystore.models.Responses.SignUpResponse;
 import com.mibodega.mystore.services.IEmployeeServices;
 import com.mibodega.mystore.services.IUserServices;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.Utils;
+import com.mibodega.mystore.views.employers.ManageEmployerActivity;
 
 import java.util.Objects;
 
@@ -149,6 +153,15 @@ public class SignUpShopActivity extends AppCompatActivity {
                         Toast.makeText(getBaseContext(),"BODEGUERO CREADO",Toast.LENGTH_SHORT).show();
                         System.out.println("successfull request");
                         finish();
+                        Utils utils = new Utils();
+                        Dialog dialog = utils.getAlertCustom(SignUpShopActivity.this,"successs","Exitoso","Bodeguero creado",false);
+                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+
+                            }
+                        });
+                        dialog.show();
                     }
 
                 }

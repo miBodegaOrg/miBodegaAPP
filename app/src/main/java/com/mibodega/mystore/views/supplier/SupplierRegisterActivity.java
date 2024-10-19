@@ -6,6 +6,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -217,13 +219,18 @@ public class SupplierRegisterActivity extends MainActivity {
                 System.out.println(response.toString());
                 if(response.isSuccessful()){
                     System.out.println("body: "+response.body());
-                    Toast.makeText(getBaseContext(),"Creado",Toast.LENGTH_SHORT).show();
-
                     edt_name.setText("");
                     edt_phone.setText("");
                     edt_ruc.setText("");
                     arrayListProduct.clear();
-
+                    Dialog dialog = utils.getAlertCustom(SupplierRegisterActivity.this,"success","Registro"," Se creo exitosamente el proveedor",false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            finish();
+                        }
+                    });
+                    dialog.show();
 
                 }
             }

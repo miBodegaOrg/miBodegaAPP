@@ -182,7 +182,7 @@ tools:context=".views.employers.ManageEmployerActivity">
                 android:id="@+id/Btn_createEmployee_employee"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Crear Empleado" />
+                android:text="Registrar" />
 
             <Button
                 android:id="@+id/Btn_back_employee"

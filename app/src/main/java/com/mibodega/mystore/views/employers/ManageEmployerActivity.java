@@ -25,6 +25,7 @@ import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.shared.adapters.LoadingDialogAdapter;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
 import com.mibodega.mystore.views.products.ProductEditActivity;
+import com.mibodega.mystore.views.supplier.SupplierRegisterActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -182,19 +183,27 @@ public class ManageEmployerActivity extends MainActivity {
         btn_create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Objects.equals(valiteFields(), "ok")){
-                    ArrayList<String> aux = new ArrayList<>();
-                    for (String item : config.getArrPermises()) {
-                        CheckBox checkBox = mapEsPermisses.get(item);
-                        assert checkBox != null;
-                        if(checkBox.isChecked()){
-                            aux.add(item);
-                        }
+                ArrayList<String> aux = new ArrayList<>();
+                for (String item : config.getArrPermises()) {
+                    CheckBox checkBox = mapEsPermisses.get(item);
+                    assert checkBox != null;
+                    if(checkBox.isChecked()){
+                        aux.add(item);
                     }
-                    curremtPermises = aux;
+                }
+                curremtPermises = aux;
+
+                if(Objects.equals(valiteFields(), "ok")){
                     createEmployee();
                 }else{
-                    Toast.makeText(getBaseContext(),valiteFields(),Toast.LENGTH_SHORT).show();
+                    Dialog dialog = utils.getAlertCustom(ManageEmployerActivity.this,"danger","Error",valiteFields(),false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+
+                        }
+                    });
+                    dialog.show();
                 }
             }
         });
@@ -397,8 +406,14 @@ public class ManageEmployerActivity extends MainActivity {
                         edt_dni.setText("");
                         edt_phone.setText("");
                         edt_password.setText("");
-                        Toast.makeText(getBaseContext(),"EMPLEADO CREADO",Toast.LENGTH_SHORT).show();
-                        System.out.println("successfull request");
+                        Dialog dialog = utils.getAlertCustom(ManageEmployerActivity.this,"success","Registro"," Se creo exitosamente del empleado",false);
+                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                finish();
+                            }
+                        });
+                        dialog.show();
                     }
                 }
             }
@@ -415,6 +430,9 @@ public class ManageEmployerActivity extends MainActivity {
         }
         if(edt_lastname.getText().toString().trim().length() == 0){
             message += "😨 Debe ingresar apellidos \n";
+        }
+        if(curremtPermises.size()< 1){
+            message += "😨 Debe seleccionar al menos un permiso \n";
         }
         if(edt_email.getText().toString().trim().length() == 0){
             message += "😨 Debe ingresar correo \n";
