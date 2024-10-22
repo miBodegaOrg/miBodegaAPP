@@ -26,6 +26,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -185,7 +186,26 @@ public class ProductDetailActivity extends MainActivity {
         adapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         getSp_factor.setAdapter(adapter4);
         getSp_factor.setSelection(0);
+        getSp_factor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(getSp_factor.getSelectedItem().toString().equals("KG")){ txt_stock_product.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);}else{
+                    txt_stock_product.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    if(!Objects.requireNonNull(txt_stock_product.getText()).toString().equals("")){
+                        String input = txt_stock_product.getText().toString();
+                        Double decimalValue = Double.valueOf(input);
+                        Integer intValue = decimalValue.intValue();
+                        txt_stock_product.setText(String.valueOf(intValue));
+                    }
 
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         code = getIntent().getExtras().getString("product_code");
 
         getProductByCode(code);
@@ -361,7 +381,12 @@ public class ProductDetailActivity extends MainActivity {
                             } else {
                                 txt_cost_product.setText(String.valueOf(productGeneral.getCost()));
                             }
-
+                            if(productGeneral.isWeight()){
+                                getSp_factor.setSelection(1);
+                            }else{
+                                getSp_factor.setSelection(0);
+                            }
+                            if(getSp_factor.getSelectedItem().toString().equals("KG")){ txt_stock_product.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);}else{txt_stock_product.setInputType(InputType.TYPE_CLASS_NUMBER); }
 
                             if(!Objects.equals(productGeneral.getImage_url(), "")){
 
