@@ -728,7 +728,7 @@ public class ProductEditActivity extends AppCompatActivity {
             message += "- Debe ingresar el stock y debe ser mayor a 0 \n";
         }
         if (Objects.requireNonNull(txt_saleprice_product.getText()).toString().equals("")||!(Double.parseDouble(txt_saleprice_product.getText().toString())>0)) {
-            message += "- Debe ingresar el stock y debe ser mayor a 0 \n";
+            message += "- Debe ingresar el costo mayor a 0 \n";
         }
 
         if (getSp_category_product.getSelectedItem() == null || TextUtils.isEmpty(getSp_category_product.getSelectedItem().toString())) {
@@ -742,6 +742,15 @@ public class ProductEditActivity extends AppCompatActivity {
         }
         if (getSp_Type_product.getSelectedItem() == null || TextUtils.isEmpty(getSp_Type_product.getSelectedItem().toString())) {
             message += "- Debe Seleccionar el tipo KG o UN\n";
+        }
+        if(!Objects.requireNonNull(txt_price_product.getText()).toString().equals("") &&
+                (Double.parseDouble(txt_price_product.getText().toString())>0) &&
+                !Objects.requireNonNull(txt_saleprice_product.getText()).toString().equals("") &&
+                (Double.parseDouble(txt_saleprice_product.getText().toString())>0)
+        ){
+            if(Double.parseDouble(txt_saleprice_product.getText().toString())>Double.parseDouble(txt_price_product.getText().toString())){
+                message += "- El costo no debe ser mayor al precio de venta\n";
+            }
         }
 
 

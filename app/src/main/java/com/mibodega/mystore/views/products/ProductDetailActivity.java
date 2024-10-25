@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -269,10 +270,17 @@ public class ProductDetailActivity extends MainActivity {
         btn_saveProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!txt_code_product.getText().toString().equals("")){
+                if(validar_datos().equals("")){
                     updateproductData(productGeneral.get_id());
                 }else {
-                    Toast.makeText(getBaseContext(),"Genera el codigo del producto",Toast.LENGTH_SHORT).show();
+                    Utils utils = new Utils();
+                    Dialog dialog = utils.getAlertCustom(ProductDetailActivity.this,"danger","Error",validar_datos(),false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    dialog.show();
                 }
             }
         });
@@ -860,7 +868,6 @@ public class ProductDetailActivity extends MainActivity {
         }
         return null;
     }
-
     private void startBarcodeScanner() {
         ScanOptions options = new ScanOptions()
                 .setDesiredBarcodeFormats(ScanOptions.ALL_CODE_TYPES)
@@ -870,8 +877,6 @@ public class ProductDetailActivity extends MainActivity {
                 .setBarcodeImageEnabled(false);
         barcodeLauncher.launch(options);
     }
-
-
     public void loadSuppliers(){
         Retrofit retrofit = new Retrofit.
                 Builder().
@@ -914,5 +919,54 @@ public class ProductDetailActivity extends MainActivity {
                 System.out.println("errror "+t.getMessage());
             }
         });
+    }
+
+    private String validar_datos() {
+        String message = "";
+
+        if (Objects.requireNonNull(tv_fileName.getText()).toString().equals("")) {
+            message += "- Debes subir foto del producto \n";
+        }
+        if (Objects.requireNonNull(txt_name_product.getText()).toString().equals("")) {
+            message += "- Debes ingresar nombre \n";
+        }
+        if (Objects.requireNonNull(txt_code_product.getText()).toString().equals("")) {
+            message += "- Debe existir codigo barras \n";
+        }
+        if (Objects.requireNonNull(txt_price_product.getText()).toString().equals("")||!(Double.parseDouble(txt_price_product.getText().toString())>0)) {
+            message += "- Debe ingresar el precio y debe ser mayor a 0 \n";
+        }
+        if (Objects.requireNonNull(txt_stock_product.getText()).toString().equals("")||!(Double.parseDouble(txt_stock_product.getText().toString())>0)) {
+            message += "- Debe ingresar el stock y debe ser mayor a 0 \n";
+        }
+        if (Objects.requireNonNull(txt_cost_product.getText()).toString().equals("")||!(Double.parseDouble(txt_cost_product.getText().toString())>0)) {
+            message += "- Debe ingresar el costo mayor a 0 \n";
+        }
+
+        if (getSp_category_product.getSelectedItem() == null || TextUtils.isEmpty(getSp_category_product.getSelectedItem().toString())) {
+            message += "- Debe Seleccionar categoria\n";
+        }
+        if (getSp_subcategory_product.getSelectedItem() == null || TextUtils.isEmpty(getSp_subcategory_product.getSelectedItem().toString())) {
+            message += "- Debe Seleccionar subcategoria\n";
+        }
+        if (getSp_proveedor.getSelectedItem() == null || TextUtils.isEmpty(getSp_proveedor.getSelectedItem().toString())) {
+            message += "- Debe Seleccionar proveedor o no existen proveedores registrados\n";
+        }
+        if (getSp_factor.getSelectedItem() == null || TextUtils.isEmpty(getSp_factor.getSelectedItem().toString())) {
+            message += "- Debe Seleccionar el tipo KG o UN\n";
+        }
+        if(!Objects.requireNonNull(txt_price_product.getText()).toString().equals("") &&
+                (Double.parseDouble(txt_price_product.getText().toString())>0) &&
+                !Objects.requireNonNull(txt_cost_product.getText()).toString().equals("") &&
+                (Double.parseDouble(txt_cost_product.getText().toString())>0)
+        ){
+            if(Double.parseDouble(txt_cost_product.getText().toString())>Double.parseDouble(txt_price_product.getText().toString())){
+                message += "- El costo no debe ser mayor al precio de venta\n";
+            }
+        }
+
+
+
+        return message;
     }
 }
