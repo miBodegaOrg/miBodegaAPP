@@ -143,10 +143,17 @@ public class PurchaseFormActivity extends MainActivity {
         btn_vender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Objects.equals(valiteFields(), "ok")){
+                if(Objects.equals(valiteFields(), "")){
                     createPurchase();
                 }else{
-                    Toast.makeText(getBaseContext(),valiteFields(),Toast.LENGTH_SHORT).show();
+                    Utils utils = new Utils();
+                    Dialog dialog = utils.getAlertCustom(PurchaseFormActivity.this,"danger","Error",valiteFields(),false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    dialog.show();
                 }
             }
         });
@@ -192,18 +199,18 @@ public class PurchaseFormActivity extends MainActivity {
     }
 
     public String valiteFields(){
-            String message = "ok";
+            String message = "";
             if(edt_shipping.getText().toString().trim().length() == 0){
-                message += "😨 Debe ingresar precio envio \n";
+                message += "- Debe ingresar costo de envio \n";
             }
             if(edt_dicount.getText().toString().trim().length() == 0){
-                message += "😨 Debe ingresar el descuento \n";
+                message += "- Debe ingresar el descuento \n";
             }
 
              if(edt_dicount.getText().toString().trim().length() != 0){
                  double aux = Double.parseDouble(edt_dicount.getText().toString());
                  if(aux>100){
-                     message += "😨 Debe ingresar un numero menor a 100 en descuentos \n";
+                     message += "- Debe ingresar un numero menor a 100 en descuentos \n";
                  }
              }
             return message;
