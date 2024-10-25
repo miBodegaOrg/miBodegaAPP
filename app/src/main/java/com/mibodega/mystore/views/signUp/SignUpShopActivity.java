@@ -56,7 +56,14 @@ public class SignUpShopActivity extends AppCompatActivity {
                 if(Objects.equals(valiteFields(), "ok")){
                     createShop();
                 }else{
-                    Toast.makeText(getBaseContext(),valiteFields(),Toast.LENGTH_SHORT).show();
+                    Utils utils = new Utils();
+                    Dialog dialog = utils.getAlertCustom(SignUpShopActivity.this,"danger","Advertencia",valiteFields(),false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    dialog.show();
                 }
             }
         });
@@ -150,20 +157,26 @@ public class SignUpShopActivity extends AppCompatActivity {
                                 edt_rucSignUp_shop.setText("");
                                 edt_passwordSignUp_shop.setText("");
 
-                        Toast.makeText(getBaseContext(),"BODEGUERO CREADO",Toast.LENGTH_SHORT).show();
-                        System.out.println("successfull request");
-                        finish();
                         Utils utils = new Utils();
                         Dialog dialog = utils.getAlertCustom(SignUpShopActivity.this,"successs","Exitoso","Bodeguero creado",false);
                         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                             @Override
                             public void onDismiss(DialogInterface dialog) {
-
+                                finish();
                             }
                         });
                         dialog.show();
                     }
 
+                }else{
+                    Utils utils = new Utils();
+                    Dialog dialog = utils.getAlertCustom(SignUpShopActivity.this,"Danger","Error","No se registro",false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    dialog.show();
                 }
             }
             @Override
