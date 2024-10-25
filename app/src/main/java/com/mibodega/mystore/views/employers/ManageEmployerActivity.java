@@ -107,6 +107,17 @@ public class ManageEmployerActivity extends MainActivity {
                 // No es necesario hacer nada aquí
             }
         });
+
+        ly_permisesCheckList.removeAllViews();
+        ly_permisesContainer.setVisibility(View.VISIBLE);
+        for (String item : config.getArrPermises()) {
+            CheckBox checkBox = new CheckBox(getBaseContext());
+            checkBox.setText(item);
+            checkBox.setChecked(true);
+            // Establecer el texto del CheckBox con el valor del permiso
+            ly_permisesCheckList.addView(checkBox); // Agregar el CheckBox al LinearLayout
+            mapEsPermisses.put(item,checkBox);
+        }
         if(Objects.equals(id_employee, "0")){
             btn_saveChangesEmployee.setVisibility(View.GONE);
             btn_update.setVisibility(View.GONE);
@@ -193,7 +204,7 @@ public class ManageEmployerActivity extends MainActivity {
                 }
                 curremtPermises = aux;
 
-                if(Objects.equals(valiteFields(), "ok")){
+                if(Objects.equals(valiteFields(), "")){
                     createEmployee();
                 }else{
                     Dialog dialog = utils.getAlertCustom(ManageEmployerActivity.this,"danger","Error",valiteFields(),false);
@@ -214,14 +225,7 @@ public class ManageEmployerActivity extends MainActivity {
             }
         });
 
-        ly_permisesCheckList.removeAllViews();
-        ly_permisesContainer.setVisibility(View.VISIBLE);
-        for (String item : config.getArrPermises()) {
-            CheckBox checkBox = new CheckBox(getBaseContext());
-            checkBox.setText(item); // Establecer el texto del CheckBox con el valor del permiso
-            ly_permisesCheckList.addView(checkBox); // Agregar el CheckBox al LinearLayout
-            mapEsPermisses.put(item,checkBox);
-        }
+
 
     }
 
@@ -406,7 +410,7 @@ public class ManageEmployerActivity extends MainActivity {
                         edt_dni.setText("");
                         edt_phone.setText("");
                         edt_password.setText("");
-                        Dialog dialog = utils.getAlertCustom(ManageEmployerActivity.this,"success","Registro"," Se creo exitosamente del empleado",false);
+                        Dialog dialog = utils.getAlertCustom(ManageEmployerActivity.this,"success","Exitoso","Se creó exitosamente el empleado",false);
                         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                             @Override
                             public void onDismiss(DialogInterface dialog) {
@@ -424,44 +428,44 @@ public class ManageEmployerActivity extends MainActivity {
         });
     }
     public String valiteFields(){
-        String message = "ok";
+        String message = "";
         if(edt_name.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar nombre \n";
+            message += "- Debe ingresar nombre \n";
         }
         if(edt_lastname.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar apellidos \n";
+            message += "- Debe ingresar apellidos \n";
         }
         if(curremtPermises.size()< 1){
-            message += "😨 Debe seleccionar al menos un permiso \n";
+            message += "- Debe seleccionar al menos un permiso \n";
         }
         if(edt_email.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar correo \n";
+            message += "- Debe ingresar correo \n";
         }
         if(edt_dni.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar DNI \n";
+            message += "- Debe ingresar DNI \n";
         }
         if(edt_phone.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar telefono \n";
+            message += "- Debe ingresar telefono \n";
         }
         if(edt_password.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar contraseña \n";
+            message += "- Debe ingresar contraseña \n";
         }
         if(edt_phone.getText().toString().trim().length() != 0){
             int aux = edt_phone.getText().toString().length();
             if(aux != 9){
-                message += "😨 Debe ingresar un numero telefono con 8 digitos\n";
+                message += "- Debe ingresar un numero telefono con 8 digitos\n";
             }
         }
         if(edt_dni.getText().toString().trim().length() != 0){
             int aux = edt_dni.getText().toString().length();
             if(aux != 8){
-                message += "😨 Debe ingresar un numero telefono con 8 digitos\n";
+                message += "- Debe ingresar un numero telefono con 8 digitos\n";
             }
         }
         if(edt_password.getText().toString().trim().length() != 0){
             int aux = edt_password.getText().toString().length();
             if(aux <6){
-                message += "😨 Debe ingresar una contraseña con 6 digitos\n";
+                message += "- Debe ingresar una contraseña con 6 digitos\n";
             }
         }
 

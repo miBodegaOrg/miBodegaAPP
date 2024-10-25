@@ -57,7 +57,7 @@ public class SignUpShopActivity extends AppCompatActivity {
                     createShop();
                 }else{
                     Utils utils = new Utils();
-                    Dialog dialog = utils.getAlertCustom(SignUpShopActivity.this,"danger","Advertencia",valiteFields(),false);
+                    Dialog dialog = utils.getAlertCustom(SignUpShopActivity.this,"danger","Error",valiteFields(),false);
                     dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialog) {
