@@ -94,7 +94,7 @@
                     android:id="@+id/Edt_rucdniSignUp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Ruc o DNI" />
+                    android:hint="Ruc" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
