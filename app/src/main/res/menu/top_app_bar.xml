@@ -1,17 +1,2 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <item
-        android:id="@+id/favorite"
-        android:enabled="false"
-        android:icon="@drawable/img"
-        android:title="TODO"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/singoff"
-        android:title="Sign off"
-        android:contentDescription="as"
-        app:showAsAction="never" />
-
-</menu>
+    xmlns:app="http://schemas.android.com/apk/res-auto"/>

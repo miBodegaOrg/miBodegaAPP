@@ -152,27 +152,7 @@ public class MainNavigationActivity extends AppCompatActivity {
                 return true;
             }
         });
-        binding.topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                /*
-                switch (item.getItemId()){
-                    case R.id.singoff:
-                        View dialogView = getLayoutInflater().from(HomeActivity.this).inflate(R.layout.progress_dialog, null);
-                        loadingDialog.startLoadingDialog(HomeActivity.this,dialogView,"close session");
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                loadingDialog.dismissDialog();
-                                utils.cerrarSesionYSalir(HomeMenuActivity);
-                            }
-                        },1000);
-                        break;
-                }*/
-                return true;
-            }
-        });
+
         binding.FabtnMoveSaleProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

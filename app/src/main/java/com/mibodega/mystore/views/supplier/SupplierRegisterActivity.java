@@ -315,15 +315,15 @@ public class SupplierRegisterActivity extends MainActivity {
             public void onResponse(@NonNull Call<SupplierResponseV2> call, @NonNull Response<SupplierResponseV2> response) {
                 System.out.println(response.toString());
                 if(response.isSuccessful()){
-                    Toast.makeText(getBaseContext(),"cargado",Toast.LENGTH_SHORT).show();
                     supplierResponse = response.body();
-                    if(supplierResponse.getProducts().size()>0) {
-                        edt_name.setText(supplierResponse.getName());
-                        edt_ruc.setText(supplierResponse.getRuc());
-                        edt_phone.setText(supplierResponse.getPhone());
-                        int index = supplierResponse.getProducts().size();
-                        arrayListProduct = supplierResponse.getProducts();
-                        updateDATA();
+                    edt_name.setText(supplierResponse.getName());
+                    edt_ruc.setText(supplierResponse.getRuc());
+                    edt_phone.setText(supplierResponse.getPhone());
+
+                    if(supplierResponse.getProducts()!=null){
+                      int index = supplierResponse.getProducts().size();
+                      arrayListProduct = supplierResponse.getProducts();
+                      updateDATA();
                     }
                 }
 
