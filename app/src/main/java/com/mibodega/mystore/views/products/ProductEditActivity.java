@@ -63,6 +63,7 @@ import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.shared.adapters.LoadingDialogAdapter;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
 import com.mibodega.mystore.views.signIn.SignInActivity;
+import com.mibodega.mystore.views.signUp.SignUpShopActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -260,10 +261,17 @@ public class ProductEditActivity extends AppCompatActivity {
         btn_saveProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(validar_datos().equals("ok")){
+                if(validar_datos().equals("")){
                     postProductsData();
                 }else {
-                    Toast.makeText(getBaseContext(),validar_datos(),Toast.LENGTH_SHORT).show();
+                    Utils utils = new Utils();
+                    Dialog dialog = utils.getAlertCustom(ProductEditActivity.this,"danger","Error",validar_datos(),false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    dialog.show();
                 }
             }
         });
@@ -445,6 +453,8 @@ public class ProductEditActivity extends AppCompatActivity {
                                 finish();
                             }
                         });
+                    }else{
+
                     }
                     loadingDialog.dismissDialog();
                 }else {
@@ -700,35 +710,38 @@ public class ProductEditActivity extends AppCompatActivity {
         });
     }
     private String validar_datos() {
-        String message = "ok";
+        String message = "";
 
+        if (Objects.requireNonNull(tv_fileName.getText()).toString().equals("")) {
+            message += "- Debes subir foto del producto \n";
+        }
         if (Objects.requireNonNull(txt_name_product.getText()).toString().equals("")) {
-            message += "😨 Debes ingresar nombre \n";
+            message += "- Debes ingresar nombre \n";
         }
         if (Objects.requireNonNull(txt_code_product.getText()).toString().equals("")) {
-            message += "😨 Debe existir codigo barras \n";
+            message += "- Debe existir codigo barras \n";
         }
         if (Objects.requireNonNull(txt_price_product.getText()).toString().equals("")||!(Double.parseDouble(txt_price_product.getText().toString())>0)) {
-            message += "😨 Debe ingresar el precio y debe ser mayor a 0 \n";
+            message += "- Debe ingresar el precio y debe ser mayor a 0 \n";
         }
         if (Objects.requireNonNull(txt_stock_product.getText()).toString().equals("")||!(Double.parseDouble(txt_stock_product.getText().toString())>0)) {
-            message += "😨 Debe ingresar el stock y debe ser mayor a 0 \n";
+            message += "- Debe ingresar el stock y debe ser mayor a 0 \n";
         }
         if (Objects.requireNonNull(txt_saleprice_product.getText()).toString().equals("")||!(Double.parseDouble(txt_saleprice_product.getText().toString())>0)) {
-            message += "😨 Debe ingresar el stock y debe ser mayor a 0 \n";
+            message += "- Debe ingresar el stock y debe ser mayor a 0 \n";
         }
 
         if (getSp_category_product.getSelectedItem() == null || TextUtils.isEmpty(getSp_category_product.getSelectedItem().toString())) {
-            message += "😨 Debe Seleccionar categoria\n";
+            message += "- Debe Seleccionar categoria\n";
         }
         if (getSp_subcategory_product.getSelectedItem() == null || TextUtils.isEmpty(getSp_subcategory_product.getSelectedItem().toString())) {
-            message += "😨 Debe Seleccionar subcategoria\n";
+            message += "- Debe Seleccionar subcategoria\n";
         }
         if (getSp_proveedor_product.getSelectedItem() == null || TextUtils.isEmpty(getSp_proveedor_product.getSelectedItem().toString())) {
-            message += "😨 Debe Seleccionar proveedor o no existen proveedores registrados\n";
+            message += "- Debe Seleccionar proveedor o no existen proveedores registrados\n";
         }
         if (getSp_Type_product.getSelectedItem() == null || TextUtils.isEmpty(getSp_Type_product.getSelectedItem().toString())) {
-            message += "😨 Debe Seleccionar el tipo KG o UN\n";
+            message += "- Debe Seleccionar el tipo KG o UN\n";
         }
 
 

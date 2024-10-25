@@ -104,10 +104,10 @@ public class CreateSaleFragment extends Fragment {
         btn_vender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(validar_datos().equals("ok")){
+                if(validar_datos().equals("")){
                     createSale();
                 }else{
-                    Dialog dialog = utils.getAlertCustom(getContext(),"danger","Error"," No se puede generar la venta sin ningun producto agregado",false);
+                    Dialog dialog = utils.getAlertCustom(getContext(),"danger","Error",validar_datos(),false);
                     dialog.show();
                 }
 
@@ -232,7 +232,7 @@ public class CreateSaleFragment extends Fragment {
                                 Toast.makeText(getContext(),"Agregado",Toast.LENGTH_SHORT).show();
                                 saleTemporalList.addProduct(product,1.0);
                                 tv_subTotal.setText("S/. "+utils.formatDecimal(saleTemporalList.getTotalPrice()));
-                                utils.getAlertDialog(getContext(),"Producto","Se agrego "+product.getName()+"a la lista","verde");
+                               // utils.getAlertDialog(getContext(),"Producto","Se agrego "+product.getName()+"a la lista","verde");
                                 loadData();
                             }
                         });
@@ -292,7 +292,7 @@ public class CreateSaleFragment extends Fragment {
             public void onResponse(Call<SaleResponse> call, Response<SaleResponse> response) {
                 Log.e("error", response.toString());
                 if (response.isSuccessful()) {
-                    Toast.makeText(getContext(),"Creado",Toast.LENGTH_SHORT).show();
+
                     saleTemporalList.cleanAll();
                     loadData();
                     SaleResponse saleResponse = response.body();
@@ -334,10 +334,25 @@ public class CreateSaleFragment extends Fragment {
     }
 
     private String validar_datos() {
-        String message = "ok";
+        String message = "";
 
         if (arrayListProduct.size()<1) {
-            message += "😨 Debe agregar al menos un producto a la lista \n";
+            message += "- Debe agregar al menos un producto a la lista \n";
+        }
+        for(ProductResponse item: arrayListProduct){
+            if(listAdapter.getMapEditAmount().get(item.getCode()).getText().toString()==""){
+                message += "- La cantidad del producto no debe estar vacio \n";
+            }
+            else if(item.isWeight()){
+                if(Double.parseDouble(listAdapter.getMapEditAmount().get(item.getCode()).getText().toString())<1){
+                    message += "- Se debe ingresar una cantidad mayor a 0 \n";
+                }
+            }else{
+                if(Integer.parseInt(listAdapter.getMapEditAmount().get(item.getCode()).getText().toString())<1){
+                    message += "- Se debe ingresar una cantidad mayor a 0 \n";
+                }
+            }
+
         }
         return message;
     }

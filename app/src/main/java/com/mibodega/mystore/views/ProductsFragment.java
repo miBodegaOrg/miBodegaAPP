@@ -21,6 +21,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.card.MaterialCardView;
@@ -67,6 +68,7 @@ public class ProductsFragment extends Fragment {
     private MaterialCardView viewCategory;
     private ImageButton btn_toggleCategory;
     private int NUMBER_SIZE_PAGINATION=20;
+    private TextView tv_messageNotFound;
 
     private TextInputEditText edt_searchText;
 
@@ -87,6 +89,7 @@ public class ProductsFragment extends Fragment {
         btn_toggleCategory = root.findViewById(R.id.Imgb_toggleCategory_product);
         linearLayoutSubcategoryViews = root.findViewById(R.id.Ly_subcategoriesContainer);
         edt_searchText = root.findViewById(R.id.Edt_searchClient_product);
+        tv_messageNotFound = root.findViewById(R.id.Tv_mensajeNotFoundProduct_product);
 
         btnMoveToAddProduct.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -279,6 +282,11 @@ public class ProductsFragment extends Fragment {
                 if(response.isSuccessful()){
                     pagesProductResponse = response.body();
                     if(pagesProductResponse!=null){
+                        if(!pagesProductResponse.getDocs().isEmpty()){
+                            tv_messageNotFound.setVisibility(View.GONE);
+                        }else{
+                            tv_messageNotFound.setVisibility(View.VISIBLE);
+                        }
                         System.out.println(pagesProductResponse.getDocs().size());
                         productlist  = (ArrayList<ProductResponse>) pagesProductResponse.getDocs();
                         recyclerView.removeAllViews();
@@ -301,9 +309,14 @@ public class ProductsFragment extends Fragment {
 
                         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
                         recyclerView.setAdapter(listAdapter);
-                    }
-                    System.out.println("successfull request");
 
+
+                    }else{
+                        tv_messageNotFound.setVisibility(View.VISIBLE);
+                    }
+
+                }else{
+                    tv_messageNotFound.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -311,6 +324,7 @@ public class ProductsFragment extends Fragment {
             @Override
             public void onFailure(@NonNull Call<PagesProductResponse> call, @NonNull Throwable t) {
                 System.out.println("errror "+t.getMessage());
+                tv_messageNotFound.setVisibility(View.VISIBLE);
             }
         });
     }
