@@ -53,7 +53,7 @@ public class SignUpShopActivity extends AppCompatActivity {
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Objects.equals(valiteFields(), "ok")){
+                if(Objects.equals(valiteFields(), "")){
                     createShop();
                 }else{
                     Utils utils = new Utils();
@@ -75,42 +75,42 @@ public class SignUpShopActivity extends AppCompatActivity {
         });
     }
     public String valiteFields(){
-        String message = "ok";
+        String message = "";
         if(edt_nameSignUp_shop.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar nombre \n";
+            message += "- Debe ingresar nombre \n";
         }
         if(edt_lastnameSignUp_shop.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar apellidos \n";
+            message += "- Debe ingresar apellidos \n";
         }
         if(edt_addressSignUp_shop.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar dirección \n";
+            message += "- Debe ingresar dirección \n";
         }
 
         if(edt_phoneSignUp_shop.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar correo \n";
+            message += "- Debe ingresar correo \n";
         }
         if(edt_rucSignUp_shop.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar RUC \n";
+            message += "- Debe ingresar RUC \n";
         }
         if(edt_passwordSignUp_shop.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar contraseña \n";
+            message += "- Debe ingresar contraseña \n";
         }
         if(edt_phoneSignUp_shop.getText().toString().trim().length() != 0){
             int aux = edt_phoneSignUp_shop.getText().toString().length();
             if(aux != 9){
-                message += "😨 Debe ingresar un numero telefono con 9 digitos\n";
+                message += "- Debe ingresar un numero telefono con 9 digitos\n";
             }
         }
         if(edt_rucSignUp_shop.getText().toString().trim().length() != 0){
             int aux = edt_rucSignUp_shop.getText().toString().length();
             if(aux != 11&&aux!=8){
-                message += "😨 Debe ingresar un numero de ruc con minimo 8 digitos\n";
+                message += "- Debe ingresar un numero de ruc con minimo 8 digitos\n";
             }
         }
         if(edt_passwordSignUp_shop.getText().toString().trim().length() != 0){
             int aux = edt_passwordSignUp_shop.getText().toString().length();
             if(aux < 6){
-                message += "😨 Debe ingresar una contraseña minimo 6 digitos\n";
+                message += "- Debe ingresar una contraseña minimo 6 digitos\n";
             }
         }
 
@@ -158,7 +158,7 @@ public class SignUpShopActivity extends AppCompatActivity {
                                 edt_passwordSignUp_shop.setText("");
 
                         Utils utils = new Utils();
-                        Dialog dialog = utils.getAlertCustom(SignUpShopActivity.this,"successs","Exitoso","Bodeguero creado",false);
+                        Dialog dialog = utils.getAlertCustom(SignUpShopActivity.this,"success","Exitoso","Bodeguero creado",false);
                         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                             @Override
                             public void onDismiss(DialogInterface dialog) {
@@ -170,7 +170,7 @@ public class SignUpShopActivity extends AppCompatActivity {
 
                 }else{
                     Utils utils = new Utils();
-                    Dialog dialog = utils.getAlertCustom(SignUpShopActivity.this,"Danger","Error","No se registro",false);
+                    Dialog dialog = utils.getAlertCustom(SignUpShopActivity.this,"danger","Error","No se registro",false);
                     dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialog) {
