@@ -1,5 +1,7 @@
 package com.mibodega.mystore.views.chatbot;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -29,6 +31,7 @@ import com.mibodega.mystore.shared.DBfunctionsTableData;
 import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.shared.adapters.MessageAdapter;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterChat;
+import com.mibodega.mystore.views.products.ProductEditActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -143,6 +146,7 @@ public class ChatBotGlobalFragment extends Fragment {
                 if(response.isSuccessful()){
                     MessageResponseGpt responseGpt = response.body();
                     if(responseGpt!=null){
+                        pgr_loadMessage.setVisibility(View.GONE);
                         ChatMessage message = new ChatMessage(1,responseGpt.getResponse(),"assistant", utils.getDateTimeDDMMYYYYHHMMSS());
                         messageList.add(message);
                         messageAdapter.notifyItemInserted(messageList.size() - 1);
@@ -152,12 +156,18 @@ public class ChatBotGlobalFragment extends Fragment {
                     }
                     System.out.println("successfull request");
                 }else{
+                    Utils utils = new Utils();
+                    if(!utils.isConnectedToInternet(getContext())){
+                        Dialog dialog = utils.getAlertCustom(getContext(),"danger","Error","No hay conexión a internet. Por favor, conéctese a una red",false);
+                        dialog.show();
+                    }
+
                     try {
                         String errorBody = response.errorBody().string();
                         System.out.println("Error response body: " + errorBody);
                         JSONObject errorJson = new JSONObject(errorBody);
                         String errorMessage = errorJson.getString("message");
-                        Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
                         System.out.println(errorMessage);
 
                     } catch (IOException | JSONException e) {
@@ -170,6 +180,12 @@ public class ChatBotGlobalFragment extends Fragment {
             @Override
             public void onFailure(@NonNull Call<MessageResponseGpt> call, @NonNull Throwable t) {
                 System.out.println("errror "+t.getMessage());
+                if(!utils.isConnectedToInternet(getContext())){
+                    Utils utils = new Utils();
+                    Dialog dialog = utils.getAlertCustom(getContext(),"danger","Error","No hay conexión a internet. Por favor, conéctese a una red",false);
+                    dialog.show();
+                }
+                pgr_loadMessage.setVisibility(View.GONE);
             }
         });
     }

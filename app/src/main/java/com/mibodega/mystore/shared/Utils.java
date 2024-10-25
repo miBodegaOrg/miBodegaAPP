@@ -20,6 +20,8 @@ import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
 import android.os.Build;
 import android.text.Html;
 import android.view.Display;
@@ -306,6 +308,31 @@ public class Utils {
         SimpleDateFormat formatoFechaTiempo = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         String fechaTiempoFormateada = formatoFechaTiempo.format(fechaActual);
         return fechaTiempoFormateada;
+    }
+
+    public boolean isConnectedToInternet(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (connectivityManager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                NetworkCapabilities networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
+                if (networkCapabilities != null) {
+                    if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                        return true;
+                    }
+                }
+            } else {
+                // Para versiones anteriores a Android Marshmallow
+                android.net.NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+                if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
+                    return true;
+                }
+            }
+        }
+
+        // Si no hay conexión, muestra un mensaje y retorna falso
+        return false;
     }
 
 }

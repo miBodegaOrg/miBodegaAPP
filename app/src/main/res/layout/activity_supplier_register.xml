@@ -195,7 +195,7 @@ tools:context=".views.supplier.SupplierRegisterActivity">
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Registar"
+                    android:text="Registrar"
                     app:icon="@drawable/baseline_save_24" />
             </LinearLayout>
         </LinearLayout>
