@@ -32,6 +32,7 @@ import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSearch;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSupplier;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
+import com.mibodega.mystore.views.products.ProductEditActivity;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -118,10 +119,17 @@ public class SupplierRegisterActivity extends MainActivity {
             @Override
             public void onClick(View view) {
 
-                if(Objects.equals(valiteFields(), "ok")){
+                if(Objects.equals(valiteFields(), "")){
                     registerSupplier();
                 }else{
-                    Toast.makeText(getBaseContext(),valiteFields(),Toast.LENGTH_SHORT).show();
+                    Utils utils = new Utils();
+                    Dialog dialog = utils.getAlertCustom(SupplierRegisterActivity.this,"danger","Error",valiteFields(),false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    dialog.show();
                 }
 
             }
@@ -141,10 +149,17 @@ public class SupplierRegisterActivity extends MainActivity {
         btn_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Objects.equals(valiteFields(), "ok")){
+                if(Objects.equals(valiteFields(), "")){
                     updateSupplier(ruc);
                 }else{
-                    Toast.makeText(getBaseContext(),valiteFields(),Toast.LENGTH_SHORT).show();
+                    Utils utils = new Utils();
+                    Dialog dialog = utils.getAlertCustom(SupplierRegisterActivity.this,"danger","Error",valiteFields(),false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    dialog.show();;
                 }
 
             }
@@ -481,23 +496,23 @@ public class SupplierRegisterActivity extends MainActivity {
     }
 
     public String valiteFields(){
-        String message = "ok";
+        String message = "";
         if(edt_name.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar nombre \n";
+            message += "- Debe ingresar nombre del proveedor \n";
         }
         if(edt_ruc.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar apellidos \n";
+            message += "- Debe ingresar el ruc \n";
         }
         if(edt_phone.getText().toString().trim().length() != 0){
             int aux = edt_phone.getText().toString().length();
             if(aux != 9){
-                message += "😨 Debe ingresar un numero telefono con 9 digitos\n";
+                message += "- Debe ingresar un numero telefono con 9 digitos\n";
             }
         }
         if(edt_ruc.getText().toString().trim().length() != 0){
             int aux = edt_ruc.getText().toString().length();
             if(aux != 11){
-                message += "😨 Debe ingresar un ruc con 11 digitos\n";
+                message += "- Debe ingresar un ruc con 11 digitos\n";
             }
         }
 
