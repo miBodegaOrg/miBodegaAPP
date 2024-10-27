@@ -1,6 +1,7 @@
 package com.mibodega.mystore.views;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -17,6 +18,7 @@ import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.SignInResponse;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.DBfunctionsTableData;
+import com.mibodega.mystore.views.user.EditProfileActivity;
 
 
 public class ProfileFragment extends Fragment {
@@ -59,7 +61,8 @@ public class ProfileFragment extends Fragment {
         btn_editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(getContext(), EditProfileActivity.class);
+                startActivity(intent);
             }
         });
         btn_signOut.setOnClickListener(new View.OnClickListener() {

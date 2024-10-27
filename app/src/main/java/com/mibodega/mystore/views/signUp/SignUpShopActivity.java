@@ -83,11 +83,11 @@ public class SignUpShopActivity extends AppCompatActivity {
             message += "- Debe ingresar apellidos \n";
         }
         if(edt_addressSignUp_shop.getText().toString().trim().length() == 0){
-            message += "- Debe ingresar dirección \n";
+            message += "- Debe ingresar correo \n";
         }
 
         if(edt_phoneSignUp_shop.getText().toString().trim().length() == 0){
-            message += "- Debe ingresar correo \n";
+            message += "- Debe ingresar telefono \n";
         }
         if(edt_rucSignUp_shop.getText().toString().trim().length() == 0){
             message += "- Debe ingresar RUC \n";
@@ -103,8 +103,8 @@ public class SignUpShopActivity extends AppCompatActivity {
         }
         if(edt_rucSignUp_shop.getText().toString().trim().length() != 0){
             int aux = edt_rucSignUp_shop.getText().toString().length();
-            if(aux != 11&&aux!=8){
-                message += "- Debe ingresar un numero de ruc con minimo 8 digitos\n";
+            if(aux != 11){
+                message += "- Debe ingresar un numero de ruc con minimo 11 digitos\n";
             }
         }
         if(edt_passwordSignUp_shop.getText().toString().trim().length() != 0){

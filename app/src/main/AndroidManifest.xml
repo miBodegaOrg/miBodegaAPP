@@ -36,6 +36,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyStore"
         tools:targetApi="31">
+        <activity
+            android:name=".views.user.EditProfileActivity"
+            android:exported="false" />
+
         <service
             android:name=".firebase.MyFirebaseMessagingService"
             android:exported="false"
@@ -44,6 +48,7 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <activity
             android:name=".views.selling.PurchaseFormActivity"
             android:exported="false" />
@@ -167,6 +172,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
