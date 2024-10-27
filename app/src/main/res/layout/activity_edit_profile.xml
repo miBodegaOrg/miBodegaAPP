@@ -96,12 +96,14 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:endIconMode="password_toggle">
+                    >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/Edt_passwordProfile_profile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:enabled="false"
                         android:hint="Contraseña" />
                 </com.google.android.material.textfield.TextInputLayout>
 

@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +37,7 @@ import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSale;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSearch;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
+import com.mibodega.mystore.views.products.ProductEditActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -91,7 +94,7 @@ public class PromotionActivity extends MainActivity {
         //setContentView(R.layout.activity_promotion);
         setContentLayout(R.layout.activity_promotion);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Nueva Promocion");
+            getSupportActionBar().setTitle("Nueva Oferta");
         }
         searchProduct = findViewById(R.id.Sv_searchProduct_promotion);
         rv_recyclerSearchProductList = findViewById(R.id.Rv_listSearchProduct_promotion);
@@ -164,10 +167,17 @@ public class PromotionActivity extends MainActivity {
         btn_vender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Objects.equals(valiteFields(), "ok")){
+                if(Objects.equals(valiteFields(), "")){
                     createPromotion();
                 }else{
-                    Toast.makeText(getBaseContext(),valiteFields(),Toast.LENGTH_SHORT).show();
+                    Utils utils = new Utils();
+                    Dialog dialog = utils.getAlertCustom(PromotionActivity.this,"danger","Error",valiteFields(),false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    dialog.show();
                 }
             }
         });
@@ -361,29 +371,49 @@ public class PromotionActivity extends MainActivity {
                     edt_name.setText("");
                     edt_buy.setText("");
                     edt_receiv.setText("");
-
                     loadData();
-                    Toast.makeText(getBaseContext(),"PROMOCION CREADA",Toast.LENGTH_SHORT).show();
 
+                    Utils utils = new Utils();
+                    Dialog dialog = utils.getAlertCustom(PromotionActivity.this,"success","Exitoso","Oferta creada correctamente",false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    dialog.show();
                 } else {
                     try {
                         String errorBody = response.errorBody().string();
                         System.out.println("Error response body: " + errorBody);
                         JSONObject errorJson = new JSONObject(errorBody);
                         String errorMessage = errorJson.getString("message");
-                        Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_SHORT).show();
                         System.out.println(errorMessage);
 
                     } catch (IOException | JSONException e) {
                         e.printStackTrace();
                     }
-                    Toast.makeText(getBaseContext(),"no Creado",Toast.LENGTH_SHORT).show();
+                    Utils utils = new Utils();
+                    Dialog dialog = utils.getAlertCustom(PromotionActivity.this,"danger","Error","No se pudo crear",false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    dialog.show();
                 }
             }
 
             @Override
             public void onFailure(Call<PromotionResponse> call, Throwable t) {
-
+                Utils utils = new Utils();
+                Dialog dialog = utils.getAlertCustom(PromotionActivity.this,"danger","Error","No se pudo crear",false);
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                    }
+                });
+                dialog.show();
             }
         });
     }
@@ -399,21 +429,30 @@ public class PromotionActivity extends MainActivity {
         barcodeLauncher.launch(options);
     }
     public String valiteFields(){
-        String message = "ok";
+        String message = "";
         if(edt_dateInit.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar fecha inicial \n";
+            message += "- Debe ingresar fecha inicial \n";
         }
         if(edt_dateEnd.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar fecha final \n";
+            message += "- Debe ingresar fecha final \n";
         }
-        if(edt_buy.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar cantidad pago \n";
+        if(edt_buy.getText().toString().trim().length() == 0||!(Integer.valueOf(edt_buy.getText().toString())>0)){
+            message += "- Debe ingresar cantidad pago mayor a 0\n";
         }
-        if(edt_receiv.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar cantidad recibir \n";
+        if(edt_receiv.getText().toString().trim().length() == 0||!(Integer.valueOf(edt_receiv.getText().toString())>0)){
+            message += "- Debe ingresar cantidad recibir mayor a 0 \n";
         }
 
 
+        if(!Objects.requireNonNull(edt_buy.getText()).toString().equals("") &&
+                (Integer.parseInt(edt_buy.getText().toString())>0) &&
+                !Objects.requireNonNull(edt_receiv.getText()).toString().equals("") &&
+                (Integer.parseInt(edt_receiv.getText().toString())>0)
+        ){
+            if(Integer.parseInt(edt_buy.getText().toString())>Integer.parseInt(edt_receiv.getText().toString())){
+                message += "- El campo 'paga por' debe ser menor al campo 'recibe'\n";
+            }
+        }
 
         return message;
 

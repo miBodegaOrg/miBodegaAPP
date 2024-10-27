@@ -52,7 +52,7 @@ public class OffersActivity extends MainActivity {
         //setContentView(R.layout.activity_offers);
         setContentLayout(R.layout.activity_offers);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Descuentos y Promociones");
+            getSupportActionBar().setTitle("Descuentos y Ofertas");
         }
         btn_newDiscount = findViewById(R.id.Btn_newDiscount_discount);
         btn_newPromotion = findViewById(R.id.Btn_newPromotion_promotion);

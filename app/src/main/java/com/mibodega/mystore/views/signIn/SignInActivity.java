@@ -118,7 +118,7 @@ public class SignInActivity extends AppCompatActivity {
 
                 }else{
                     loadingDialog.dismissDialog();
-                    Dialog dialog = utils.getAlertCustom(SignInActivity.this, "danger", "Alerta", "Usuario o Contraseña incorrecta", false);
+                    Dialog dialog = utils.getAlertCustom(SignInActivity.this, "danger", "Alerta", "Alerta  - DNI / RUC o Contraseña incorrecta", false);
                     dialog.show();
                     System.out.println("error");
                 }
