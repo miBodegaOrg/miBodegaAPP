@@ -132,12 +132,12 @@ public class ManageEmployerActivity extends MainActivity {
             btn_update.setVisibility(View.VISIBLE);
             btn_delete.setVisibility(View.VISIBLE);
             btn_create.setVisibility(View.GONE);
-            edt_name.setEnabled(false);
-            edt_lastname.setEnabled(false);
-            edt_email.setEnabled(false);
-            edt_dni.setEnabled(false);
-            edt_phone.setEnabled(false);
-            edt_password.setEnabled(false);
+            //edt_name.setEnabled(false);
+            //edt_lastname.setEnabled(false);
+            //edt_email.setEnabled(false);
+            //edt_dni.setEnabled(false);
+            //edt_phone.setEnabled(false);
+            //edt_password.setEnabled(false);
             loadEmployee(id_employee);
 
         }

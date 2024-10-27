@@ -194,6 +194,7 @@ public class MainNavigationActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
     private void showDialog() {
+        /*
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Bienvenido");
         builder.setMessage("El Chabot ya conoce todos datos de tu bodega hasta este momento. Carga una vez cada día.");
@@ -203,7 +204,7 @@ public class MainNavigationActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-        builder.create().show();
+        builder.create().show();*/
     }
 
     public void loadCreateChat(){
