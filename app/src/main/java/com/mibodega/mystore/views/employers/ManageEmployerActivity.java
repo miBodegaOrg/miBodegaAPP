@@ -149,7 +149,7 @@ public class ManageEmployerActivity extends MainActivity {
             //edt_email.setEnabled(false);
             //edt_dni.setEnabled(false);
             //edt_phone.setEnabled(false);
-            //edt_password.setEnabled(false);
+            edt_password.setText("");
             loadEmployee(id_employee);
 
         }
@@ -192,7 +192,19 @@ public class ManageEmployerActivity extends MainActivity {
         btn_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateEmployee(id_employee);
+                if(Objects.equals(valiteFieldsupdate(), "")){
+                    updateEmployee(id_employee);
+                }else{
+                    Dialog dialog = utils.getAlertCustom(ManageEmployerActivity.this,"danger","Error",valiteFieldsupdate(),false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+
+                        }
+                    });
+                    dialog.show();
+                }
+
             }
         });
 
@@ -281,8 +293,8 @@ public class ManageEmployerActivity extends MainActivity {
                             CheckBox checkBox = mapEsPermisses.get(item);
                             checkBox.setChecked(true);
                         }
-                        Toast.makeText(getBaseContext(),"EMPLEADO ACTUALIZADO",Toast.LENGTH_SHORT).show();
-                        System.out.println("successfull request");
+                        Dialog dialog = utils.getAlertCustom(ManageEmployerActivity.this, "success", "Exitoso", "El empleado ha sido editado correctamente", false);
+                        dialog.show();
                     }
                 }else{
                     try {
@@ -296,6 +308,8 @@ public class ManageEmployerActivity extends MainActivity {
                     } catch (IOException | JSONException e) {
                         e.printStackTrace();
                     }
+                    Dialog dialog = utils.getAlertCustom(ManageEmployerActivity.this, "danger", "Error", "No se actualizo", false);
+                    dialog.show();
                     //manejar el error de dni que ya existe,
                     //Toast.makeText(getBaseContext(),"Mensaje: DNI ya fue registrado, usa ono distinto",Toast.LENGTH_SHORT).show();
 
@@ -477,6 +491,50 @@ public class ManageEmployerActivity extends MainActivity {
         if(edt_password.getText().toString().trim().length() == 0){
             message += "- Debe ingresar contraseña \n";
         }
+        if(edt_phone.getText().toString().trim().length() != 0){
+            int aux = edt_phone.getText().toString().length();
+            if(aux != 9){
+                message += "- Debe ingresar un numero telefono con 9 digitos\n";
+            }
+        }
+        if(edt_dni.getText().toString().trim().length() != 0){
+            int aux = edt_dni.getText().toString().length();
+            if(aux != 8){
+                message += "- Debe ingresar un numero telefono con 8 digitos\n";
+            }
+        }
+        if(edt_password.getText().toString().trim().length() != 0){
+            int aux = edt_password.getText().toString().length();
+            if(aux <6){
+                message += "- Debe ingresar una contraseña con 6 digitos\n";
+            }
+        }
+
+
+        return message;
+
+    }
+    public String valiteFieldsupdate(){
+        String message = "";
+        if(edt_name.getText().toString().trim().length() == 0){
+            message += "- Debe ingresar nombre \n";
+        }
+        if(edt_lastname.getText().toString().trim().length() == 0){
+            message += "- Debe ingresar apellidos \n";
+        }
+        if(curremtPermises.size()< 1){
+            message += "- Debe seleccionar al menos un permiso \n";
+        }
+        if(edt_email.getText().toString().trim().length() == 0){
+            message += "- Debe ingresar correo \n";
+        }
+        if(edt_dni.getText().toString().trim().length() == 0){
+            message += "- Debe ingresar DNI \n";
+        }
+        if(edt_phone.getText().toString().trim().length() == 0){
+            message += "- Debe ingresar telefono \n";
+        }
+
         if(edt_phone.getText().toString().trim().length() != 0){
             int aux = edt_phone.getText().toString().length();
             if(aux != 9){
