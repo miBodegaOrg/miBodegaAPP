@@ -49,6 +49,7 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicReference;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -66,6 +67,8 @@ public class PromotionActivity extends MainActivity {
     private Button btn_vender;
     private Config config =  new Config();
     private Utils utils = new Utils();
+    private String startDateValue="";
+    private String endDateValue="";
 
     private SaleTemporalList saleTemporalList =  new SaleTemporalList();
     private ArrayList<ProductResponse> arrayListProduct = new ArrayList<>();
@@ -147,13 +150,16 @@ public class PromotionActivity extends MainActivity {
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 showDateTimePicker(edt_dateInit,startCalendar);
+
             }
         });
         btn_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDateTimePicker(edt_dateEnd,endCalendar);
+                showEndDateTimePicker(edt_dateEnd,endCalendar);
+
             }
         });
 
@@ -317,6 +323,7 @@ public class PromotionActivity extends MainActivity {
         });
     }
 
+
     private void showDateTimePicker(TextInputEditText editText, Calendar calendar) {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
@@ -331,11 +338,42 @@ public class PromotionActivity extends MainActivity {
                 calendar.set(Calendar.MINUTE, minute1);
 
                 // Configura el formato de fecha y la zona horaria de Lima
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy h:mm a", Locale.getDefault());
+                SimpleDateFormat dateFormatVisual = new SimpleDateFormat("dd-MM-yyyy h:mm a", Locale.getDefault());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
                 dateFormat.setTimeZone(TimeZone.getTimeZone("America/Lima"));
 
                 String formattedDateTime = dateFormat.format(calendar.getTime());
-                editText.setText(formattedDateTime);
+                String formatVisual = dateFormatVisual.format(calendar.getTime());
+                startDateValue = formattedDateTime;  // Asigna el valor al AtomicReference
+                editText.setText(formatVisual);
+            }, hour, minute, false); // Usa false para el formato de 12 horas (am/pm)
+            timePickerDialog.show();
+        }, year, month, day);
+
+        datePickerDialog.show();
+    }
+    private void showEndDateTimePicker(TextInputEditText editText, Calendar calendar) {
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, year1, monthOfYear, dayOfMonth) -> {
+            calendar.set(year1, monthOfYear, dayOfMonth);
+            TimePickerDialog timePickerDialog = new TimePickerDialog(this, (view1, hourOfDay, minute1) -> {
+                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                calendar.set(Calendar.MINUTE, minute1);
+
+                // Configura el formato de fecha y la zona horaria de Lima
+                SimpleDateFormat dateFormatVisual = new SimpleDateFormat("dd-MM-yyyy h:mm a", Locale.getDefault());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+                dateFormat.setTimeZone(TimeZone.getTimeZone("America/Lima"));
+
+                String formattedDateTime = dateFormat.format(calendar.getTime());
+                String formatVisual = dateFormatVisual.format(calendar.getTime());
+                endDateValue = formattedDateTime;  // Asigna el valor al AtomicReference
+                editText.setText(formatVisual);
             }, hour, minute, false); // Usa false para el formato de 12 horas (am/pm)
             timePickerDialog.show();
         }, year, month, day);
@@ -343,13 +381,14 @@ public class PromotionActivity extends MainActivity {
         datePickerDialog.show();
     }
 
+
     public void createPromotion(){
         ArrayList<String> arraux = new ArrayList<>();
         for (ProductResponse product : saleTemporalList.getArrayList()){
             arraux.add(product.get_id());
         }
-        String startDate = edt_dateInit.getText().toString();
-        String endDate = edt_dateEnd.getText().toString();
+        String startDate = startDateValue;
+        String endDate = endDateValue;
         int pay = Integer.valueOf(edt_buy.getText().toString());
         int buy = Integer.valueOf(edt_receiv.getText().toString());
 

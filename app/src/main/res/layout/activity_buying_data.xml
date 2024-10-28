@@ -1,45 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:id="@+id/drawer_layout"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="vertical"
-tools:context=".views.dashboards.BuyingDataActivity">
-
-<!-- Contenido principal -->
-<FrameLayout
-    android:id="@+id/content_frame"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <!-- Tu contenido principal aquí -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:ignore="UselessParent">
-
-        <TextView
-            android:id="@+id/textView52"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="COMPRAS"
-            android:textAlignment="center"
-            android:textSize="24sp"
-            android:visibility="gone" />
-    </LinearLayout>
-
-</FrameLayout>
-
-<!-- Chatbot -->
-<FrameLayout
-    android:id="@+id/chat_fragment_container"
-    android:layout_width="370dp"
     android:layout_height="match_parent"
-    android:layout_gravity="end"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    android:backgroundTint="@color/md_theme_light_background"
+    android:orientation="vertical"
+    tools:context=".views.dashboards.BuyingDataActivity">
+
+    <!-- Contenido principal -->
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Tu contenido principal aquí -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:ignore="UselessParent">
+
+            <TextView
+                android:id="@+id/textView52"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="COMPRAS"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <!-- Chatbot -->
+    <FrameLayout
+        android:id="@+id/chat_fragment_container"
+        android:layout_width="370dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
 

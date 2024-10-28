@@ -48,7 +48,8 @@ tools:context=".views.offers.DiscountsActivity">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="8dp">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/Rv_listSearchProduct_discount"
@@ -195,8 +196,8 @@ tools:context=".views.offers.DiscountsActivity">
                             android:id="@+id/Edt_discount_discount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="number"
-                            android:hint="Descuento %" />
+                            android:hint="Descuento %"
+                            android:inputType="number" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout

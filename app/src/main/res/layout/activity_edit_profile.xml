@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="@color/md_theme_light_background"
     android:orientation="vertical"
     tools:context=".views.user.EditProfileActivity">
 
@@ -95,16 +96,15 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
+                    android:layout_height="wrap_content">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/Edt_passwordProfile_profile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textPassword"
                         android:enabled="false"
-                        android:hint="Contraseña" />
+                        android:hint="Contraseña"
+                        android:inputType="textPassword" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>

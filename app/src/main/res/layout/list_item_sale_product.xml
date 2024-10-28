@@ -26,6 +26,7 @@
                 android:paddingLeft="5dp"
                 android:text="PRODUCTO NOMBRE 12323"
                 android:textAlignment="viewStart"
+                android:textColor="@color/md_theme_light_shadow"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -123,7 +124,7 @@
                         android:layout_weight="1"
                         android:text="S/100.000"
                         android:textAlignment="viewEnd"
-                        android:textColor="@color/md_theme_light_inversePrimary"
+                        android:textColor="@color/md_theme_light_onPrimaryContainer"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 

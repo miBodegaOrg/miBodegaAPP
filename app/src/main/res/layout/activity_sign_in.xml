@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="@color/md_theme_light_background"
     tools:context=".views.signIn.SignInActivity">
 
     <LinearLayout
@@ -85,6 +86,7 @@
                     android:id="@+id/TextInputLayout_user"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="@color/md_theme_light_onPrimaryContainer"
                     android:hint="Ingrese DNI / RUC"
                     app:endIconMode="clear_text">
 
@@ -106,6 +108,7 @@
                     android:id="@+id/TextInputLayout_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="@color/md_theme_light_onPrimaryContainer"
                     android:hint="Ingrese Contraseña"
                     app:endIconMode="password_toggle">
 
@@ -131,6 +134,7 @@
                 android:layout_marginTop="17dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="19dp"
+                android:backgroundTint="@color/md_theme_light_onPrimaryContainer"
                 android:text="Iniciar sesion"
                 android:textAllCaps="true"
                 android:textSize="16dp"
