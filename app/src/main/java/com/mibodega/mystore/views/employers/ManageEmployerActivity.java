@@ -591,8 +591,12 @@ public class ManageEmployerActivity extends MainActivity {
             public void onClick(View v) {
                 if(editText.getText().toString().equals("ELIMINAR")){
                     deleteEmployee(id_employee);
+                    dialog.dismiss();
+                }else{
+                    Dialog dialog = utils.getAlertCustom(ManageEmployerActivity.this,"danger","Error","Ingresa correctamente el mensaje de confirmación",false);
+                    dialog.show();
                 }
-                dialog.dismiss();
+
             }
         });
         Button btn_cancel = dialog.findViewById(R.id.btn_cancel);
