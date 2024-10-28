@@ -69,7 +69,7 @@
                     android:layout_height="80dp"
                     android:layout_weight="2"
                     android:background="@drawable/backgroun_custom_rectangle"
-                    android:backgroundTint="@color/md_theme_dark_inverseSurface"
+                    android:backgroundTint="@color/md_theme_light_background"
                     android:padding="10dp"
                     app:srcCompat="@drawable/harina" />
 
@@ -93,7 +93,7 @@
                             android:layout_weight="1"
                             android:text="Stock: 50"
                             android:textAlignment="viewStart"
-                            android:textColor="@color/md_theme_dark_shadow" />
+                            android:textColor="@color/md_theme_light_shadow" />
 
                         <TextView
                             android:id="@+id/Tv_productState_product"
@@ -101,7 +101,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Estado: ACTIVO"
-                            android:textColor="@color/md_theme_dark_shadow" />
+                            android:textColor="@color/md_theme_light_shadow" />
 
                     </LinearLayout>
 
@@ -185,9 +185,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.3"
-                    android:text="S/.  270.00"
+                    android:text="S/ 270.00"
                     android:textAlignment="viewEnd"
-                    android:textColor="@color/md_theme_dark_errorContainer"
+                    android:textColor="@color/md_theme_light_onPrimaryContainer"
                     android:textSize="22sp"
                     android:textStyle="bold" />
             </LinearLayout>

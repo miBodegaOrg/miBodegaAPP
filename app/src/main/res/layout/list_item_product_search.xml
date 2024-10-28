@@ -43,7 +43,7 @@
                         android:paddingLeft="5dp"
                         android:text="LECHE GLORIA 1L"
                         android:textAlignment="viewStart"
-                        android:textColor="@color/md_theme_dark_inversePrimary"
+                        android:textColor="@color/md_theme_light_onPrimaryContainer"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -88,7 +88,7 @@
                             android:layout_weight="1.2"
                             android:text="S/ 10000"
                             android:textAlignment="viewEnd"
-                            android:textColor="@color/md_theme_dark_errorContainer"
+                            android:textColor="@color/md_theme_light_errorContainer"
                             android:textSize="16sp"
                             android:textStyle="bold" />
                     </LinearLayout>

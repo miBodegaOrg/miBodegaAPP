@@ -48,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.TimeZone;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -329,12 +330,16 @@ public class PromotionActivity extends MainActivity {
                 calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 calendar.set(Calendar.MINUTE, minute1);
 
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+                // Configura el formato de fecha y la zona horaria de Lima
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy h:mm a", Locale.getDefault());
+                dateFormat.setTimeZone(TimeZone.getTimeZone("America/Lima"));
+
                 String formattedDateTime = dateFormat.format(calendar.getTime());
                 editText.setText(formattedDateTime);
-            }, hour, minute, true);
+            }, hour, minute, false); // Usa false para el formato de 12 horas (am/pm)
             timePickerDialog.show();
         }, year, month, day);
+
         datePickerDialog.show();
     }
 

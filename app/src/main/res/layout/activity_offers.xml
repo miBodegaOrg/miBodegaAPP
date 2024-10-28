@@ -71,7 +71,7 @@ tools:context=".views.offers.OffersActivity">
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/borde"
-                    android:backgroundTint="@color/md_theme_dark_inversePrimary"
+                    android:backgroundTint="@color/md_theme_light_onPrimaryContainer"
                     android:orientation="vertical"
                     android:padding="10dp">
 
@@ -94,7 +94,7 @@ tools:context=".views.offers.OffersActivity">
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/borde"
-                    android:backgroundTint="@color/md_theme_dark_inversePrimary"
+                    android:backgroundTint="@color/md_theme_light_onPrimaryContainer"
                     android:orientation="vertical"
                     android:padding="10dp">
 

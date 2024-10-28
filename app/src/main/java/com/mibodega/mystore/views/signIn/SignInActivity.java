@@ -84,12 +84,12 @@ public class SignInActivity extends AppCompatActivity {
                 .load(R.drawable.logo_size2)
                 .apply(RequestOptions.circleCropTransform())
                 .into(imageView);
-
+/*
         if(!Objects.equals(dBfunctionsTableData.get_user_save(getBaseContext()), "")){
             System.out.println("remember "+dBfunctionsTableData.get_user_save(getBaseContext()));
             postsigninToken(dBfunctionsTableData.get_user_save(getBaseContext()));
         }
-
+*/
 
     }
     private void postData(String user, String pass) {

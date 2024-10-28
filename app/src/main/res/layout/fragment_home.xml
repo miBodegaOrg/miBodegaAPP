@@ -38,7 +38,7 @@
                         android:layout_weight="1"
                         android:text="Mi bodega Hoy"
                         android:textAlignment="center"
-                        android:textColor="@color/md_theme_dark_inversePrimary"
+                        android:textColor="@color/md_theme_light_onPrimaryContainer"
                         android:textSize="34sp"
                         android:textStyle="bold" />
 
@@ -48,7 +48,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="15dp"
                         android:background="@drawable/background_custom_rectangle_shadow"
-                        android:backgroundTint="@color/md_theme_dark_inversePrimary"
+                        android:backgroundTint="@color/md_theme_light_onPrimaryContainer"
                         android:orientation="horizontal"
                         android:padding="10dp">
 
@@ -183,7 +183,7 @@
                                     android:contextClickable="false"
                                     android:scaleType="fitCenter"
                                     android:src="@drawable/baseline_groups_24"
-                                    app:tint="@color/md_theme_dark_inversePrimary" />
+                                    app:tint="@color/md_theme_light_onPrimaryContainer" />
 
                                 <TextView
                                     android:id="@+id/textView86"
@@ -223,7 +223,7 @@
                                     android:clickable="false"
                                     android:scaleType="fitCenter"
                                     android:src="@drawable/ic_shipment"
-                                    android:tint="@color/md_theme_dark_inversePrimary" />
+                                    android:tint="@color/md_theme_light_onPrimaryContainer" />
 
                                 <TextView
                                     android:id="@+id/textView87"
@@ -269,7 +269,7 @@
                                     android:clickable="false"
                                     android:scaleType="fitCenter"
                                     android:src="@drawable/baseline_add_shopping_cart_24"
-                                    android:tint="@color/md_theme_dark_inversePrimary" />
+                                    android:tint="@color/md_theme_light_onPrimaryContainer" />
 
                                 <TextView
                                     android:id="@+id/textView863"
@@ -307,7 +307,7 @@
                                     android:clickable="false"
                                     android:scaleType="fitCenter"
                                     android:src="@drawable/baseline_discount_24"
-                                    android:tint="@color/md_theme_dark_inversePrimary" />
+                                    app:tint="@color/md_theme_light_onPrimaryContainer" />
 
                                 <TextView
                                     android:id="@+id/textView8237"

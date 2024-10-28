@@ -43,7 +43,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/md_theme_dark_inversePrimary"
+        android:background="@color/md_theme_light_onPrimaryContainer"
         android:orientation="horizontal">
 
         <TextView

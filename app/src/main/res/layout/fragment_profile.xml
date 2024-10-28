@@ -70,7 +70,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.9"
                         android:text="Correo:"
-                        android:textColor="@color/md_theme_dark_outline"
+                        android:textColor="@color/md_theme_light_outline"
                         android:textStyle="bold" />
 
                     <TextView
@@ -109,7 +109,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.9"
                         android:text="Telefono:"
-                        android:textColor="@color/md_theme_dark_outline"
+                        android:textColor="@color/md_theme_light_outline"
                         android:textStyle="bold" />
 
                     <TextView
@@ -148,7 +148,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.9"
                         android:text="Ruc o Dni:"
-                        android:textColor="@color/md_theme_dark_outline"
+                        android:textColor="@color/md_theme_light_outline"
                         android:textStyle="bold" />
 
                     <TextView

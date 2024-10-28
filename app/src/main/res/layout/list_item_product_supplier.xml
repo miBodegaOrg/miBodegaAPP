@@ -110,7 +110,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="S/100.000"
-                        android:textColor="@color/md_theme_dark_inversePrimary" />
+                        android:textColor="@color/md_theme_light_inversePrimary" />
 
                     <TextView
                         android:id="@+id/textView58"
@@ -133,7 +133,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/backgroun_custom_rectangle"
-                    android:backgroundTint="@color/md_theme_dark_inversePrimary"
+                    android:backgroundTint="@color/md_theme_light_onPrimaryContainer"
                     android:orientation="vertical"
                     android:padding="5dp">
 
@@ -167,7 +167,7 @@
                             android:inputType="number|numberDecimal"
                             android:text="12"
                             android:textAlignment="center"
-                            android:textColor="@color/md_theme_dark_onBackground" />
+                            android:textColor="@color/md_theme_light_shadow" />
 
                     </LinearLayout>
 
@@ -203,7 +203,7 @@
                             android:inputType="number|numberDecimal"
                             android:text="12"
                             android:textAlignment="center"
-                            android:textColor="@color/md_theme_dark_onBackground" />
+                            android:textColor="@color/md_theme_light_onBackground" />
                     </LinearLayout>
 
                 </LinearLayout>

@@ -111,7 +111,7 @@
             android:layout_weight="2"
             android:text="Iniciar Sesión"
             android:textAlignment="viewStart"
-            android:textColor="@color/md_theme_dark_inversePrimary"
+            android:textColor="@color/md_theme_light_inversePrimary"
             android:textStyle="bold" />
     </LinearLayout>
 

@@ -37,7 +37,7 @@ tools:context=".views.offers.PromotionActivity">
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@drawable/backgroun_custom_rectangle"
-            android:backgroundTint="@color/md_theme_dark_onSecondaryContainer">
+            android:backgroundTint="@color/md_theme_light_inverseOnSurface">
 
         </SearchView>
 
@@ -75,7 +75,7 @@ tools:context=".views.offers.PromotionActivity">
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Ultimo codigo: "
-                        android:textColor="@color/md_theme_dark_inversePrimary" />
+                        android:textColor="@color/md_theme_light_onPrimaryContainer" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -101,7 +101,7 @@ tools:context=".views.offers.PromotionActivity">
                             android:layout_marginLeft="5dp"
                             android:layout_weight="4"
                             android:background="@drawable/backgroun_custom_rectangle"
-                            android:backgroundTint="@color/md_theme_dark_inversePrimary"
+                            android:backgroundTint="@color/md_theme_light_onPrimaryContainer"
                             android:src="@drawable/ic_barcode"
                             app:tint="@color/white" />
                     </LinearLayout>
@@ -178,12 +178,12 @@ tools:context=".views.offers.PromotionActivity">
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="Nombre de Promocion">
+                        android:hint="Nombre de Oferta">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/Edt_namePromotion_promotion"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
+                            android:layout_height="match_parent" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <LinearLayout

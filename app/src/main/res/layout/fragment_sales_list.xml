@@ -31,7 +31,7 @@
             android:gravity="center_vertical"
             android:text="08/09/2024"
             android:textAlignment="center"
-            android:textColor="@color/md_theme_dark_inversePrimary"
+            android:textColor="@color/md_theme_light_onPrimaryContainer"
             android:textStyle="bold" />
 
         <ImageButton

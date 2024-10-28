@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/backgroun_custom_rectangle"
-    android:backgroundTint="@color/md_theme_dark_inverseSurface"
+    android:backgroundTint="@color/md_theme_light_background"
     android:orientation="vertical"
     tools:context=".views.chatbot.ChatBotGlobalFragment">
 
@@ -12,7 +12,7 @@
         android:id="@+id/ly_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/md_theme_dark_inversePrimary"
+        android:background="@color/md_theme_light_onPrimaryContainer"
         android:orientation="horizontal"
         android:padding="10dp">
 
@@ -72,7 +72,8 @@
             android:minLines="1"
             android:overScrollMode="always"
             android:padding="7dp"
-            android:scrollbars="vertical" />
+            android:scrollbars="vertical"
+            android:textColor="@color/md_theme_light_scrim" />
 
         <Button
             android:id="@+id/buttonSend"

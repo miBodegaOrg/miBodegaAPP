@@ -69,7 +69,7 @@
                         android:layout_width="65dp"
                         android:layout_height="wrap_content"
                         android:text="Precio U :"
-                        android:textColor="@color/md_theme_dark_outline"
+                        android:textColor="@color/md_theme_light_outline"
                         android:textSize="12sp" />
 
                     <TextView
@@ -78,7 +78,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="S/ 10.00"
-                        android:textColor="@color/md_theme_dark_outline"
+                        android:textColor="@color/md_theme_light_outline"
                         android:textSize="14sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -94,7 +94,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.09"
                         android:text="Stock:"
-                        android:textColor="@color/md_theme_dark_outline"
+                        android:textColor="@color/md_theme_light_outline"
                         android:textSize="12sp" />
 
                     <TextView
@@ -103,7 +103,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="10"
-                        android:textColor="@color/md_theme_dark_outline"
+                        android:textColor="@color/md_theme_light_outline"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -123,7 +123,7 @@
                         android:layout_weight="1"
                         android:text="S/100.000"
                         android:textAlignment="viewEnd"
-                        android:textColor="@color/md_theme_dark_inversePrimary"
+                        android:textColor="@color/md_theme_light_inversePrimary"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -133,7 +133,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:background="@drawable/backgroun_custom_rectangle"
-                    android:backgroundTint="@color/md_theme_dark_inversePrimary"
+                    android:backgroundTint="@color/md_theme_light_onPrimaryContainer"
                     android:orientation="horizontal"
                     android:padding="5dp">
 
@@ -160,7 +160,7 @@
                         android:inputType="numberDecimal"
                         android:text="12"
                         android:textAlignment="center"
-                        android:textColor="@color/md_theme_dark_onBackground" />
+                        android:textColor="@color/md_theme_light_onBackground" />
 
                     <ImageButton
                         android:id="@+id/Imgb_editSaveProduct_sale"

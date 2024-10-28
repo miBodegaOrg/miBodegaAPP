@@ -67,7 +67,7 @@ tools:context=".views.selling.PurchaseFormActivity">
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:background="@drawable/backgroun_custom_rectangle"
-                    android:backgroundTint="@color/md_theme_dark_onSecondaryContainer"
+                    android:backgroundTint="@color/md_theme_light_onSecondaryContainer"
                     android:visibility="gone">
 
                 </SearchView>
@@ -115,7 +115,7 @@ tools:context=".views.selling.PurchaseFormActivity">
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="numberDecimal"
-                            android:hint="Costo Envio S/." />
+                            android:hint="Costo Envio S/" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 

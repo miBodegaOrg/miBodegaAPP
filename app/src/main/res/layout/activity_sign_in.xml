@@ -99,7 +99,8 @@
                     android:id="@+id/Cbx_remenberUser_signin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Recordar Usuario" />
+                    android:text="Recordar Usuario"
+                    android:visibility="gone" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/TextInputLayout_password"

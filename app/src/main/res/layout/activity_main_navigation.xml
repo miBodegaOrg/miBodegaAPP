@@ -26,7 +26,7 @@ tools:context=".MainNavigationActivity">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:background="@color/md_theme_dark_inversePrimary"
+            android:background="@color/md_theme_light_onPrimaryContainer"
             android:minHeight="?attr/actionBarSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -80,7 +80,7 @@ tools:context=".MainNavigationActivity">
             android:background="@android:color/transparent"
             app:itemIconSize="36dp"
 
-            app:itemIconTint="@color/md_theme_dark_inversePrimary"
+            app:itemIconTint="@color/md_theme_light_onPrimaryContainer"
             app:itemTextColor="@color/black"
             app:labelVisibilityMode="labeled"
             app:layout_constraintBottom_toBottomOf="parent"
