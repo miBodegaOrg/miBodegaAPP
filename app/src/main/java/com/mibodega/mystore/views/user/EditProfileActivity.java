@@ -60,7 +60,7 @@ public class EditProfileActivity extends AppCompatActivity {
         String[] nombres= obtenerPrimeraYSegundaPalabra(config.getUserData().getName());
         edt_name.setText(nombres[0]);
         edt_lastname.setText(nombres[1]);
-        edt_address.setText("jack008007z@gmail.com");
+        edt_address.setText(config.getUserData().getEmail());
         edt_phone.setText(config.getUserData().getPhone());
         edt_ruc.setText(config.getUserData().getUsername());
         edt_password.setText("123456");
@@ -86,7 +86,8 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void updateUser(){
-        RequestUpdateProfile request = new RequestUpdateProfile(edt_name.getText().toString(),edt_phone.getText().toString(),edt_address.getText().toString());
+        String name = edt_name.getText().toString();
+        RequestUpdateProfile request = new RequestUpdateProfile(name,edt_phone.getText().toString(),edt_address.getText().toString());
 
         Retrofit retrofit = new Retrofit.
                 Builder().
@@ -155,11 +156,12 @@ public class EditProfileActivity extends AppCompatActivity {
     public String valiteFields(){
         String message = "";
         if(edt_name.getText().toString().trim().length() == 0){
-            message += "- El nombre no debe estar vacio \n";
+            message += "- El nombre y apellido no debe estar vacio \n";
         }
+        /*
         if(edt_lastname.getText().toString().trim().length() == 0){
             message += "- Debe ingresar apellidos \n";
-        }
+        }*/
         if(edt_address.getText().toString().trim().length() == 0){
             message += "- Debe ingresar correo \n";
         }
@@ -170,23 +172,25 @@ public class EditProfileActivity extends AppCompatActivity {
         if(edt_ruc.getText().toString().trim().length() == 0){
             message += "- Debe ingresar RUC \n";
         }
+        /*
         if(edt_password.getText().toString().trim().length() == 0){
             message += "- Debe ingresar contraseña \n";
-        }
+        }*/
+
         if(edt_phone.getText().toString().trim().length() != 0){
             int aux = edt_phone.getText().toString().length();
             if(aux != 9){
                 message += "- Debe ingresar un numero telefono con 9 digitos\n";
             }
         }
-
+/*
         if(edt_password.getText().toString().trim().length() != 0){
             int aux = edt_password.getText().toString().length();
             if(aux < 6){
                 message += "- Debe ingresar una contraseña minimo 6 digitos\n";
             }
         }
-
+*/
 
 
         return message;
