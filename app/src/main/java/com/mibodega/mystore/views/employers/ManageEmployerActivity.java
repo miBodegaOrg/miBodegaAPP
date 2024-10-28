@@ -2,16 +2,27 @@ package com.mibodega.mystore.views.employers;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -56,6 +67,7 @@ public class ManageEmployerActivity extends MainActivity {
     private ArrayList<String> curremtPermises = new ArrayList<>();
     private LoadingDialogAdapter loadingDialog = new LoadingDialogAdapter();
     private Utils utils = new Utils();
+    private Dialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -188,7 +200,7 @@ public class ManageEmployerActivity extends MainActivity {
             @Override
             public void onClick(View view) {
                 // agregar dialog para preguntar si esta seguro de eliminar el empleado
-                deleteEmployee(id_employee);
+                dialog.show();
             }
         });
         btn_create.setOnClickListener(new View.OnClickListener() {
@@ -225,8 +237,7 @@ public class ManageEmployerActivity extends MainActivity {
             }
         });
 
-
-
+        loadDialog(ManageEmployerActivity.this);
     }
 
     public void updateEmployee(String id){
@@ -261,6 +272,10 @@ public class ManageEmployerActivity extends MainActivity {
                         edt_phone.setText(employeeResponse.getPhone());
                         edt_password.setText("");
                         curremtPermises = employeeResponse.getPermissions();
+                        for (String item: config.getArrPermises()) {
+                            CheckBox checkBox = mapEsPermisses.get(item);
+                            checkBox.setChecked(false);
+                        }
                         for (String item:
                                 employeeResponse.getPermissions()) {
                             CheckBox checkBox = mapEsPermisses.get(item);
@@ -270,8 +285,20 @@ public class ManageEmployerActivity extends MainActivity {
                         System.out.println("successfull request");
                     }
                 }else{
+                    try {
+                        String errorBody = response.errorBody().string();
+                        System.out.println("Error response body: " + errorBody);
+                        JSONObject errorJson = new JSONObject(errorBody);
+                        String errorMessage = errorJson.getString("message");
+                        Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                        System.out.println(errorMessage);
+
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
                     //manejar el error de dni que ya existe,
-                    Toast.makeText(getBaseContext(),"Mensaje: DNI ya fue registrado, usa ono distinto",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getBaseContext(),"Mensaje: DNI ya fue registrado, usa ono distinto",Toast.LENGTH_SHORT).show();
+
                 }
             }
             @Override
@@ -473,5 +500,59 @@ public class ManageEmployerActivity extends MainActivity {
         return message;
 
     }
+
+    public void loadDialog(Context context){
+        dialog = new Dialog(context);
+        dialog.setContentView(R.layout.dialog_delete_employee);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            dialog.getWindow().setBackgroundDrawableResource(R.drawable.backgroun_custom_rectangle);
+        }
+        Display display;
+        Point size = new Point();
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            display = context.getDisplay();
+            display.getSize(size);
+        } else {
+            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            if (windowManager != null) {
+                display = windowManager.getDefaultDisplay();
+                display.getSize(size);
+            }
+        }
+        int screenWidth = size.x;
+        int dialogWidth = (int) (screenWidth * 0.9);
+        int dialogHeight = ViewGroup.LayoutParams.WRAP_CONTENT;
+        dialog.getWindow().setLayout(dialogWidth, dialogHeight);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
+        TextInputEditText editText = dialog.findViewById(R.id.Edt_confirWordDelete_dialog);
+        ImageButton btn_close = dialog.findViewById(R.id.Imgb_custom_closeDialog);
+
+        Button btn_accept = dialog.findViewById(R.id.btn_accept);
+        btn_accept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(editText.getText().toString().equals("ELIMINAR")){
+                    deleteEmployee(id_employee);
+                }
+                dialog.dismiss();
+            }
+        });
+        Button btn_cancel = dialog.findViewById(R.id.btn_cancel);
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        btn_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+
+    }
+
 
 }
