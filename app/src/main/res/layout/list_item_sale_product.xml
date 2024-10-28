@@ -161,7 +161,7 @@
                         android:inputType="numberDecimal"
                         android:text="12"
                         android:textAlignment="center"
-                        android:textColor="@color/md_theme_light_onBackground" />
+                        android:textColor="@color/md_theme_light_onPrimary" />
 
                     <ImageButton
                         android:id="@+id/Imgb_editSaveProduct_sale"

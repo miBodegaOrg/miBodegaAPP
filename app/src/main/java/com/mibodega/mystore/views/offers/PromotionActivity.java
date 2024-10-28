@@ -438,7 +438,7 @@ public class PromotionActivity extends MainActivity {
                         e.printStackTrace();
                     }
                     Utils utils = new Utils();
-                    Dialog dialog = utils.getAlertCustom(PromotionActivity.this,"danger","Error","No se pudo crear",false);
+                    Dialog dialog = utils.getAlertCustom(PromotionActivity.this,"danger","Error","La fecha de inicio debe ser menor a la fecha final",false);
                     dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialog) {

@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +37,7 @@ import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSale;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSearch;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
+import com.mibodega.mystore.views.products.ProductDetailActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -172,10 +175,17 @@ public class DiscountsActivity extends MainActivity {
         btn_vender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Objects.equals(valiteFields(), "ok")){
+                if(Objects.equals(valiteFields(), "")){
                     createPromotion();
                 }else{
-                    Toast.makeText(getBaseContext(),valiteFields(),Toast.LENGTH_SHORT).show();
+                    Utils utils = new Utils();
+                    Dialog dialog = utils.getAlertCustom(DiscountsActivity.this,"danger","Error",valiteFields(),false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    dialog.show();
                 }
             }
         });
@@ -404,9 +414,23 @@ public class DiscountsActivity extends MainActivity {
                         edt_name.setText("");
                         edt_discount.setText("");
                         loadData();
-                        Toast.makeText(getBaseContext(),"DESCUENTO CREADO",Toast.LENGTH_SHORT).show();
+                        Utils utils = new Utils();
+                        Dialog dialog = utils.getAlertCustom(DiscountsActivity.this,"success","Exitoso","Descuento creado correctamente",false);
+                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                            }
+                        });
+                        dialog.show();
                     }else{
-                        Toast.makeText(getBaseContext(),"ALGUN ERROR OCURRIO",Toast.LENGTH_SHORT).show();
+                        Utils utils = new Utils();
+                        Dialog dialog = utils.getAlertCustom(DiscountsActivity.this,"danger","Error","Ocurrio un error",false);
+                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                            }
+                        });
+                        dialog.show();
                     }
 
 
@@ -416,13 +440,19 @@ public class DiscountsActivity extends MainActivity {
                         System.out.println("Error response body: " + errorBody);
                         JSONObject errorJson = new JSONObject(errorBody);
                         String errorMessage = errorJson.getString("message");
-                        Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_SHORT).show();
-                        System.out.println(errorMessage);
+                        Utils utils = new Utils();
+                        Dialog dialog = utils.getAlertCustom(DiscountsActivity.this,"danger","Error","La fecha de inicio debe ser menor a la fecha final",false);
+                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                            }
+                        });
+                        dialog.show();
 
                     } catch (IOException | JSONException e) {
                         e.printStackTrace();
                     }
-                    Toast.makeText(getBaseContext(),"no Creado",Toast.LENGTH_SHORT).show();
+
                 }
             }
 
@@ -444,23 +474,23 @@ public class DiscountsActivity extends MainActivity {
         barcodeLauncher.launch(options);
     }
     public String valiteFields(){
-        String message = "ok";
+        String message = "";
         if(edt_name.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar nombre \n";
+            message += "- Debe ingresar nombre \n";
         }
         if(edt_discount.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar descuento \n";
+            message += "- Debe ingresar descuento \n";
         }
         if(edt_dateInit.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar fecha inicial \n";
+            message += "- Debe ingresar fecha inicial \n";
         }
         if(edt_dateEnd.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar fecha final \n";
+            message += "- Debe ingresar fecha final \n";
         }
         if(edt_discount.getText().toString().trim().length() != 0){
             double aux = Double.parseDouble(edt_discount.getText().toString());
             if(aux>100){
-                message += "😨 Debe ingresar un numero menor a 100 en descuentos \n";
+                message += "- Debe ingresar un numero menor a 100 en descuentos \n";
             }
         }
 
