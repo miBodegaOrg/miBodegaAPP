@@ -190,7 +190,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="2.5"
                         android:padding="8dp"
-                        app:srcCompat="@drawable/baseline_notifications_24" />
+                        app:srcCompat="@drawable/baseline_lock_24" />
 
                     <TextView
                         android:id="@+id/textView62"
@@ -199,13 +199,15 @@
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:padding="10dp"
-                        android:text="Push notificaciones" />
+                        android:text="Cambiar contraseña" />
 
-                    <Switch
-                        android:id="@+id/chi45p4"
+                    <ImageButton
+                        android:id="@+id/IBtn_moveChangePassword_profile"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="2.2" />
+                        android:layout_weight="2.2"
+                        android:background="@color/md_theme_light_background"
+                        android:src="@drawable/baseline_arrow_forward_ios_24" />
                 </LinearLayout>
 
                 <Space
@@ -233,7 +235,8 @@
                         android:layout_height="match_parent"
                         android:layout_weight="2.5"
                         android:padding="8dp"
-                        app:srcCompat="@drawable/ic_barcode" />
+                        android:tint="@color/md_theme_light_error"
+                        app:srcCompat="@drawable/baseline_warning_24" />
 
                     <TextView
                         android:id="@+id/textView642"
@@ -241,16 +244,18 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
+                        android:textStyle="bold"
                         android:padding="10dp"
-                        android:text="Descargar codigos de barras" />
+                        android:text="Eliminar todos los datos" />
 
                     <ImageButton
-                        android:id="@+id/IBtn_downloadCodeBars_profile"
+                        android:id="@+id/IBtn_deleteAllDataApp_profile"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="2.2"
                         android:background="@drawable/backgroun_custom_rectangle"
-                        android:src="@drawable/baseline_file_download_24" />
+                        android:src="@drawable/baseline_delete_24"
+                        android:tint="@color/md_theme_light_error" />
                 </LinearLayout>
 
                 <Space

@@ -58,8 +58,8 @@ public class EditProfileActivity extends AppCompatActivity {
         btn_update = findViewById(R.id.Btn_registerProfile_profile);
 
         String[] nombres= obtenerPrimeraYSegundaPalabra(config.getUserData().getName());
-        edt_name.setText(nombres[0]);
-        edt_lastname.setText(nombres[1]);
+        edt_name.setText(config.getUserData().getName());
+        //edt_lastname.setText(nombres[1]);
         edt_address.setText(config.getUserData().getEmail());
         edt_phone.setText(config.getUserData().getPhone());
         edt_ruc.setText(config.getUserData().getUsername());
