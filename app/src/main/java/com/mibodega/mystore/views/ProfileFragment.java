@@ -46,7 +46,7 @@ public class ProfileFragment extends Fragment {
         SignInResponse user = config.getUserData();
         if(user!=null){
             tv_name.setText(user.getName());
-           // tv_address.setText();
+            tv_address.setText(user.getEmail());
             tv_phone.setText(user.getPhone());
             tv_rucdni.setText(user.getUsername());
         }
@@ -76,5 +76,17 @@ public class ProfileFragment extends Fragment {
         });
 
         return  root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SignInResponse user = config.getUserData();
+        if(user!=null){
+            tv_name.setText(user.getName());
+            tv_address.setText(user.getEmail());
+            tv_phone.setText(user.getPhone());
+            tv_rucdni.setText(user.getUsername());
+        }
     }
 }

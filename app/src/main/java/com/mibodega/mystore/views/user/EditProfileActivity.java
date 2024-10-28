@@ -14,11 +14,30 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.mibodega.mystore.R;
+import com.mibodega.mystore.models.Requests.PromotionRequest;
+import com.mibodega.mystore.models.Requests.RequestUpdateProfile;
+import com.mibodega.mystore.models.Responses.ProductResponse;
+import com.mibodega.mystore.models.Responses.PromotionResponse;
+import com.mibodega.mystore.models.Responses.UpdateProfileResponse;
+import com.mibodega.mystore.services.IPromotionService;
+import com.mibodega.mystore.services.IUserServices;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.Utils;
+import com.mibodega.mystore.views.offers.PromotionActivity;
 import com.mibodega.mystore.views.signUp.SignUpShopActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class EditProfileActivity extends AppCompatActivity {
 
@@ -67,15 +86,71 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void updateUser(){
-        Dialog dialog = utils.getAlertCustom(EditProfileActivity.this,"success","Exitoso","Datos actualizados correctamente",false);
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        RequestUpdateProfile request = new RequestUpdateProfile(edt_name.getText().toString(),edt_phone.getText().toString(),edt_address.getText().toString());
+
+        Retrofit retrofit = new Retrofit.
+                Builder().
+                baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
+                build();
+        IUserServices service = retrofit.create(IUserServices.class);
+        Call<UpdateProfileResponse> call = service.put_updateProfile(request, "Bearer " + config.getJwt());
+        call.enqueue(new Callback<UpdateProfileResponse>() {
             @Override
-            public void onDismiss(DialogInterface dialog) {
+            public void onResponse(Call<UpdateProfileResponse> call, Response<UpdateProfileResponse> response) {
+                System.out.println(response);
+                if (response.isSuccessful()) {
+                    UpdateProfileResponse data = response.body();
+                    edt_name.setText(data.getName());
+                    edt_phone.setText(data.getPhone());
+                    edt_address.setText(data.getAddress());
+                    config.getUserData().setName(data.getName());
+                    config.getUserData().setPhone(data.getPhone());
+                    config.getUserData().setEmail(data.getAddress());
+                    Utils utils = new Utils();
+                    Dialog dialog = utils.getAlertCustom(EditProfileActivity.this,"success","Exitoso","Datos actualizados correctamente",false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    dialog.show();
+
+                } else {
+                    try {
+                        String errorBody = response.errorBody().string();
+                        System.out.println("Error response body: " + errorBody);
+                        JSONObject errorJson = new JSONObject(errorBody);
+                        String errorMessage = errorJson.getString("message");
+                        //Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                        System.out.println(errorMessage);
+
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+                    Utils utils = new Utils();
+                    Dialog dialog = utils.getAlertCustom(EditProfileActivity.this,"danger","Error","Error al actualizar perfil",false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    dialog.show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UpdateProfileResponse> call, Throwable t) {
+                Utils utils = new Utils();
+                Dialog dialog = utils.getAlertCustom(EditProfileActivity.this,"danger","Error","Error al actualizar perfil",false);
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                    }
+                });
+                dialog.show();
             }
         });
-        dialog.show();
     }
-
 
     public String valiteFields(){
         String message = "";

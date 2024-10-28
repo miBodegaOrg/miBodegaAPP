@@ -152,7 +152,7 @@ public class SignInActivity extends AppCompatActivity {
                     loadingDialog.dismissDialog();
                     SignInResponseToken data = response.body();
                     config.setJwt(token);
-                    config.setUserData(new SignInResponse(data.getName(),data.getUsername(),data.getPhone(),data.getType(),token));
+                    config.setUserData(new SignInResponse(data.getName(),data.getUsername(),data.getPhone(),data.getEmail(),data.getType(),token));
                     Intent moveHMA = new Intent(getApplicationContext(), MainNavigationActivity.class);
                     startActivity(moveHMA);
 
