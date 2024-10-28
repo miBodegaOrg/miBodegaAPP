@@ -100,7 +100,7 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
             arrEdtAmount.put(product.getCode(),holder.edt_amount);
             holder.productDescription.setText(product.getName());
             holder.productStock.setText(String.valueOf(product.getStock()));
-            holder.buyPrice.setText("s/ " +String.valueOf(product.getPrice()));
+            holder.buyPrice.setText("S/ " +String.valueOf(product.getPrice()));
             if(product.isWeight()){ holder.edt_amount.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);}else{holder.edt_amount.setInputType(InputType.TYPE_CLASS_NUMBER); }
             Number amountNum = saleTemporalList.getMapAmountProduct().get(product.getCode());
 
@@ -116,7 +116,7 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
 
             }
 
-            holder.total_price.setText("s/. "+utils.formatDecimal(_total_price));
+            holder.total_price.setText("S/. "+utils.formatDecimal(_total_price));
 
             holder.edt_amount.setEnabled(false);
 
@@ -143,7 +143,7 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
                             total_price = product.getPrice() * Integer.parseInt(holder.edt_amount.getText().toString());
 
                         }
-                       holder.total_price.setText("s/. " + utils.formatDecimal(total_price));
+                       holder.total_price.setText("S/ " + utils.formatDecimal(total_price));
                     }
                 }
             });

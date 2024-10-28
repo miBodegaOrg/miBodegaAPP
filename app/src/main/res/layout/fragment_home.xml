@@ -88,7 +88,7 @@
                                 android:id="@+id/textView82"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Total s/."
+                                android:text="Total S/ "
                                 android:textAlignment="center"
                                 android:textColor="@color/ic_launcher_background"
                                 android:textSize="16sp" />

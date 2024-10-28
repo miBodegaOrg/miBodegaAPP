@@ -96,10 +96,10 @@ public class RecyclerViewAdapterProductSupplier extends RecyclerView.Adapter<Rec
         holder.tv_stock.setText(String.valueOf(item.getStock()));
         holder.edt_amount.setText("1");
         holder.edt_priceCost.setText(String.valueOf(item.getCost()));
-        holder.tv_priceVenta.setText("s/ " +String.valueOf(item.getPrice()));
+        holder.tv_priceVenta.setText("S/ " +String.valueOf(item.getPrice()));
         double total_price = item.getCost()*Integer.parseInt(holder.edt_amount.getText().toString());
-        holder.tv_totalPrice.setText("s/. "+total_price);
-        holder.tv_cost.setText("s/ "+item.getCost());
+        holder.tv_totalPrice.setText("S/ "+total_price);
+        holder.tv_cost.setText("S/ "+item.getCost());
 
 
         mapEditCost.put(item.getCode(),holder.edt_priceCost);
@@ -151,7 +151,7 @@ public class RecyclerViewAdapterProductSupplier extends RecyclerView.Adapter<Rec
             public void afterTextChanged(Editable editable) {
                 if(!editable.toString().equals("")) {
                     double total_price = item.getCost() * Integer.parseInt(holder.edt_amount.getText().toString());
-                    holder.tv_totalPrice.setText("s/. " + total_price);
+                    holder.tv_totalPrice.setText("S/ " + total_price);
                 }
             }
         });

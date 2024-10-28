@@ -85,7 +85,7 @@
                     android:id="@+id/TextInputLayout_user"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Ingrese Usuario"
+                    android:hint="Ingrese DNI / RUC"
                     app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText

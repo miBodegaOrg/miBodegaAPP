@@ -54,6 +54,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class Utils {
 
@@ -82,19 +83,21 @@ public class Utils {
             return null;
         }
     }
-    public String convertDateToClearFormat(String date){
+    public String convertDateToClearFormat(String date) {
         String createdAtString = date;
 
         SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+        isoFormat.setTimeZone(TimeZone.getTimeZone("UTC")); // Asegura que el formato de entrada esté en UTC
         Date createdAtDate = null;
         try {
             createdAtDate = isoFormat.parse(createdAtString);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+
         SimpleDateFormat desiredFormat = new SimpleDateFormat("EEEE d MMM h:mm a", new Locale("es", "ES"));
-        String formattedDate = desiredFormat.format(createdAtDate);
-        return formattedDate;
+        desiredFormat.setTimeZone(TimeZone.getTimeZone("America/Lima")); // Configura la zona horaria a Lima, Perú
+        return desiredFormat.format(createdAtDate);
     }
     public Dialog getAlertCustom(Context context, String type, String title, String message, boolean hasButtons) {
         Dialog dialog = new Dialog(context);

@@ -65,7 +65,7 @@ public class RecyclerViewAdapterDiscount extends RecyclerView.Adapter<RecyclerVi
         DiscountResponse item = discountList.get(position);
         holder.tv_name.setText(item.getName());
         holder.tv_percentage.setText("Descuento: "+String.valueOf(item.getPercentage())+" %");
-        holder.tv_value.setText("valor: s/. "+item.getValue());
+        holder.tv_value.setText("valor: S/ "+item.getValue());
         String active ="INACTIVO";
         if(item.isActive())active="ACTIVO";
         holder.tv_status.setText(active);

@@ -185,7 +185,6 @@ public class PurchaseFormActivity extends MainActivity {
         sp_selectSupplier.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getBaseContext(),"SELECCIONADO",Toast.LENGTH_SHORT).show();
                 arrProducts.clear();
                 arrProducts = mapsupplierResponses.get(sp_selectSupplier.getSelectedItem().toString()).getProducts();
                 loadData();

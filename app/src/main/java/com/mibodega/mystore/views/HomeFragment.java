@@ -276,8 +276,8 @@ public class HomeFragment extends Fragment {
                 if(response.isSuccessful()){
                     TodayDataResponse data = response.body();
                     if(data!=null){
-                        tv_cantSale.setText(data.getSales().toString());
-                        tv_amountSale.setText(data.getTotal().toString());
+                        tv_cantSale.setText(String.valueOf(data.getSales()));
+                        tv_amountSale.setText(utils.formatDecimal(data.getTotal().doubleValue()));
                     }
                 }else{
                     try {

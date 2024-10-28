@@ -238,7 +238,7 @@ public class SupplierRegisterActivity extends MainActivity {
                     edt_phone.setText("");
                     edt_ruc.setText("");
                     arrayListProduct.clear();
-                    Dialog dialog = utils.getAlertCustom(SupplierRegisterActivity.this,"success","Registro"," Se creo exitosamente el proveedor",false);
+                    Dialog dialog = utils.getAlertCustom(SupplierRegisterActivity.this,"success","Registro"," Se creó exitosamente el proveedor",false);
                     dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialog) {

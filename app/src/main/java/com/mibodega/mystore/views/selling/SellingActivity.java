@@ -20,6 +20,7 @@ import com.mibodega.mystore.models.Responses.PurchaseResponse;
 import com.mibodega.mystore.services.IChatServices;
 import com.mibodega.mystore.services.IPurchasesService;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.adapters.LoadingDialogAdapter;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterChat;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterPurchase;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
@@ -43,6 +44,7 @@ public class SellingActivity extends MainActivity {
     private ArrayList<PurchaseResponse> purchaseList = new ArrayList<>();
     private DrawerLayout drawerLayout;
     private FrameLayout chatFragmentContainer;
+    private LoadingDialogAdapter loadingDialog = new LoadingDialogAdapter();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +102,7 @@ public class SellingActivity extends MainActivity {
     }
 
     public void loadPurchases(){
+
         Retrofit retrofit = new Retrofit.
                 Builder().
                 baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
@@ -115,6 +118,7 @@ public class SellingActivity extends MainActivity {
                 if(response.isSuccessful()){
                     purchaseList = (ArrayList<PurchaseResponse>) response.body();
                     if(purchaseList!=null){
+
                         rv_purchaseList.removeAllViews();
                         recyclerViewAdapterPurchase = new RecyclerViewAdapterPurchase(getBaseContext(), purchaseList, new RecyclerViewAdapterPurchase.OnDetailItem() {
                             @Override
@@ -138,6 +142,9 @@ public class SellingActivity extends MainActivity {
         });
     }
     public void validatePurchase(PurchaseResponse purchase){
+        View dialogView = getLayoutInflater().from(getBaseContext()).inflate(R.layout.progress_dialog, null);
+        loadingDialog.startLoadingDialog(this, dialogView, "Cargando","Porfavor espere...");
+
         Retrofit retrofit = new Retrofit.
                 Builder().
                 baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
@@ -153,17 +160,20 @@ public class SellingActivity extends MainActivity {
                 if(response.isSuccessful()){
                      PurchaseResponse purchaseResponse =  response.body();
                     if(purchaseResponse!=null){
+
                         System.out.println("successfull request");
                         loadPurchases();
                     }
 
                 }
 
+                loadingDialog.dismissDialog();
             }
 
             @Override
             public void onFailure(@NonNull Call<PurchaseResponse> call, @NonNull Throwable t) {
                 System.out.println("errror "+t.getMessage());
+                loadingDialog.dismissDialog();
             }
         });
     }
