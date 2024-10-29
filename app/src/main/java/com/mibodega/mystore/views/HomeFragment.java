@@ -80,6 +80,8 @@ public class HomeFragment extends Fragment {
         pgb_loadRecomendation = root.findViewById(R.id.Pgb_loadingRecomendation_home);
         pgb_loadRecomendation.setVisibility(View.VISIBLE);
         preferencesHelper = new SharedPreferencesHelper(getContext());
+
+
         btn_employe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -300,6 +302,11 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
+    private void validatePermisesAccess(){
+
+    }
+
     @Override
     public void onResume() {
         super.onResume();

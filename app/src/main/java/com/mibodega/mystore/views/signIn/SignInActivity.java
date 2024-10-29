@@ -51,6 +51,7 @@ public class SignInActivity extends AppCompatActivity {
     private CheckBox cbx_rememberUser;
     private DBfunctionsTableData dBfunctionsTableData = new DBfunctionsTableData();
     private LoadingDialogAdapter loadingDialog = new LoadingDialogAdapter();
+    private TextView tv_forgotPassword;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +61,7 @@ public class SignInActivity extends AppCompatActivity {
         edt_password = findViewById(R.id.Tedt_password);
         btn_moveToHome = findViewById(R.id.Btn_moveToHome_login);
         Tv_questionForgotPassword_login = findViewById(R.id.Tv_questionForgotPassword_login);
+        tv_forgotPassword = findViewById(R.id.Imgv_helpIcon_login);
         cbx_rememberUser = findViewById(R.id.Cbx_remenberUser_signin);
         btn_moveToHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +73,7 @@ public class SignInActivity extends AppCompatActivity {
                 }
             }
         });
+
         Tv_questionForgotPassword_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,6 +87,14 @@ public class SignInActivity extends AppCompatActivity {
                 .load(R.drawable.logo_size2)
                 .apply(RequestOptions.circleCropTransform())
                 .into(imageView);
+
+        tv_forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SignInActivity.this,RecoverPasswordActivity.class);
+                startActivity(intent);
+            }
+        });
 /*
         if(!Objects.equals(dBfunctionsTableData.get_user_save(getBaseContext()), "")){
             System.out.println("remember "+dBfunctionsTableData.get_user_save(getBaseContext()));

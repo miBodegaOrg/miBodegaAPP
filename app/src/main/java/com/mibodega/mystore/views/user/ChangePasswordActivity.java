@@ -71,7 +71,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
     private void savePassword(){
         String lastpas = edt_lastpass.getText().toString();
-        String newpas = edt_lastpass.getText().toString();
+        String newpas = edt_newpass.getText().toString();
         RequestUpdatePassword request = new RequestUpdatePassword(lastpas,newpas);
 
         Retrofit retrofit = new Retrofit.

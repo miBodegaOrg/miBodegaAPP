@@ -88,6 +88,17 @@ public class ManageEmployerActivity extends MainActivity {
         btn_delete = findViewById(R.id.Btn_deleteEmployee_employee);
         btn_create = findViewById(R.id.Btn_createEmployee_employee);
         btn_back = findViewById(R.id.Btn_back_employee);
+        ly_permisesCheckList.removeAllViews();
+        ly_permisesContainer.setVisibility(View.VISIBLE);
+        for (String item : config.getArrPermises()) {
+            System.out.println("permises "+item.toString());
+            CheckBox checkBox = new CheckBox(getBaseContext());
+            checkBox.setText(item);
+            checkBox.setChecked(true);
+            // Establecer el texto del CheckBox con el valor del permiso
+            ly_permisesCheckList.addView(checkBox); // Agregar el CheckBox al LinearLayout
+            mapEsPermisses.put(item,checkBox);
+        }
 
         id_employee = getIntent().getExtras().getString("employee_id");
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -120,16 +131,8 @@ public class ManageEmployerActivity extends MainActivity {
             }
         });
 
-        ly_permisesCheckList.removeAllViews();
-        ly_permisesContainer.setVisibility(View.VISIBLE);
-        for (String item : config.getArrPermises()) {
-            CheckBox checkBox = new CheckBox(getBaseContext());
-            checkBox.setText(item);
-            checkBox.setChecked(true);
-            // Establecer el texto del CheckBox con el valor del permiso
-            ly_permisesCheckList.addView(checkBox); // Agregar el CheckBox al LinearLayout
-            mapEsPermisses.put(item,checkBox);
-        }
+
+
         if(Objects.equals(id_employee, "0")){
             btn_saveChangesEmployee.setVisibility(View.GONE);
             btn_update.setVisibility(View.GONE);
@@ -193,6 +196,17 @@ public class ManageEmployerActivity extends MainActivity {
             @Override
             public void onClick(View view) {
                 if(Objects.equals(valiteFieldsupdate(), "")){
+                    curremtPermises.clear();
+                    ArrayList<String> aux = new ArrayList<>();
+                    for (String item : config.getArrPermises()) {
+                        CheckBox checkBox = mapEsPermisses.get(item);
+                        assert checkBox != null;
+                        if(checkBox.isChecked()){
+                            aux.add(item);
+                            System.out.println(" permiso "+item);
+                        }
+                    }
+                    curremtPermises = aux;
                     updateEmployee(id_employee);
                 }else{
                     Dialog dialog = utils.getAlertCustom(ManageEmployerActivity.this,"danger","Error",valiteFieldsupdate(),false);
@@ -218,12 +232,14 @@ public class ManageEmployerActivity extends MainActivity {
         btn_create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                curremtPermises.clear();
                 ArrayList<String> aux = new ArrayList<>();
                 for (String item : config.getArrPermises()) {
                     CheckBox checkBox = mapEsPermisses.get(item);
                     assert checkBox != null;
                     if(checkBox.isChecked()){
                         aux.add(item);
+                        System.out.println(" permiso "+item);
                     }
                 }
                 curremtPermises = aux;
@@ -291,6 +307,7 @@ public class ManageEmployerActivity extends MainActivity {
                         for (String item:
                                 employeeResponse.getPermissions()) {
                             CheckBox checkBox = mapEsPermisses.get(item);
+                            System.out.println(item);
                             checkBox.setChecked(true);
                         }
                         Dialog dialog = utils.getAlertCustom(ManageEmployerActivity.this, "success", "Exitoso", "El empleado ha sido editado correctamente", false);
@@ -404,6 +421,9 @@ public class ManageEmployerActivity extends MainActivity {
                         edt_email.setText(employeeResponse.getEmail());
                         edt_password.setText("");
                         curremtPermises = employeeResponse.getPermissions();
+                        for (String item : config.getArrPermises()) {
+                           mapEsPermisses.get(item).setChecked(false);
+                        }
                         for (String item:
                              employeeResponse.getPermissions()) {
                             CheckBox checkBox = mapEsPermisses.get(item);

@@ -6,6 +6,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -20,11 +22,13 @@ import com.mibodega.mystore.models.Responses.PurchaseResponse;
 import com.mibodega.mystore.services.IChatServices;
 import com.mibodega.mystore.services.IPurchasesService;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.shared.adapters.LoadingDialogAdapter;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterChat;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterPurchase;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
 import com.mibodega.mystore.views.chatbot.ChatbotActivity;
+import com.mibodega.mystore.views.employers.ManageEmployerActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -131,6 +135,18 @@ public class SellingActivity extends MainActivity {
                     }
                     System.out.println("successfull request");
 
+                }else{
+                    if(response.code()==403){
+                        Utils utils = new Utils();
+                        Dialog dialog = utils.getAlertCustom(SellingActivity.this,"danger","Error","Acceso no autorizado",false);
+                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+
+                            }
+                        });
+                        dialog.show();
+                    }
                 }
 
             }
