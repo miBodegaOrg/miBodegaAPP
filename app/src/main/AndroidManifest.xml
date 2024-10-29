@@ -37,6 +37,15 @@
         android:theme="@style/Base.Theme.MyStore"
         tools:targetApi="31">
         <activity
+            android:name=".views.user.ValidatePasswordCodeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.user.ChangePasswordWithEmailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.user.ChangePasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.user.EditProfileActivity"
             android:exported="false" />
 

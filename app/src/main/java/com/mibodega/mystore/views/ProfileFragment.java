@@ -32,6 +32,7 @@ import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.DBfunctionsTableData;
 import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.views.employers.ManageEmployerActivity;
+import com.mibodega.mystore.views.user.ChangePasswordActivity;
 import com.mibodega.mystore.views.user.EditProfileActivity;
 
 import org.json.JSONException;
@@ -50,7 +51,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ProfileFragment extends Fragment {
 
-    private ImageButton btn_deleteAllDataShop;
+    private ImageButton btn_deleteAllDataShop,btn_moveUpdatePassword;
     private TextView tv_name,tv_address,tv_phone, tv_rucdni;
     private Button btn_editProfile;
     private MaterialCardView btn_signOut;
@@ -71,6 +72,7 @@ public class ProfileFragment extends Fragment {
         tv_rucdni = root.findViewById(R.id.Tv_ruc_profile);
         btn_editProfile = root.findViewById(R.id.Btn_editProfile_profile);
         btn_signOut = root.findViewById(R.id.Mc_signOut_profile);
+        btn_moveUpdatePassword = root.findViewById(R.id.IBtn_moveChangePassword_profile);
 
         SignInResponse user = config.getUserData();
         if(user!=null){
@@ -102,6 +104,13 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 dialog.show();
+            }
+        });
+        btn_moveUpdatePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), ChangePasswordActivity.class);
+                startActivity(intent);
             }
         });
         return  root;
