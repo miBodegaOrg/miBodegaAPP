@@ -95,6 +95,8 @@ public class ProductEditActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 100;
     private static final int CAMERA_PERMISSION_REQUEST = 101;
 
+
+    //***************
     private Uri imageUri;
     private MultipartBody.Part imagePart;
     private Utils utils= new Utils();
@@ -257,7 +259,6 @@ public class ProductEditActivity extends AppCompatActivity {
             }
         });
         setupButtons();
-
         btn_saveProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -275,7 +276,6 @@ public class ProductEditActivity extends AppCompatActivity {
                 }
             }
         });
-
         tv_fileName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -293,7 +293,6 @@ public class ProductEditActivity extends AppCompatActivity {
                     startBarcodeScanner();
             }
         });
-
         btnGenerateCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -340,7 +339,7 @@ public class ProductEditActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_spinner_item, subcategories);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         getSp_subcategory_product.setAdapter(adapter2);
-        getSp_category_product.setSelection(0);
+        getSp_subcategory_product.setSelection(0);
     }
 
     public void setDialogs(Context context){

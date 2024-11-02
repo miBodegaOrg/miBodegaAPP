@@ -423,6 +423,7 @@ public class ManageEmployerActivity extends MainActivity {
                         curremtPermises = employeeResponse.getPermissions();
                         for (String item : config.getArrPermises()) {
                            mapEsPermisses.get(item).setChecked(false);
+                           System.out.println("- "+item);
                         }
                         for (String item:
                              employeeResponse.getPermissions()) {
