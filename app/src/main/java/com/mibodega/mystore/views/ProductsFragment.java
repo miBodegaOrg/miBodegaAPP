@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.mibodega.mystore.MainNavigationActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.CategoryResponse;
@@ -36,6 +37,7 @@ import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.models.Responses.SubCategoryResponse;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.InputValidator;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProduct;
 import com.mibodega.mystore.shared.adapters.SubcategoryView;
 import com.mibodega.mystore.views.products.ProductDetailActivity;
@@ -71,6 +73,8 @@ public class ProductsFragment extends Fragment {
     private TextView tv_messageNotFound;
 
     private TextInputEditText edt_searchText;
+    private TextInputLayout tly_edt_searchText;
+
 
     private LinearLayout linearLayoutSubcategoryViews;
     private View _root;
@@ -89,6 +93,7 @@ public class ProductsFragment extends Fragment {
         btn_toggleCategory = root.findViewById(R.id.Imgb_toggleCategory_product);
         linearLayoutSubcategoryViews = root.findViewById(R.id.Ly_subcategoriesContainer);
         edt_searchText = root.findViewById(R.id.Edt_searchClient_product);
+        tly_edt_searchText= root.findViewById(R.id.Txly_layoutSearch_product);
         tv_messageNotFound = root.findViewById(R.id.Tv_mensajeNotFoundProduct_product);
 
         btnMoveToAddProduct.setOnClickListener(new View.OnClickListener() {
@@ -138,22 +143,10 @@ public class ProductsFragment extends Fragment {
             }
         });
 
-        edt_searchText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        // Lógica que se ejecutará cuando el texto sea válido
+        Runnable searchProductLogic = this::searchProductWithDifferentCategoriesSubcategories;
+        InputValidator.addBusquedaInputValidation(edt_searchText, tly_edt_searchText, searchProductLogic);
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                searchProductWithDifferentCategoriesSubcategories();
-            }
-        });
         return root;
     }
 

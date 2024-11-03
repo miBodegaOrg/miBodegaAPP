@@ -1,7 +1,9 @@
 package com.mibodega.mystore.shared.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -24,6 +26,7 @@ import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.SaleTemporalList;
 import com.mibodega.mystore.shared.Utils;
+import com.mibodega.mystore.views.products.ProductDetailActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -162,13 +165,30 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
 
                         }
                         if(amount.doubleValue()>0){
-                            holder.edt_amount.setEnabled(false);
+                            if(amount<=product.getStock().doubleValue()){
+                                holder.edt_amount.setEnabled(false);
+                                saleTemporalList.updateAmountProduct(product.getCode(),amount);
+                                holder.btn_edit_save.setImageResource(R.drawable.baseline_edit_24);
+                                arrIsEdit.put(product.getCode(),false);
+                                //notifyDataSetChanged();
+                            }else{
+                                Utils utils = new Utils();
+                                Dialog dialog = utils.getAlertCustom(context,"danger","Error","La cantidad no debe superar al stock",false);
+                                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @Override
+                                    public void onDismiss(DialogInterface dialog) {
+                                        holder.edt_amount.setEnabled(false);
+                                        holder.edt_amount.setText("1");
+                                        saleTemporalList.updateAmountProduct(product.getCode(),1.0);
+                                        holder.btn_edit_save.setImageResource(R.drawable.baseline_edit_24);
+                                        arrIsEdit.put(product.getCode(),false);
+                                        onEdit.onClick(product);
+                                        notifyDataSetChanged();
+                                    }
+                                });
+                                dialog.show();
 
-                            saleTemporalList.updateAmountProduct(product.getCode(),amount);
-
-                            holder.btn_edit_save.setImageResource(R.drawable.baseline_edit_24);
-                            arrIsEdit.put(product.getCode(),false);
-                            //notifyDataSetChanged();
+                            }
                         }
                     }else {
                         holder.edt_amount.setEnabled(true);

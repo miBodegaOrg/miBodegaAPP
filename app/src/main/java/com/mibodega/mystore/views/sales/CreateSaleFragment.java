@@ -296,6 +296,9 @@ public class CreateSaleFragment extends Fragment {
                     saleTemporalList.cleanAll();
                     loadData();
                     SaleResponse saleResponse = response.body();
+                    Log.e("error", saleResponse.getDiscount().toString());
+                    Log.e("error", saleResponse.getSubtotal().toString());
+
                     saleTemporalList.setSaleCurrent(saleResponse);
                     Intent moveHMA = new Intent(getContext(), ValidateSaleActivity.class);
                     startActivity(moveHMA);
