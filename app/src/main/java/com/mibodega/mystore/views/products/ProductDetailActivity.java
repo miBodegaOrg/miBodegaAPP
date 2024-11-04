@@ -48,6 +48,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.mibodega.mystore.MainActivity;
@@ -64,6 +65,7 @@ import com.mibodega.mystore.services.IBarCodeService;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.services.ISupplierServices;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.InputValidator;
 import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.shared.adapters.LoadingDialogAdapter;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
@@ -106,7 +108,7 @@ public class ProductDetailActivity extends MainActivity {
 
     private ImageButton btnCamera ;
     private ImageButton btnGallery;
-
+    private TextInputLayout tly_name_product;
     private TextInputEditText txt_name_product;
     private TextInputEditText txt_price_product;
     private TextInputEditText txt_stock_product;
@@ -163,6 +165,9 @@ public class ProductDetailActivity extends MainActivity {
             getSupportActionBar().setTitle("Detalle de Producto");
         }
         img_barCode = findViewById(R.id.Imv_barsCode_detail_update);
+        tly_name_product = findViewById(R.id.Tly_nameProductDetail_product);
+
+
         txt_name_product = findViewById(R.id.Edt_name_product_update);
         txt_price_product = findViewById(R.id.Edt_price_product_update);
         txt_stock_product = findViewById(R.id.Edt_stock_product_update);
@@ -180,6 +185,10 @@ public class ProductDetailActivity extends MainActivity {
         btnScanProduct = findViewById(R.id.Btn_scanProductCode_product_update);
         btnGenerateCode = findViewById(R.id.Btn_generateProductCode_product_update);
 
+        //INPUTS VALIDATIONS
+        InputValidator.addEmpresaInputValidationTextInput(txt_name_product,tly_name_product);
+
+        //
         ArrayList<String> type = new ArrayList<>();
         type.add("UN");
         type.add("KG");

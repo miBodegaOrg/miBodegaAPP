@@ -79,7 +79,7 @@ public class InputValidator {
             }
         });
     }
-    public static void addEmpresaInputValidationTextInput(TextInputEditText editText, TextInputLayout inputLayout, Runnable onValidInput) {
+    public static void addEmpresaInputValidationTextInput(TextInputEditText editText, TextInputLayout inputLayout) {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -99,7 +99,6 @@ public class InputValidator {
                     editText.setSelection(filteredInput.length());  // Mover el cursor al final
                 } else {
                     inputLayout.setError(null);
-                    onValidInput.run();
                     // Limpiar el error si es válido
                 }
             }

@@ -59,6 +59,7 @@
                             android:padding="8dp">
 
                             <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/Tly_nameProductDetail_product"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 

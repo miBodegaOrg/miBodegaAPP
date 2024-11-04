@@ -44,6 +44,7 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.mibodega.mystore.MainActivity;
@@ -59,6 +60,7 @@ import com.mibodega.mystore.models.Responses.SupplierResponseV2;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.services.ISupplierServices;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.InputValidator;
 import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.shared.adapters.LoadingDialogAdapter;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
@@ -104,6 +106,7 @@ public class ProductEditActivity extends AppCompatActivity {
     private ImageButton btnCamera ;
     private ImageButton btnGallery;
 
+    private TextInputLayout tly_name_product;
     private TextInputEditText txt_name_product;
     private TextInputEditText txt_price_product;
     private TextInputEditText txt_stock_product;
@@ -156,6 +159,8 @@ public class ProductEditActivity extends AppCompatActivity {
         /*if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Nuevo Producto");
         }*/
+        tly_name_product = findViewById(R.id.Tly_nameProductEdit_product);
+
         txt_name_product = findViewById(R.id.Edt_name_product);
         txt_price_product = findViewById(R.id.Edt_price_product);
         txt_stock_product = findViewById(R.id.Edt_stock_product);
@@ -165,13 +170,10 @@ public class ProductEditActivity extends AppCompatActivity {
         getSp_subcategory_product = findViewById(R.id.Sp_selectProductSubCategory_product);
         getSp_proveedor_product = findViewById(R.id.Sp_selectProveedor_product);
         getSp_Type_product = findViewById(R.id.Sp_selectUnidad_product);
-
         btn_saveProduct = findViewById(R.id.Btn_saveProduct_product);
         tv_fileName = findViewById(R.id.Tv_productFileName_product);
         btnScanProduct = findViewById(R.id.Btn_scanProductCode_product);
         btnGenerateCode = findViewById(R.id.Btn_generateProductCode_product);
-
-
         drawerLayout = findViewById(R.id.drawer_layout);
         chatFragmentContainer = findViewById(R.id.chat_fragment_container);
         drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
@@ -202,7 +204,10 @@ public class ProductEditActivity extends AppCompatActivity {
             }
         });
 
+        //set input validations:
+        InputValidator.addEmpresaInputValidationTextInput(txt_name_product,tly_name_product);
 
+        //*****
         ArrayList<String> type = new ArrayList<>();
         type.add("UN");
         type.add("KG");
