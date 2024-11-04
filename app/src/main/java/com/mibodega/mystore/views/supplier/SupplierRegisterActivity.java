@@ -6,6 +6,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,27 +17,22 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.RequestSupplier;
-import com.mibodega.mystore.models.Responses.CategoryProduct;
 import com.mibodega.mystore.models.Responses.PagesProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
-import com.mibodega.mystore.models.Responses.ProductResponseByCode;
-import com.mibodega.mystore.models.Responses.ProductResponseSupplier;
 import com.mibodega.mystore.models.Responses.ProductResponseSupplierV2;
-import com.mibodega.mystore.models.Responses.SubCategoryResponse;
-import com.mibodega.mystore.models.Responses.SupplierResponse;
 import com.mibodega.mystore.models.Responses.SupplierResponseV2;
 import com.mibodega.mystore.models.common.ProductSupplier;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.services.ISupplierServices;
 import com.mibodega.mystore.shared.Config;
-import com.mibodega.mystore.shared.SupplierProductList;
 import com.mibodega.mystore.shared.Utils;
-import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSale;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSearch;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSupplier;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
+import com.mibodega.mystore.views.products.ProductEditActivity;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -46,7 +43,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class SupplierRegisterActivity extends AppCompatActivity {
+public class SupplierRegisterActivity extends MainActivity {
 
     private TextInputEditText edt_name, edt_ruc, edt_phone, search;
     private RecyclerView rv_products, rv_products_supplier;
@@ -69,7 +66,10 @@ public class SupplierRegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_supplier_register);
+        //setContentView(R.layout.activity_supplier_register);
+        setContentLayout(R.layout.activity_supplier_register);
+
+
         edt_name = findViewById(R.id.Edt_nameSupplier_supplier);
         edt_ruc = findViewById(R.id.Edt_rucSupplier_supplier);
         edt_phone = findViewById(R.id.Edt_phoneSupplier_supplier);
@@ -119,10 +119,17 @@ public class SupplierRegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(Objects.equals(valiteFields(), "ok")){
+                if(Objects.equals(valiteFields(), "")){
                     registerSupplier();
                 }else{
-                    Toast.makeText(getBaseContext(),valiteFields(),Toast.LENGTH_SHORT).show();
+                    Utils utils = new Utils();
+                    Dialog dialog = utils.getAlertCustom(SupplierRegisterActivity.this,"danger","Error",valiteFields(),false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    dialog.show();
                 }
 
             }
@@ -142,10 +149,17 @@ public class SupplierRegisterActivity extends AppCompatActivity {
         btn_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Objects.equals(valiteFields(), "ok")){
+                if(Objects.equals(valiteFields(), "")){
                     updateSupplier(ruc);
                 }else{
-                    Toast.makeText(getBaseContext(),valiteFields(),Toast.LENGTH_SHORT).show();
+                    Utils utils = new Utils();
+                    Dialog dialog = utils.getAlertCustom(SupplierRegisterActivity.this,"danger","Error",valiteFields(),false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    dialog.show();;
                 }
 
             }
@@ -177,12 +191,18 @@ public class SupplierRegisterActivity extends AppCompatActivity {
 
 
         if(!Objects.equals(ruc, "0")){
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle("Detalle de Proveedor");
+            }
             arrayListProduct.clear();
             btn_update.setVisibility(View.VISIBLE);
             btn_delete.setVisibility(View.VISIBLE);
             btn_save.setVisibility(View.GONE);
             loadData(ruc);
         }else {
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle("Nuevo Proveedor");
+            }
             arrayListProduct.clear();
             btn_update.setVisibility(View.GONE);
             btn_delete.setVisibility(View.GONE);
@@ -214,13 +234,18 @@ public class SupplierRegisterActivity extends AppCompatActivity {
                 System.out.println(response.toString());
                 if(response.isSuccessful()){
                     System.out.println("body: "+response.body());
-                    Toast.makeText(getBaseContext(),"Creado",Toast.LENGTH_SHORT).show();
-
                     edt_name.setText("");
                     edt_phone.setText("");
                     edt_ruc.setText("");
                     arrayListProduct.clear();
-
+                    Dialog dialog = utils.getAlertCustom(SupplierRegisterActivity.this,"success","Registro"," Se creó exitosamente el proveedor",false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            finish();
+                        }
+                    });
+                    dialog.show();
 
                 }
             }
@@ -273,7 +298,7 @@ public class SupplierRegisterActivity extends AppCompatActivity {
                                         product.getSubcategory().get_id(),
                                         product.getShop(),
                                         product.getCreatedAt(),
-                                        product.getUpdatedAt()));
+                                        product.getUpdatedAt(),"otros"));
                                 updateDATA();
                             }
                         });
@@ -305,15 +330,15 @@ public class SupplierRegisterActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<SupplierResponseV2> call, @NonNull Response<SupplierResponseV2> response) {
                 System.out.println(response.toString());
                 if(response.isSuccessful()){
-                    Toast.makeText(getBaseContext(),"cargado",Toast.LENGTH_SHORT).show();
                     supplierResponse = response.body();
-                    if(supplierResponse.getProducts().size()>0) {
-                        edt_name.setText(supplierResponse.getName());
-                        edt_ruc.setText(supplierResponse.getRuc());
-                        edt_phone.setText(supplierResponse.getPhone());
-                        int index = supplierResponse.getProducts().size();
-                        arrayListProduct = supplierResponse.getProducts();
-                        updateDATA();
+                    edt_name.setText(supplierResponse.getName());
+                    edt_ruc.setText(supplierResponse.getRuc());
+                    edt_phone.setText(supplierResponse.getPhone());
+
+                    if(supplierResponse.getProducts()!=null){
+                      int index = supplierResponse.getProducts().size();
+                      arrayListProduct = supplierResponse.getProducts();
+                      updateDATA();
                     }
                 }
 
@@ -435,8 +460,8 @@ public class SupplierRegisterActivity extends AppCompatActivity {
                                             product.getSubcategory().get_id(),
                                             product.getShop(),
                                             product.getCreatedAt(),
-                                            product.getUpdatedAt()
-                            );
+                                            product.getUpdatedAt(),
+                                    "otros");
                             arrayListProduct.add(productResponse);
                             if(index>0) {
                                 getProductByCode(supplierResponse.getProducts().get(index-1).getCode(), index - 1);
@@ -471,23 +496,23 @@ public class SupplierRegisterActivity extends AppCompatActivity {
     }
 
     public String valiteFields(){
-        String message = "ok";
+        String message = "";
         if(edt_name.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar nombre \n";
+            message += "- Debe ingresar nombre del proveedor \n";
         }
         if(edt_ruc.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar apellidos \n";
+            message += "- Debe ingresar el ruc \n";
         }
         if(edt_phone.getText().toString().trim().length() != 0){
             int aux = edt_phone.getText().toString().length();
             if(aux != 9){
-                message += "😨 Debe ingresar un numero telefono con 9 digitos\n";
+                message += "- Debe ingresar un numero telefono con 9 digitos\n";
             }
         }
         if(edt_ruc.getText().toString().trim().length() != 0){
             int aux = edt_ruc.getText().toString().length();
             if(aux != 11){
-                message += "😨 Debe ingresar un ruc con 11 digitos\n";
+                message += "- Debe ingresar un ruc con 11 digitos\n";
             }
         }
 

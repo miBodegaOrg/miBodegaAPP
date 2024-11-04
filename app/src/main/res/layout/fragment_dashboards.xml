@@ -10,9 +10,12 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:background="@color/md_theme_light_onPrimaryContainer"
+        android:padding="10dp"
         android:text="Datos de tu negocio"
-        android:textSize="24sp"
+        android:textAlignment="center"
+        android:textColor="@color/ic_launcher_background"
+        android:textSize="30sp"
         android:textStyle="bold" />
 
     <ScrollView
@@ -61,6 +64,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="ver.."
+                        android:textAlignment="viewStart"
                         android:textColor="@color/white"
                         android:textSize="20sp" />
 
@@ -69,18 +73,18 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/Cv_RentabilityOption_dashboard"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_margin="8dp"
-                android:visibility="gone"
                 app:cardCornerRadius="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/backgroun_custom_rectangle"
-                    android:backgroundTint="@color/md_theme_dark_secondary"
+                    android:backgroundTint="@color/md_theme_light_secondary"
                     android:orientation="vertical"
                     android:padding="16dp">
 
@@ -95,7 +99,7 @@
                         android:layout_marginTop="8dp"
                         android:text="Rentabilidad"
                         android:textColor="@color/white"
-                        android:textSize="18sp"
+                        android:textSize="22sp"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -107,18 +111,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="10dp"
-                            android:text="120 Sem"
+                            android:text="Ver..."
                             android:textColor="@color/white"
                             android:textSize="16sp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/backgroun_custom_rectangle"
-                            android:padding="4dp"
-                            android:text="NORMAL"
-                            android:textColor="#4CAF50"
-                            android:textSize="10sp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -126,6 +122,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/Cv_BuyingOption_dashboard"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
@@ -166,11 +163,11 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/Cv_InventaryOption_dashboard"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_margin="8dp"
-                android:visibility="gone"
                 app:cardCornerRadius="10dp">
 
                 <LinearLayout
@@ -206,6 +203,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/Cv_PerformanceOption_dashboard"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
@@ -257,7 +255,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/backgroun_custom_rectangle"
-                    android:backgroundTint="@color/md_theme_dark_error"
+                    android:backgroundTint="@color/md_theme_light_error"
                     android:orientation="vertical"
                     android:padding="16dp">
 

@@ -65,9 +65,13 @@ public class RecyclerViewAdapterPurchase extends RecyclerView.Adapter<RecyclerVi
         PurchaseResponse item = purchaseList.get(position);
         String formattedDate = utils.convertDateToClearFormat(item.getCreatedAt().toString());
         holder.date.setText(formattedDate);
-        holder.status.setText(item.getStatus());
+        if(Objects.equals(item.getStatus(), "received")){
+            holder.status.setText("Recibido");
+        }else{
+            holder.status.setText("En progreso");
+        }
         holder.amount.setText("Cantidad: "+item.getProducts().size());
-        holder.total.setText("Total: "+item.getTotal());
+        holder.total.setText("Total: S/ "+utils.formatDecimal(item.getTotal()));
         holder.btn_validatePurchase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

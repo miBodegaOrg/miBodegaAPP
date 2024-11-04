@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.PagesProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
@@ -34,7 +35,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class SupplierActivity extends AppCompatActivity {
+public class SupplierActivity extends MainActivity {
 
     private TextInputEditText edt_searchSupplier;
     private FloatingActionButton btn_newSupplier;
@@ -46,7 +47,11 @@ public class SupplierActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_supplier);
+        //setContentView(R.layout.activity_supplier);
+        setContentLayout(R.layout.activity_supplier);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Mis Proveedores");
+        }
         edt_searchSupplier = findViewById(R.id.Edt_searchSuplier_supplier);
         btn_newSupplier = findViewById(R.id.Btn_addNewSupplier_supplier);
         rv_supplierList = findViewById(R.id.Rv_supplierList_supplier);

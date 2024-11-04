@@ -6,6 +6,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,16 +15,20 @@ import android.widget.FrameLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.ChatResponse;
 import com.mibodega.mystore.models.Responses.PurchaseResponse;
 import com.mibodega.mystore.services.IChatServices;
 import com.mibodega.mystore.services.IPurchasesService;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.Utils;
+import com.mibodega.mystore.shared.adapters.LoadingDialogAdapter;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterChat;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterPurchase;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
 import com.mibodega.mystore.views.chatbot.ChatbotActivity;
+import com.mibodega.mystore.views.employers.ManageEmployerActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +39,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class SellingActivity extends AppCompatActivity {
+public class SellingActivity extends MainActivity {
     private FloatingActionButton btn_newPurchase;
     private RecyclerView rv_purchaseList;
     private RecyclerViewAdapterPurchase recyclerViewAdapterPurchase;
@@ -42,10 +48,16 @@ public class SellingActivity extends AppCompatActivity {
     private ArrayList<PurchaseResponse> purchaseList = new ArrayList<>();
     private DrawerLayout drawerLayout;
     private FrameLayout chatFragmentContainer;
+    private LoadingDialogAdapter loadingDialog = new LoadingDialogAdapter();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_selling);
+        //setContentView(R.layout.activity_selling);
+        setContentLayout(R.layout.activity_selling);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("TUS COMPRAS");
+        }
+
         btn_newPurchase = findViewById(R.id.Btn_addNewPurchase_purchases);
         rv_purchaseList = findViewById(R.id.Rv_purchaseList_purchases);
 
@@ -94,6 +106,7 @@ public class SellingActivity extends AppCompatActivity {
     }
 
     public void loadPurchases(){
+
         Retrofit retrofit = new Retrofit.
                 Builder().
                 baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
@@ -109,6 +122,7 @@ public class SellingActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
                     purchaseList = (ArrayList<PurchaseResponse>) response.body();
                     if(purchaseList!=null){
+
                         rv_purchaseList.removeAllViews();
                         recyclerViewAdapterPurchase = new RecyclerViewAdapterPurchase(getBaseContext(), purchaseList, new RecyclerViewAdapterPurchase.OnDetailItem() {
                             @Override
@@ -121,6 +135,18 @@ public class SellingActivity extends AppCompatActivity {
                     }
                     System.out.println("successfull request");
 
+                }else{
+                    if(response.code()==403){
+                        Utils utils = new Utils();
+                        Dialog dialog = utils.getAlertCustom(SellingActivity.this,"danger","Error","Acceso no autorizado",false);
+                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+
+                            }
+                        });
+                        dialog.show();
+                    }
                 }
 
             }
@@ -132,6 +158,9 @@ public class SellingActivity extends AppCompatActivity {
         });
     }
     public void validatePurchase(PurchaseResponse purchase){
+        View dialogView = getLayoutInflater().from(getBaseContext()).inflate(R.layout.progress_dialog, null);
+        loadingDialog.startLoadingDialog(this, dialogView, "Cargando","Porfavor espere...");
+
         Retrofit retrofit = new Retrofit.
                 Builder().
                 baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
@@ -147,17 +176,20 @@ public class SellingActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
                      PurchaseResponse purchaseResponse =  response.body();
                     if(purchaseResponse!=null){
+
                         System.out.println("successfull request");
                         loadPurchases();
                     }
 
                 }
 
+                loadingDialog.dismissDialog();
             }
 
             @Override
             public void onFailure(@NonNull Call<PurchaseResponse> call, @NonNull Throwable t) {
                 System.out.println("errror "+t.getMessage());
+                loadingDialog.dismissDialog();
             }
         });
     }

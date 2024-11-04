@@ -28,14 +28,17 @@ tools:context=".views.offers.DiscountsActivity">
             android:padding="10dp"
             android:text="Crear Descuento"
             android:textAlignment="center"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:visibility="gone" />
 
         <SearchView
             android:id="@+id/Sv_searchProduct_discount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/backgroun_custom_rectangle"
-            android:backgroundTint="@color/md_theme_dark_onSecondaryContainer">
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/background_custom_rectangle_shadow">
 
         </SearchView>
 
@@ -46,7 +49,8 @@ tools:context=".views.offers.DiscountsActivity">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="8dp">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/Rv_listSearchProduct_discount"
@@ -73,7 +77,7 @@ tools:context=".views.offers.DiscountsActivity">
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Ultimo codigo: "
-                        android:textColor="@color/md_theme_dark_inversePrimary" />
+                        android:textColor="@color/md_theme_light_onPrimaryContainer" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -99,7 +103,7 @@ tools:context=".views.offers.DiscountsActivity">
                             android:layout_marginLeft="5dp"
                             android:layout_weight="4"
                             android:background="@drawable/backgroun_custom_rectangle"
-                            android:backgroundTint="@color/md_theme_dark_inversePrimary"
+                            android:backgroundTint="@color/md_theme_light_onPrimaryContainer"
                             android:src="@drawable/ic_barcode"
                             app:tint="@color/white" />
                     </LinearLayout>
@@ -193,8 +197,8 @@ tools:context=".views.offers.DiscountsActivity">
                             android:id="@+id/Edt_discount_discount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="number"
-                            android:hint="Descuento %" />
+                            android:hint="Descuento %"
+                            android:inputType="number" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -206,7 +210,7 @@ tools:context=".views.offers.DiscountsActivity">
                             android:id="@+id/Edt_value_discount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Valor S/."
+                            android:hint="Valor S/ "
                             android:inputType="numberDecimal" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>

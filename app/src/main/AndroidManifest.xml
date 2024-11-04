@@ -34,8 +34,39 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MyStore"
+        android:theme="@style/Base.Theme.MyStore"
         tools:targetApi="31">
+        <activity
+            android:name=".views.signIn.SetNewPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.signIn.ValidateEmailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.signIn.RecoverPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.user.ValidatePasswordCodeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.user.ChangePasswordWithEmailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.user.ChangePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.user.EditProfileActivity"
+            android:exported="false" />
+
+        <service
+            android:name=".firebase.MyFirebaseMessagingService"
+            android:exported="false"
+            android:permission="TODO">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".views.selling.PurchaseFormActivity"
             android:exported="false" />

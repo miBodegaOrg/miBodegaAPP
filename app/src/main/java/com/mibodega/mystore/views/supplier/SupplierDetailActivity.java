@@ -8,18 +8,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
 
-public class SupplierDetailActivity extends AppCompatActivity {
+public class SupplierDetailActivity extends MainActivity {
 
     private DrawerLayout drawerLayout;
     private FrameLayout chatFragmentContainer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_supplier_detail);
-
+        //setContentView(R.layout.activity_supplier_detail);
+        setContentLayout(R.layout.activity_supplier_detail);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Detalle de Proveedor");
+        }
         drawerLayout = findViewById(R.id.drawer_layout);
         chatFragmentContainer = findViewById(R.id.chat_fragment_container);
         drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {

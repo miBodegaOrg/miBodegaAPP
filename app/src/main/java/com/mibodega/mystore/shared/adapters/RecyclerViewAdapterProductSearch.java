@@ -64,7 +64,7 @@ public class RecyclerViewAdapterProductSearch extends RecyclerView.Adapter<Recyc
         ProductResponse product = productList.get(position);
         holder.tv_name.setText(product.getName().toString());
         holder.tv_stock.setText(String.valueOf(product.getStock()));
-       holder.tv_price.setText("s/. " +String.valueOf(product.getPrice()));
+       holder.tv_price.setText("S/ " +utils.formatDecimal(product.getPrice()));
         holder.ly_item_product.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -4,8 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="@color/md_theme_light_background"
     android:orientation="vertical"
+    android:padding="10dp"
     tools:context=".views.sales.DetailSaleActivity">
+
+    <TextView
+        android:id="@+id/textView67"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Detalles"
+        android:textSize="24sp"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,9 +25,10 @@
         android:padding="16dp">
 
         <TextView
+            android:id="@+id/Tv_date_sale_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Title"
+            android:text="08/09/2024"
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -28,41 +39,124 @@
             android:layout_marginTop="8dp"
             android:background="#E0E0E0" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="16dp" />
-
     </LinearLayout>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp">
+        android:background="@color/md_theme_light_onPrimaryContainer"
+        android:orientation="horizontal">
 
-        <Button
-            style="@style/Widget.Material3.Button.IconButton.Filled"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/textView71"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:background="@drawable/backgroun_custom_rectangle"
-            android:text="Save"
-            android:textColor="#FFFFFF" />
+            android:text="Codigo"
+            android:textAlignment="center"
+            android:textColor="@color/ic_launcher_background" />
 
-        <Button
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/textView72"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:background="@drawable/backgroun_custom_rectangle"
-            android:text="Cancel"
-            android:textColor="#000000" />
+            android:text="Nombre"
+            android:textAlignment="center"
+            android:textColor="@color/ic_launcher_background" />
+
+        <TextView
+            android:id="@+id/textView79"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cantidad"
+            android:textAlignment="center"
+            android:textColor="@color/ic_launcher_background" />
+
+        <TextView
+            android:id="@+id/textView69"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Precio"
+            android:textAlignment="center"
+            android:textColor="@color/ic_launcher_background" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/Rv_itemsale_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background_custom_rectangle_shadow"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView73"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Subtotal:" />
+
+            <TextView
+                android:id="@+id/Tv_subtotal_sale_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="..." />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView70"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Descuentos:" />
+
+            <TextView
+                android:id="@+id/Tv_descuento_sale_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="..." />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView68"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Total:" />
+
+            <TextView
+                android:id="@+id/Tv_total_sale_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="..." />
+        </LinearLayout>
 
     </LinearLayout>
+
 </LinearLayout>

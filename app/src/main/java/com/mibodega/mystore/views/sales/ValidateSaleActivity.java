@@ -88,7 +88,6 @@ public class ValidateSaleActivity extends AppCompatActivity {
             public void onResponse(Call<SaleResponse> call, Response<SaleResponse> response) {
                 Log.e("error", response.toString());
                 if (response.isSuccessful()) {
-                    Toast.makeText(getBaseContext(),"Actualizado",Toast.LENGTH_SHORT).show();
 
                     btn_backSale.setVisibility(View.VISIBLE);
                     btn_cancelSale.setVisibility(View.GONE);
@@ -117,7 +116,6 @@ public class ValidateSaleActivity extends AppCompatActivity {
             public void onResponse(Call<SaleResponse> call, Response<SaleResponse> response) {
                 Log.e("error", response.toString());
                 if (response.isSuccessful()) {
-                    Toast.makeText(getBaseContext(),"Actualizado",Toast.LENGTH_SHORT).show();
                     btn_backSale.setVisibility(View.VISIBLE);
                     btn_cancelSale.setVisibility(View.GONE);
                     btn_paidSale.setVisibility(View.GONE);

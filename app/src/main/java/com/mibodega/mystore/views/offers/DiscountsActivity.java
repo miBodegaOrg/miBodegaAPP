@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -21,25 +23,21 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
+import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.DiscountRequest;
-import com.mibodega.mystore.models.Requests.PromotionRequest;
-import com.mibodega.mystore.models.Responses.CategoryProduct;
 import com.mibodega.mystore.models.Responses.DiscountResponse;
 import com.mibodega.mystore.models.Responses.PagesProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
-import com.mibodega.mystore.models.Responses.ProductResponseByCode;
-import com.mibodega.mystore.models.Responses.PromotionResponse;
-import com.mibodega.mystore.models.Responses.SubCategoryResponse;
 import com.mibodega.mystore.services.IDiscountsService;
 import com.mibodega.mystore.services.IProductServices;
-import com.mibodega.mystore.services.IPromotionService;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.SaleTemporalList;
 import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSale;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSearch;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
+import com.mibodega.mystore.views.products.ProductDetailActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,6 +48,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicReference;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -57,7 +57,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class DiscountsActivity extends AppCompatActivity {
+public class DiscountsActivity extends MainActivity {
     private SearchView searchProduct;
     private TextView tv_codeScanned;
     private ImageButton btn_scanCodeBar;
@@ -74,7 +74,8 @@ public class DiscountsActivity extends AppCompatActivity {
     private PagesProductResponse pagesSearchProductResponse;
     private TextInputEditText edt_name, edt_discount, edt_value,edt_dateInit, edt_dateEnd;
 
-
+    private String startDateValue="";
+    private String endDateValue="";
 
     private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
             result -> {
@@ -92,11 +93,17 @@ public class DiscountsActivity extends AppCompatActivity {
     private Calendar startCalendar, endCalendar;
     private DrawerLayout drawerLayout;
     private FrameLayout chatFragmentContainer;
+
+    private static final String REGEX_BUSQUEDA_VALIDO = "^[a-zA-Z0-9\\s\\-_#]*$";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_discounts);
-
+        //setContentView(R.layout.activity_discounts);
+        setContentLayout(R.layout.activity_discounts);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Nuevo Descuento");
+        }
         searchProduct = findViewById(R.id.Sv_searchProduct_discount);
         rv_recyclerSearchProductList = findViewById(R.id.Rv_listSearchProduct_discount);
         tv_codeScanned = findViewById(R.id.Tv_codeScannedBar_discount);
@@ -151,12 +158,15 @@ public class DiscountsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showDateTimePicker(edt_dateInit,startCalendar);
+
             }
         });
         btn_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDateTimePicker(edt_dateEnd,endCalendar);
+
+                showEndDateTimePicker(edt_dateEnd,endCalendar);
+
             }
         });
         btn_scanCodeBar.setOnClickListener(new View.OnClickListener() {
@@ -168,10 +178,17 @@ public class DiscountsActivity extends AppCompatActivity {
         btn_vender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Objects.equals(valiteFields(), "ok")){
+                if(Objects.equals(valiteFields(), "")){
                     createPromotion();
                 }else{
-                    Toast.makeText(getBaseContext(),valiteFields(),Toast.LENGTH_SHORT).show();
+                    Utils utils = new Utils();
+                    Dialog dialog = utils.getAlertCustom(DiscountsActivity.this,"danger","Error",valiteFields(),false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    dialog.show();
                 }
             }
         });
@@ -194,7 +211,14 @@ public class DiscountsActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String s) {
                 if(Objects.equals(s, "")){
                     rv_recyclerSearchProductList.setVisibility(View.GONE);
-
+                }else{
+                    if (!s.matches(REGEX_BUSQUEDA_VALIDO)) {
+                        String filteredInput = s.replaceAll("[^a-zA-Z0-9\\s\\-_#]", ""); // Filtra solo los caracteres no permitidos
+                        if (!s.equals(filteredInput)) {
+                            Toast.makeText(DiscountsActivity.this,"Evitar ingresar simbolos o caracteres especiales",Toast.LENGTH_SHORT).show();
+                            searchProduct.setQuery(filteredInput, false); // Establece el texto filtrado sin activar el submit
+                        }
+                    }
                 }
                 return true;
 
@@ -204,7 +228,17 @@ public class DiscountsActivity extends AppCompatActivity {
 
     public void loadData(){
         arrayListProduct  = saleTemporalList.getArrayList();
-        RecyclerViewAdapterProductSale listAdapter = new RecyclerViewAdapterProductSale(getBaseContext(),arrayListProduct);
+        RecyclerViewAdapterProductSale listAdapter = new RecyclerViewAdapterProductSale(getBaseContext(), arrayListProduct, new RecyclerViewAdapterProductSale.OnEdit() {
+            @Override
+            public void onClick(ProductResponse product) {
+
+            }
+        }, new RecyclerViewAdapterProductSale.OnDelete() {
+            @Override
+            public void onClick(ProductResponse product) {
+
+            }
+        });
         rv_recyclerProductList.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false));
         rv_recyclerProductList.setAdapter(listAdapter);
     }
@@ -232,13 +266,15 @@ public class DiscountsActivity extends AppCompatActivity {
                                 product.getStock(),
                                 product.getImage_url(),
                                 product.getSales(),
-                                false,
+                                product.isWeight(),
                                 product.getCategory(), product.getSubcategory(),
                                 product.getShop(),
                                 product.getCreatedAt(),
-                                product.getUpdatedAt()
+                                product.getUpdatedAt(),
+                                product.getCost(),
+                                product.getSupplier()
                         );
-                        saleTemporalList.addProduct(productResponse,1);
+                        saleTemporalList.addProduct(productResponse,1.0);
                         loadData();
                     }
                     System.out.println("successfull request");
@@ -277,7 +313,7 @@ public class DiscountsActivity extends AppCompatActivity {
                             @Override
                             public void onClick(ProductResponse product) {
                                 Toast.makeText(getBaseContext(),"Agregado",Toast.LENGTH_SHORT).show();
-                                saleTemporalList.addProduct(product,1);
+                                saleTemporalList.addProduct(product,1.0);
                                 loadData();
                             }
                         });
@@ -312,21 +348,57 @@ public class DiscountsActivity extends AppCompatActivity {
                 calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 calendar.set(Calendar.MINUTE, minute1);
 
+                // Configura el formato de fecha y la zona horaria de Lima
+                SimpleDateFormat dateFormatVisual = new SimpleDateFormat("dd-MM-yyyy h:mm a", Locale.getDefault());
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+                dateFormat.setTimeZone(TimeZone.getTimeZone("America/Lima"));
+
                 String formattedDateTime = dateFormat.format(calendar.getTime());
-                editText.setText(formattedDateTime);
-            }, hour, minute, true);
+                String formatVisual = dateFormatVisual.format(calendar.getTime());
+                startDateValue = formattedDateTime;  // Asigna el valor al AtomicReference
+                editText.setText(formatVisual);
+            }, hour, minute, false); // Usa false para el formato de 12 horas (am/pm)
             timePickerDialog.show();
         }, year, month, day);
+
         datePickerDialog.show();
     }
+    private void showEndDateTimePicker(TextInputEditText editText, Calendar calendar) {
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, year1, monthOfYear, dayOfMonth) -> {
+            calendar.set(year1, monthOfYear, dayOfMonth);
+            TimePickerDialog timePickerDialog = new TimePickerDialog(this, (view1, hourOfDay, minute1) -> {
+                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                calendar.set(Calendar.MINUTE, minute1);
+
+                // Configura el formato de fecha y la zona horaria de Lima
+                SimpleDateFormat dateFormatVisual = new SimpleDateFormat("dd-MM-yyyy h:mm a", Locale.getDefault());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+                dateFormat.setTimeZone(TimeZone.getTimeZone("America/Lima"));
+
+                String formattedDateTime = dateFormat.format(calendar.getTime());
+                String formatVisual = dateFormatVisual.format(calendar.getTime());
+                endDateValue = formattedDateTime;  // Asigna el valor al AtomicReference
+                editText.setText(formatVisual);
+            }, hour, minute, false); // Usa false para el formato de 12 horas (am/pm)
+            timePickerDialog.show();
+        }, year, month, day);
+
+        datePickerDialog.show();
+    }
+
     public void createPromotion(){
         ArrayList<String> arraux = new ArrayList<>();
         for (ProductResponse product : saleTemporalList.getArrayList()){
             arraux.add(product.get_id());
         }
-        String startDate = edt_dateInit.getText().toString();
-        String endDate = edt_dateEnd.getText().toString();
+        String startDate = startDateValue;
+        String endDate = endDateValue;
         int percentage = Integer.valueOf(edt_discount.getText().toString());
         DiscountRequest request = new DiscountRequest(
                 edt_name.getText().toString(),
@@ -352,9 +424,23 @@ public class DiscountsActivity extends AppCompatActivity {
                         edt_name.setText("");
                         edt_discount.setText("");
                         loadData();
-                        Toast.makeText(getBaseContext(),"DESCUENTO CREADO",Toast.LENGTH_SHORT).show();
+                        Utils utils = new Utils();
+                        Dialog dialog = utils.getAlertCustom(DiscountsActivity.this,"success","Exitoso","Descuento creado correctamente",false);
+                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                            }
+                        });
+                        dialog.show();
                     }else{
-                        Toast.makeText(getBaseContext(),"ALGUN ERROR OCURRIO",Toast.LENGTH_SHORT).show();
+                        Utils utils = new Utils();
+                        Dialog dialog = utils.getAlertCustom(DiscountsActivity.this,"danger","Error","Ocurrio un error",false);
+                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                            }
+                        });
+                        dialog.show();
                     }
 
 
@@ -364,13 +450,19 @@ public class DiscountsActivity extends AppCompatActivity {
                         System.out.println("Error response body: " + errorBody);
                         JSONObject errorJson = new JSONObject(errorBody);
                         String errorMessage = errorJson.getString("message");
-                        Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_SHORT).show();
-                        System.out.println(errorMessage);
+                        Utils utils = new Utils();
+                        Dialog dialog = utils.getAlertCustom(DiscountsActivity.this,"danger","Error","La fecha de inicio debe ser menor a la fecha final",false);
+                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                            }
+                        });
+                        dialog.show();
 
                     } catch (IOException | JSONException e) {
                         e.printStackTrace();
                     }
-                    Toast.makeText(getBaseContext(),"no Creado",Toast.LENGTH_SHORT).show();
+
                 }
             }
 
@@ -392,23 +484,23 @@ public class DiscountsActivity extends AppCompatActivity {
         barcodeLauncher.launch(options);
     }
     public String valiteFields(){
-        String message = "ok";
+        String message = "";
         if(edt_name.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar nombre \n";
+            message += "- Debe ingresar nombre \n";
         }
         if(edt_discount.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar descuento \n";
+            message += "- Debe ingresar descuento \n";
         }
         if(edt_dateInit.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar fecha inicial \n";
+            message += "- Debe ingresar fecha inicial \n";
         }
         if(edt_dateEnd.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar fecha final \n";
+            message += "- Debe ingresar fecha final \n";
         }
         if(edt_discount.getText().toString().trim().length() != 0){
             double aux = Double.parseDouble(edt_discount.getText().toString());
             if(aux>100){
-                message += "😨 Debe ingresar un numero menor a 100 en descuentos \n";
+                message += "- Debe ingresar un numero menor a 100 en descuentos \n";
             }
         }
 

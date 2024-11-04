@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="@color/md_theme_light_background"
     tools:context=".views.signIn.SignInActivity">
 
     <LinearLayout
@@ -43,21 +44,22 @@
                 android:layout_alignParentEnd="true"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_marginStart="129dp"
-                android:layout_marginTop="152dp"
+                android:layout_marginTop="100dp"
                 android:layout_marginEnd="130dp"
                 android:textAlignment="center"
-                app:srcCompat="@drawable/img" />
+                app:srcCompat="@drawable/logo_size2" />
 
             <TextView
                 android:id="@+id/miTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/Imv_bannerSignIn"
-                android:layout_marginBottom="5dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="false"
+                android:layout_marginTop="283dp"
                 android:gravity="center"
                 android:text="Bienvenido"
                 android:textColor="@color/md_theme_light_onPrimary"
-                android:textSize="24dp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
         </RelativeLayout>
@@ -84,22 +86,31 @@
                     android:id="@+id/TextInputLayout_user"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Ingrese Usuario">
+                    android:backgroundTint="@color/md_theme_light_onPrimaryContainer"
+                    android:hint="Ingrese DNI / RUC"
+                    app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/Tedt_user"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress"
-                        android:text="20428729201" />
+                        android:inputType="textEmailAddress" />
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <CheckBox
+                    android:id="@+id/Cbx_remenberUser_signin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Recordar Usuario"
+                    android:visibility="gone" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/TextInputLayout_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:hint="Ingrese Contraseña">
+                    android:backgroundTint="@color/md_theme_light_onPrimaryContainer"
+                    android:hint="Ingrese Contraseña"
+                    app:endIconMode="password_toggle">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/Tedt_password"
@@ -123,20 +134,22 @@
                 android:layout_marginTop="17dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="19dp"
+                android:backgroundTint="@color/md_theme_light_onPrimaryContainer"
                 android:text="Iniciar sesion"
                 android:textAllCaps="true"
                 android:textSize="16dp"
                 android:textStyle="bold" />
 
-            <ImageView
+            <TextView
                 android:id="@+id/Imgv_helpIcon_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/Tv_questionForgotPassword_login"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/baseline_help_24"
-                android:tint="@color/md_theme_light_secondary"
+                android:text="Olvidé la contraseña"
+                android:textAlignment="center"
+                android:textColor="@color/stepview_mark"
                 tools:ignore="UseAppTint" />
 
             <TextView

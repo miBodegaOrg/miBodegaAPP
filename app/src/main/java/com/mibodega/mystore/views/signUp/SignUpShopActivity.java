@@ -3,6 +3,8 @@ package com.mibodega.mystore.views.signUp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +20,8 @@ import com.mibodega.mystore.models.Responses.SignUpResponse;
 import com.mibodega.mystore.services.IEmployeeServices;
 import com.mibodega.mystore.services.IUserServices;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.Utils;
+import com.mibodega.mystore.views.employers.ManageEmployerActivity;
 
 import java.util.Objects;
 
@@ -49,10 +53,17 @@ public class SignUpShopActivity extends AppCompatActivity {
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Objects.equals(valiteFields(), "ok")){
+                if(Objects.equals(valiteFields(), "")){
                     createShop();
                 }else{
-                    Toast.makeText(getBaseContext(),valiteFields(),Toast.LENGTH_SHORT).show();
+                    Utils utils = new Utils();
+                    Dialog dialog = utils.getAlertCustom(SignUpShopActivity.this,"danger","Error",valiteFields(),false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    dialog.show();
                 }
             }
         });
@@ -64,42 +75,42 @@ public class SignUpShopActivity extends AppCompatActivity {
         });
     }
     public String valiteFields(){
-        String message = "ok";
+        String message = "";
         if(edt_nameSignUp_shop.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar nombre \n";
+            message += "- Debe ingresar nombre \n";
         }
         if(edt_lastnameSignUp_shop.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar apellidos \n";
+            message += "- Debe ingresar apellidos \n";
         }
         if(edt_addressSignUp_shop.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar dirección \n";
+            message += "- Debe ingresar correo \n";
         }
 
         if(edt_phoneSignUp_shop.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar correo \n";
+            message += "- Debe ingresar telefono \n";
         }
         if(edt_rucSignUp_shop.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar RUC \n";
+            message += "- Debe ingresar RUC \n";
         }
         if(edt_passwordSignUp_shop.getText().toString().trim().length() == 0){
-            message += "😨 Debe ingresar contraseña \n";
+            message += "- Debe ingresar contraseña \n";
         }
         if(edt_phoneSignUp_shop.getText().toString().trim().length() != 0){
             int aux = edt_phoneSignUp_shop.getText().toString().length();
             if(aux != 9){
-                message += "😨 Debe ingresar un numero telefono con 9 digitos\n";
+                message += "- Debe ingresar un numero telefono con 9 digitos\n";
             }
         }
         if(edt_rucSignUp_shop.getText().toString().trim().length() != 0){
             int aux = edt_rucSignUp_shop.getText().toString().length();
             if(aux != 11){
-                message += "😨 Debe ingresar un numero de ruc con minimo 8 digitos\n";
+                message += "- Debe ingresar un numero de ruc con minimo 11 digitos\n";
             }
         }
         if(edt_passwordSignUp_shop.getText().toString().trim().length() != 0){
             int aux = edt_passwordSignUp_shop.getText().toString().length();
             if(aux < 6){
-                message += "😨 Debe ingresar una contraseña minimo 6 digitos\n";
+                message += "- Debe ingresar una contraseña minimo 6 digitos\n";
             }
         }
 
@@ -132,7 +143,6 @@ public class SignUpShopActivity extends AppCompatActivity {
 
 
         Call<SignUpResponse> call = service.post_signup(request);
-        System.out.println(config.getJwt());
         call.enqueue(new Callback<SignUpResponse>() {
             @Override
             public void onResponse(@NonNull Call<SignUpResponse> call, @NonNull Response<SignUpResponse> response) {
@@ -147,11 +157,26 @@ public class SignUpShopActivity extends AppCompatActivity {
                                 edt_rucSignUp_shop.setText("");
                                 edt_passwordSignUp_shop.setText("");
 
-                        Toast.makeText(getBaseContext(),"BODEGUERO CREADO",Toast.LENGTH_SHORT).show();
-                        System.out.println("successfull request");
-                        finish();
+                        Utils utils = new Utils();
+                        Dialog dialog = utils.getAlertCustom(SignUpShopActivity.this,"success","Exitoso","Bodeguero creado",false);
+                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                finish();
+                            }
+                        });
+                        dialog.show();
                     }
 
+                }else{
+                    Utils utils = new Utils();
+                    Dialog dialog = utils.getAlertCustom(SignUpShopActivity.this,"danger","Error","No se registro",false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    dialog.show();
                 }
             }
             @Override

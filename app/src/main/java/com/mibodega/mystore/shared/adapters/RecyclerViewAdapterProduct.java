@@ -118,11 +118,11 @@ public class RecyclerViewAdapterProduct extends RecyclerView.Adapter<RecyclerVie
         ProductResponse product = productList.get(position);
         holder.productCodigo.setText("sku:" + product.getCode());
         holder.productDescription.setText(product.getName());
-        holder.productStock.setText(String.valueOf(product.getStock()));
+        holder.productStock.setText("Stock: "+String.valueOf(product.getStock()));
         holder.productLevel.setText("ALTO");
         holder.productState.setText("ACTIVO");
-        holder.buyPrice.setText("s/ " +String.valueOf(product.getPrice()));
-        holder.sellPrice.setText("s/ " +String.valueOf(product.getPrice()));
+        holder.buyPrice.setText("Precio Compra: S/ " + utils.formatDecimal(product.getCost()));
+        holder.sellPrice.setText("S/ " +utils.formatDecimal(product.getPrice()));
 
         Glide.with(context)
                 .asBitmap()

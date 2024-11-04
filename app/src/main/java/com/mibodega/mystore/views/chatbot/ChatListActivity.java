@@ -14,6 +14,7 @@ import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.ChatResponse;
 import com.mibodega.mystore.models.Responses.PagesProductResponse;
@@ -33,7 +34,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ChatListActivity extends AppCompatActivity {
+public class ChatListActivity extends MainActivity {
 
     private TextInputEditText txt_search;
     private FloatingActionButton btn_datePicker;
@@ -44,7 +45,11 @@ public class ChatListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat_list);
+        //setContentView(R.layout.activity_chat_list);
+        setContentLayout(R.layout.activity_chat_list);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Lista de Chats");
+        }
 
         txt_search = findViewById(R.id.Edt_searchChat_chat);
         btn_datePicker = findViewById(R.id.FBtn_datePicker_chat);
@@ -85,11 +90,11 @@ public class ChatListActivity extends AppCompatActivity {
             }
         });
 
-        loadChats();
+       // loadChats();
 
     }
 
-    public void loadChats(){
+    public void loadChats(){/*
         Retrofit retrofit = new Retrofit.
                 Builder().
                 baseUrl(config.getURL_API()).addConverterFactory(GsonConverterFactory.create()).
@@ -130,7 +135,7 @@ public class ChatListActivity extends AppCompatActivity {
             public void onFailure(@NonNull Call<List<ChatResponse>> call, @NonNull Throwable t) {
                 System.out.println("errror "+t.getMessage());
             }
-        });
+        });*/
     }
 
     @Override

@@ -20,6 +20,8 @@ import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
 import android.os.Build;
 import android.text.Html;
 import android.view.Display;
@@ -49,8 +51,10 @@ import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class Utils {
 
@@ -79,19 +83,21 @@ public class Utils {
             return null;
         }
     }
-    public String convertDateToClearFormat(String date){
+    public String convertDateToClearFormat(String date) {
         String createdAtString = date;
 
         SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+        isoFormat.setTimeZone(TimeZone.getTimeZone("UTC")); // Asegura que el formato de entrada esté en UTC
         Date createdAtDate = null;
         try {
             createdAtDate = isoFormat.parse(createdAtString);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+
         SimpleDateFormat desiredFormat = new SimpleDateFormat("EEEE d MMM h:mm a", new Locale("es", "ES"));
-        String formattedDate = desiredFormat.format(createdAtDate);
-        return formattedDate;
+        desiredFormat.setTimeZone(TimeZone.getTimeZone("America/Lima")); // Configura la zona horaria a Lima, Perú
+        return desiredFormat.format(createdAtDate);
     }
     public Dialog getAlertCustom(Context context, String type, String title, String message, boolean hasButtons) {
         Dialog dialog = new Dialog(context);
@@ -180,7 +186,7 @@ public class Utils {
         }
         return dialog;
     }
-    public static void getAlertDialog(Context context, String title, String message, String color) {
+    public void getAlertDialog(Context context, String title, String message, String color) {
         Resources resources = context.getResources();
         String colorTitle = "";
         if (color.equals("verde")) {
@@ -269,6 +275,67 @@ public class Utils {
     }
     //***********
 
+    public String formatDecimal(double amount) {
+        return String.format("%.2f", amount);
+    }
+    public String getDateDDMMYYYY() {
+        Date fechaActual = new Date();
+        // Formatear la fecha en el formato DD/MM/YYYY
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+        String fechaFormateada = formatoFecha.format(fechaActual);
+        return fechaFormateada;
+    }
+    public String getDateYesterdayDDMMYYYY() {
+        // Obtener la fecha actual
+        Date fechaActual = new Date();
 
+        // Crear un objeto Calendar con la fecha actual
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(fechaActual);
+
+        // Restar un día al Calendar
+        calendar.add(Calendar.DATE, -1);
+
+        // Obtener la fecha de ayer a partir del Calendar
+        Date fechaAyer = calendar.getTime();
+
+        // Formatear la fecha de ayer en el formato DD/MM/YYYY
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+        String fechaFormateada = formatoFecha.format(fechaAyer);
+
+        return fechaFormateada;
+    }
+    public String getDateTimeDDMMYYYYHHMMSS() {
+        Date fechaActual = new Date();
+        // Formatear la fecha en el formato DD/MM/YYYY HH:mm:ss
+        SimpleDateFormat formatoFechaTiempo = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        String fechaTiempoFormateada = formatoFechaTiempo.format(fechaActual);
+        return fechaTiempoFormateada;
+    }
+
+    public boolean isConnectedToInternet(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (connectivityManager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                NetworkCapabilities networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
+                if (networkCapabilities != null) {
+                    if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                        return true;
+                    }
+                }
+            } else {
+                // Para versiones anteriores a Android Marshmallow
+                android.net.NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+                if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
+                    return true;
+                }
+            }
+        }
+
+        // Si no hay conexión, muestra un mensaje y retorna falso
+        return false;
+    }
 
 }

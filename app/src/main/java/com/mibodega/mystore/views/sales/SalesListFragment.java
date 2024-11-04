@@ -80,6 +80,7 @@ public class SalesListFragment extends Fragment {
                                 new RecyclerViewAdapterSale.OnDetailItem() {
                             @Override
                             public void onClick(SaleResponse sale) {
+                                config.setSaleResponsecurrent(sale);
                                 Intent moveHMA = new Intent(getContext(), DetailSaleActivity.class);
                                 startActivity(moveHMA);
                             }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backgroun_custom_rectangle"
+    android:backgroundTint="@color/md_theme_light_background"
     android:orientation="vertical"
     android:padding="5dp"
     tools:context=".views.sales.CreateSaleFragment">
@@ -42,8 +42,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/Rv_listSearchProduct_sale"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="gone" />
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
@@ -69,7 +68,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Ultimo codigo: "
-                    android:textColor="@color/md_theme_dark_inversePrimary" />
+                    android:textColor="@color/md_theme_light_onPrimaryContainer" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -95,7 +94,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_weight="4"
                         android:background="@drawable/backgroun_custom_rectangle"
-                        android:backgroundTint="@color/md_theme_dark_inversePrimary"
+                        android:backgroundTint="@color/md_theme_light_onPrimaryContainer"
                         android:src="@drawable/ic_barcode"
                         app:tint="@color/white" />
                 </LinearLayout>
@@ -120,6 +119,31 @@
                     android:id="@+id/Rv_productAtSaleList_sale"
                     android:layout_width="match_parent"
                     android:layout_height="399dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/background_custom_rectangle_shadow"
+                    android:gravity="right"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/textView65"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:text="SubTotal: "
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/Tv_subTotal_sale"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="S/ 0.0"
+                        android:textAlignment="viewEnd"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
                 <Button
                     android:id="@+id/Btn_saleProducts_sale"
