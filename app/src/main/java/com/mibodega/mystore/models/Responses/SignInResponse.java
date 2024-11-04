@@ -5,16 +5,19 @@ public class SignInResponse {
     private String name;
     private String username;
     private String phone;
+    private String email;
     private String type;
     private String token;
 
-    public SignInResponse(String name, String username, String phone, String type, String token) {
+    public SignInResponse(String name, String username, String phone, String email, String type, String token) {
         this.name = name;
         this.username = username;
         this.phone = phone;
+        this.email = email;
         this.type = type;
         this.token = token;
     }
+
 
     public String getName() {
         return name;
@@ -54,5 +57,13 @@ public class SignInResponse {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

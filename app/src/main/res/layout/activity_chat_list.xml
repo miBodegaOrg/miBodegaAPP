@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="@color/md_theme_light_background"
     android:orientation="vertical"
     tools:context=".views.chatbot.ChatListActivity">
 
@@ -65,7 +66,7 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="?android:attr/panelFullBackground"
-        android:backgroundTint="@color/md_theme_dark_scrim" />
+        android:backgroundTint="@color/md_theme_light_onBackground" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/Rv_chatList_chat"

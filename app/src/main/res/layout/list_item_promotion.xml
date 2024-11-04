@@ -7,7 +7,8 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/md_theme_light_background">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -74,7 +75,7 @@
                     android:layout_gravity="start"
                     android:layout_weight="1"
                     android:text="PENDIENTE"
-                    android:textColor="@color/md_theme_dark_inversePrimary"
+                    android:textColor="@color/md_theme_light_onPrimaryContainer"
                     android:textSize="16sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -83,7 +84,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <Button
                     android:id="@+id/Btn_managePromotion_promotion_item"

@@ -7,6 +7,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +25,7 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
+import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.PurchaseRequest;
 import com.mibodega.mystore.models.Responses.CategoryProduct;
@@ -43,10 +46,12 @@ import com.mibodega.mystore.services.ISupplierServices;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.SaleTemporalList;
 import com.mibodega.mystore.shared.Utils;
+import com.mibodega.mystore.shared.adapters.LoadingDialogAdapter;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSale;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSearch;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSupplier;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
+import com.mibodega.mystore.views.products.ProductEditActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -64,11 +69,12 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class PurchaseFormActivity extends AppCompatActivity {
+public class PurchaseFormActivity extends MainActivity {
 
     private SearchView searchProduct;
     private RecyclerView rv_recyclerProductList;
 
+    private LoadingDialogAdapter loadingDialog = new LoadingDialogAdapter();
     private Button btn_vender;
     private Config config =  new Config();
     private Utils utils = new Utils();
@@ -82,10 +88,15 @@ public class PurchaseFormActivity extends AppCompatActivity {
     private Map<String,SupplierResponseV2> mapsupplierResponses = new HashMap<>();
     private RecyclerViewAdapterProductSupplier listAdapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_purchase_form);
+        //setContentView(R.layout.activity_purchase_form);
+        setContentLayout(R.layout.activity_purchase_form);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Realiza tu Compra");
+        }
 
         searchProduct = findViewById(R.id.Sv_searchProduct_purchase);
         rv_recyclerProductList = findViewById(R.id.Rv_productAtPurchaseList_purchase);
@@ -95,6 +106,8 @@ public class PurchaseFormActivity extends AppCompatActivity {
         edt_shipping = findViewById(R.id.Edt_shipping_purchase);
         drawerLayout = findViewById(R.id.drawer_layout);
         chatFragmentContainer = findViewById(R.id.chat_fragment_container);
+
+
 
         // Configura el deslizable desde el lado derecho
         //drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
@@ -130,10 +143,17 @@ public class PurchaseFormActivity extends AppCompatActivity {
         btn_vender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Objects.equals(valiteFields(), "ok")){
+                if(Objects.equals(valiteFields(), "")){
                     createPurchase();
                 }else{
-                    Toast.makeText(getBaseContext(),valiteFields(),Toast.LENGTH_SHORT).show();
+                    Utils utils = new Utils();
+                    Dialog dialog = utils.getAlertCustom(PurchaseFormActivity.this,"danger","Error",valiteFields(),false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    dialog.show();
                 }
             }
         });
@@ -165,7 +185,6 @@ public class PurchaseFormActivity extends AppCompatActivity {
         sp_selectSupplier.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getBaseContext(),"SELECCIONADO",Toast.LENGTH_SHORT).show();
                 arrProducts.clear();
                 arrProducts = mapsupplierResponses.get(sp_selectSupplier.getSelectedItem().toString()).getProducts();
                 loadData();
@@ -179,18 +198,18 @@ public class PurchaseFormActivity extends AppCompatActivity {
     }
 
     public String valiteFields(){
-            String message = "ok";
+            String message = "";
             if(edt_shipping.getText().toString().trim().length() == 0){
-                message += "😨 Debe ingresar precio envio \n";
+                message += "- Debe ingresar costo de envio \n";
             }
             if(edt_dicount.getText().toString().trim().length() == 0){
-                message += "😨 Debe ingresar Nombre cliente \n";
+                message += "- Debe ingresar el descuento \n";
             }
 
              if(edt_dicount.getText().toString().trim().length() != 0){
                  double aux = Double.parseDouble(edt_dicount.getText().toString());
                  if(aux>100){
-                     message += "😨 Debe ingresar un numero menor a 100 en descuentos \n";
+                     message += "- Debe ingresar un numero menor a 100 en descuentos \n";
                  }
              }
             return message;
@@ -246,6 +265,9 @@ public class PurchaseFormActivity extends AppCompatActivity {
     }
 
     public void createPurchase(){
+        View dialogView = getLayoutInflater().from(getBaseContext()).inflate(R.layout.progress_dialog, null);
+        loadingDialog.startLoadingDialog(this, dialogView, "Cargando","Porfavor espere...");
+
         ArrayList<ProductPurchase> arraux = new ArrayList<>();
         for (ProductResponseSupplierV2 product : arrProducts){
             int amountint = Integer.parseInt(listAdapter.getMapEditAmount().get(product.getCode()).getText().toString());
@@ -271,13 +293,22 @@ public class PurchaseFormActivity extends AppCompatActivity {
         call.enqueue(new Callback<PurchaseResponse>() {
             @Override
             public void onResponse(Call<PurchaseResponse> call, Response<PurchaseResponse> response) {
-                Log.e("error", response.toString());
                 if (response.isSuccessful()) {
+                    Dialog dialog = utils.getAlertCustom(PurchaseFormActivity.this, "success", "Creado", "Compra creada", false);
                     edt_dicount.setText("");
                     edt_shipping.setText("");
                     loadData();
-                    Toast.makeText(getBaseContext(),"COMPRA CREADA",Toast.LENGTH_SHORT).show();
+                    dialog.show();
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            finish();
+                        }
+                    });
+
                 } else {
+                    Dialog dialog = utils.getAlertCustom(PurchaseFormActivity.this, "warning", "No creado", "Asegurece de ingresar bien los datos", false);
+                    dialog.show();
                     try {
                         String errorBody = response.errorBody().string();
                         System.out.println("Error response body: " + errorBody);
@@ -289,7 +320,12 @@ public class PurchaseFormActivity extends AppCompatActivity {
                     } catch (IOException | JSONException e) {
                         e.printStackTrace();
                     }
-                    Toast.makeText(getBaseContext(),"no Creado",Toast.LENGTH_SHORT).show();
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            loadingDialog.dismissDialog();
+                        }
+                    });
                 }
             }
 

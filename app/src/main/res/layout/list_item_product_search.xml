@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="5dp">
+    android:padding="1dp">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/md_theme_light_background">
 
         <LinearLayout
             android:id="@+id/Ly_itemSearchProduct_sale"
@@ -18,50 +20,82 @@
             android:orientation="vertical"
             android:padding="5dp">
 
-            <TextView
-                android:id="@+id/Tv_nameProduct_search_item"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="LECHE GLORIA 1L"
-                android:textAlignment="center"
-                android:textColor="@color/md_theme_dark_inversePrimary"
-                android:textStyle="bold" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:padding="2dp">
+                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/textView10"
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="5dp"
+                    app:srcCompat="@drawable/ic_inventory" />
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Stock:" />
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/Tv_stockProduct_search_item"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="10" />
+                    <TextView
+                        android:id="@+id/Tv_nameProduct_search_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp"
+                        android:text="LECHE GLORIA 1L"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/md_theme_light_onPrimaryContainer"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/textView14"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Precio:" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:padding="2dp">
 
-                <TextView
-                    android:id="@+id/Tv_priceProduct_search_item"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="s/. 10000" />
+                        <TextView
+                            android:id="@+id/textView10"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.4"
+                            android:text="Stock:"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/Tv_stockProduct_search_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.15"
+                            android:text="10"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textView14"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.2"
+                            android:text="Precio Un."
+                            android:textAlignment="viewEnd"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/Tv_priceProduct_search_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.2"
+                            android:text="S/ 10000"
+                            android:textAlignment="viewEnd"
+                            android:textColor="@color/md_theme_light_onPrimaryContainer"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
+
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 

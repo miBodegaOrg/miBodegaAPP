@@ -81,7 +81,7 @@ public class RecyclerViewAdapterSale extends RecyclerView.Adapter<RecyclerViewAd
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapterSale.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         SaleResponse sale = saleList.get(position);
-        holder.date.setText(sale.getCreatedAt().toString());
+        holder.date.setText(utils.convertDateToClearFormat(sale.getCreatedAt().toString()));
         holder.amountProduct.setText("Product: "+sale.getProducts().size());
 
         DecimalFormat decimalFormat = new DecimalFormat("#0.00");

@@ -1,14 +1,16 @@
 package com.mibodega.mystore.shared.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -24,6 +26,7 @@ import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.SaleTemporalList;
 import com.mibodega.mystore.shared.Utils;
+import com.mibodega.mystore.views.products.ProductDetailActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,8 +40,9 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
     private SaleTemporalList saleTemporalList  = new SaleTemporalList();
     private Map<String,Boolean> arrIsEdit = new HashMap<>();
     private Map<String,EditText> arrEdtAmount = new HashMap<>();
-
     private View.OnClickListener listener;
+    final RecyclerViewAdapterProductSale.OnEdit onEdit;
+    final RecyclerViewAdapterProductSale.OnDelete onDelete;
 
 
 
@@ -50,16 +54,19 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
             }
     }
 
-    public interface OnDetailItem {
+    public interface OnDelete {
         void onClick(ProductResponse product);
     }
-    public interface OnSupplierItem {
+    public interface OnEdit {
         void onClick(ProductResponse product);
     }
 
-        public RecyclerViewAdapterProductSale(Context context, ArrayList<ProductResponse> productList) {
+
+        public RecyclerViewAdapterProductSale(Context context, ArrayList<ProductResponse> productList, OnEdit onEdit, OnDelete onDelete) {
             this.context = context;
             this.productList = productList;
+            this.onEdit = onEdit;
+            this.onDelete = onDelete;
             for (ProductResponse product:productList){
                 arrIsEdit.put(product.getCode(),false);
             }
@@ -96,11 +103,27 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
             arrEdtAmount.put(product.getCode(),holder.edt_amount);
             holder.productDescription.setText(product.getName());
             holder.productStock.setText(String.valueOf(product.getStock()));
-            holder.buyPrice.setText("s/ " +String.valueOf(product.getPrice()));
-            holder.edt_amount.setText("1");
-            double total_price = product.getPrice()*Integer.parseInt(holder.edt_amount.getText().toString());
-            holder.total_price.setText("s/. "+total_price);
+            holder.buyPrice.setText("S/ " +utils.formatDecimal(product.getPrice()));
+            if(product.isWeight()){ holder.edt_amount.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);}else{holder.edt_amount.setInputType(InputType.TYPE_CLASS_NUMBER); }
+            Number amountNum = saleTemporalList.getMapAmountProduct().get(product.getCode());
+
+
+            double _total_price=0.0;
+            if(product.isWeight()){
+                holder.edt_amount.setText(String.valueOf(amountNum.doubleValue()));
+                _total_price = product.getPrice() * Double.valueOf(holder.edt_amount.getText().toString());
+
+            }else{
+                holder.edt_amount.setText(String.valueOf(amountNum.intValue()));
+                _total_price = product.getPrice() * Integer.parseInt(holder.edt_amount.getText().toString());
+
+            }
+
+            holder.total_price.setText("S/ "+utils.formatDecimal(_total_price));
+
             holder.edt_amount.setEnabled(false);
+
+
             holder.edt_amount.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -115,8 +138,15 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
                 @Override
                 public void afterTextChanged(Editable editable) {
                     if(!editable.toString().equals("")) {
-                        double total_price = product.getPrice() * Integer.parseInt(holder.edt_amount.getText().toString());
-                        holder.total_price.setText("s/. " + total_price);
+                        double total_price =0.0;
+                        if(product.isWeight()){
+                            total_price = product.getPrice() * Double.valueOf(holder.edt_amount.getText().toString());
+
+                        }else{
+                            total_price = product.getPrice() * Integer.parseInt(holder.edt_amount.getText().toString());
+
+                        }
+                       holder.total_price.setText("S/ " + utils.formatDecimal(total_price));
                     }
                 }
             });
@@ -125,23 +155,47 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
                 @Override
                 public void onClick(View view) {
                     if(Boolean.TRUE.equals(arrIsEdit.get(product.getCode()))){
-                        int amount = Integer.parseInt(holder.edt_amount.getText().toString());
-                        if(amount>0){
-                            holder.edt_amount.setEnabled(false);
+                        Double amount = 0.0;
 
-                            saleTemporalList.updateAmountProduct(product.getCode(),amount);
+                        if(product.isWeight()){
+                            amount = Double.valueOf(holder.edt_amount.getText().toString());
 
-                            holder.btn_edit_save.setImageResource(R.drawable.baseline_edit_24);
-                            arrIsEdit.put(product.getCode(),false);
-                            //notifyDataSetChanged();
+                        }else{
+                            amount = 1.0*Integer.parseInt(holder.edt_amount.getText().toString());
+
+                        }
+                        if(amount.doubleValue()>0){
+                            if(amount<=product.getStock().doubleValue()){
+                                holder.edt_amount.setEnabled(false);
+                                saleTemporalList.updateAmountProduct(product.getCode(),amount);
+                                holder.btn_edit_save.setImageResource(R.drawable.baseline_edit_24);
+                                arrIsEdit.put(product.getCode(),false);
+                                //notifyDataSetChanged();
+                            }else{
+                                Utils utils = new Utils();
+                                Dialog dialog = utils.getAlertCustom(context,"danger","Error","La cantidad no debe superar al stock",false);
+                                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @Override
+                                    public void onDismiss(DialogInterface dialog) {
+                                        holder.edt_amount.setEnabled(false);
+                                        holder.edt_amount.setText("1");
+                                        saleTemporalList.updateAmountProduct(product.getCode(),1.0);
+                                        holder.btn_edit_save.setImageResource(R.drawable.baseline_edit_24);
+                                        arrIsEdit.put(product.getCode(),false);
+                                        onEdit.onClick(product);
+                                        notifyDataSetChanged();
+                                    }
+                                });
+                                dialog.show();
+
+                            }
                         }
                     }else {
                         holder.edt_amount.setEnabled(true);
                         holder.btn_edit_save.setImageResource(R.drawable.baseline_save_24);
                         arrIsEdit.put(product.getCode(),true);
                     }
-
-
+                    onEdit.onClick(product);
                 }
             });
             holder.btn_delete.setOnClickListener(new View.OnClickListener() {
@@ -149,6 +203,7 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
                 public void onClick(View view) {
                     saleTemporalList.removeProduct(product);
                     productList.remove(product);
+                    onDelete.onClick(product);
                     notifyDataSetChanged();
                 }
             });

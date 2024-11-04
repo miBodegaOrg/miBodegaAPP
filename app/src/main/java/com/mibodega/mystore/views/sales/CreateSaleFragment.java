@@ -1,5 +1,6 @@
 package com.mibodega.mystore.views.sales;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -10,12 +11,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -25,13 +27,9 @@ import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.RequestCreateSale;
-import com.mibodega.mystore.models.Responses.CategoryProduct;
 import com.mibodega.mystore.models.Responses.PagesProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
-import com.mibodega.mystore.models.Responses.ProductResponseByCode;
 import com.mibodega.mystore.models.Responses.SaleResponse;
-import com.mibodega.mystore.models.Responses.SubCategoryResponse;
-import com.mibodega.mystore.models.common.ProductPurchase;
 import com.mibodega.mystore.models.common.ProductSaleV2;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.services.ISaleServices;
@@ -53,6 +51,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import android.widget.EditText;
 
 public class CreateSaleFragment extends Fragment {
 
@@ -70,8 +69,10 @@ public class CreateSaleFragment extends Fragment {
     private ArrayList<ProductResponse> arraySearchListProduct = new ArrayList<>();
     private RecyclerViewAdapterProductSale listAdapter;
 
+    private TextView tv_subTotal;
 
     private PagesProductResponse pagesSearchProductResponse;
+    private static final String REGEX_BUSQUEDA_VALIDO = "^[a-zA-Z0-9\\s\\-_#]*$";
 
     private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
             result -> {
@@ -95,6 +96,7 @@ public class CreateSaleFragment extends Fragment {
         btn_scanCodeBar = root.findViewById(R.id.Imgb_scanCodeBarProduct_sale);
         rv_recyclerProductList = root.findViewById(R.id.Rv_productAtSaleList_sale);
         btn_vender = root.findViewById(R.id.Btn_saleProducts_sale);
+        tv_subTotal = root.findViewById(R.id.Tv_subTotal_sale);
 
         btn_scanCodeBar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,17 +107,26 @@ public class CreateSaleFragment extends Fragment {
         btn_vender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createSale();
+                if(validar_datos().equals("")){
+                    createSale();
+                }else{
+                    Dialog dialog = utils.getAlertCustom(getContext(),"danger","Error",validar_datos(),false);
+                    dialog.show();
+                }
+
+
             }
         });
 
         loadData();
+
         searchProduct.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 if(!Objects.equals(s, "")){
                     rv_recyclerSearchProductList.setVisibility(View.VISIBLE);
                     searchProducts(s);
+
                 }else{
                     rv_recyclerSearchProductList.setVisibility(View.GONE);
                 }
@@ -125,9 +136,17 @@ public class CreateSaleFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
+
                 if(Objects.equals(s, "")){
                     rv_recyclerSearchProductList.setVisibility(View.GONE);
-
+                }else{
+                    if (!s.matches(REGEX_BUSQUEDA_VALIDO)) {
+                        String filteredInput = s.replaceAll("[^a-zA-Z0-9\\s\\-_#]", ""); // Filtra solo los caracteres no permitidos
+                        if (!s.equals(filteredInput)) {
+                            Toast.makeText(getContext(),"Evitar ingresar simbolos o caracteres especiales",Toast.LENGTH_SHORT).show();
+                            searchProduct.setQuery(filteredInput, false); // Establece el texto filtrado sin activar el submit
+                        }
+                    }
                 }
                 return true;
 
@@ -136,9 +155,20 @@ public class CreateSaleFragment extends Fragment {
         return root;
     }
 
+
     public void loadData(){
         arrayListProduct  = saleTemporalList.getArrayList();
-        listAdapter = new RecyclerViewAdapterProductSale(getContext(),arrayListProduct);
+        listAdapter = new RecyclerViewAdapterProductSale(getContext(), arrayListProduct, new RecyclerViewAdapterProductSale.OnEdit() {
+            @Override
+            public void onClick(ProductResponse product) {
+                tv_subTotal.setText("S/ "+utils.formatDecimal(saleTemporalList.getTotalPrice()));
+            }
+        }, new RecyclerViewAdapterProductSale.OnDelete() {
+            @Override
+            public void onClick(ProductResponse product) {
+                tv_subTotal.setText("S/ "+utils.formatDecimal(saleTemporalList.getTotalPrice()));
+            }
+        });
         rv_recyclerProductList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         rv_recyclerProductList.setAdapter(listAdapter);
     }
@@ -165,15 +195,18 @@ public class CreateSaleFragment extends Fragment {
                                 product.getStock(),
                                 product.getImage_url(),
                                 product.getSales(),
-                                false,
+                                product.isWeight(),
                                 product.getCategory(),
                                 product.getSubcategory(),
                                 product.getShop(),
                                 product.getCreatedAt(),
-                                product.getUpdatedAt()
+                                product.getUpdatedAt(),
+                                product.getCost(),
+                                product.getSupplier()
                                 );
-                        saleTemporalList.addProduct(productResponse,1);
+                        saleTemporalList.addProduct(productResponse,1.0);
                         loadData();
+                        tv_subTotal.setText("S/ "+utils.formatDecimal(saleTemporalList.getTotalPrice()));
                     }
                     System.out.println("successfull request");
                 }else{
@@ -211,7 +244,9 @@ public class CreateSaleFragment extends Fragment {
                             @Override
                             public void onClick(ProductResponse product) {
                                 Toast.makeText(getContext(),"Agregado",Toast.LENGTH_SHORT).show();
-                                saleTemporalList.addProduct(product,1);
+                                saleTemporalList.addProduct(product,1.0);
+                                tv_subTotal.setText("S/ "+utils.formatDecimal(saleTemporalList.getTotalPrice()));
+                               // utils.getAlertDialog(getContext(),"Producto","Se agrego "+product.getName()+"a la lista","verde");
                                 loadData();
                             }
                         });
@@ -236,9 +271,11 @@ public class CreateSaleFragment extends Fragment {
     public void createSale(){
         ArrayList<ProductSaleV2> arraux = new ArrayList<>();
         for (ProductResponse product : saleTemporalList.getArrayList()){
-            int amountint = Integer.parseInt(listAdapter.getMapEditAmount().get(product.getCode()).getText().toString());
-            double amount = Double.parseDouble(listAdapter.getMapEditAmount().get(product.getCode()).getText().toString());
+
+            Number amountint =0.0;
+
             if(!product.isWeight()){
+                amountint =  Integer.parseInt(listAdapter.getMapEditAmount().get(product.getCode()).getText().toString());
                 double cost =0;
                 double rentability = product.getPrice()-cost;
                 if(rentability<0){
@@ -246,12 +283,13 @@ public class CreateSaleFragment extends Fragment {
                 }
                 arraux.add(new ProductSaleV2(product.getCode(),amountint));
             }else{
+                amountint =  Double.valueOf(listAdapter.getMapEditAmount().get(product.getCode()).getText().toString());
                 double cost =0;
                 double rentability = product.getPrice()-cost;
                 if(rentability<0){
                     rentability=0;
                 }
-                arraux.add(new ProductSaleV2(product.getCode(),amount));
+                arraux.add(new ProductSaleV2(product.getCode(),amountint));
 
             }
         }
@@ -268,10 +306,13 @@ public class CreateSaleFragment extends Fragment {
             public void onResponse(Call<SaleResponse> call, Response<SaleResponse> response) {
                 Log.e("error", response.toString());
                 if (response.isSuccessful()) {
-                    Toast.makeText(getContext(),"Creado",Toast.LENGTH_SHORT).show();
+
                     saleTemporalList.cleanAll();
                     loadData();
                     SaleResponse saleResponse = response.body();
+                    Log.e("error", saleResponse.getDiscount().toString());
+                    Log.e("error", saleResponse.getSubtotal().toString());
+
                     saleTemporalList.setSaleCurrent(saleResponse);
                     Intent moveHMA = new Intent(getContext(), ValidateSaleActivity.class);
                     startActivity(moveHMA);
@@ -309,7 +350,34 @@ public class CreateSaleFragment extends Fragment {
         barcodeLauncher.launch(options);
     }
 
+    private String validar_datos() {
+        String message = "";
 
+        if (arrayListProduct.size()<1) {
+            message += "- Debe agregar al menos un producto a la lista \n";
+        }
+        for(ProductResponse item: arrayListProduct){
+            if(listAdapter.getMapEditAmount().get(item.getCode()).getText().toString()==""){
+                message += "- La cantidad del producto no debe estar vacio \n";
+            }
+            else if(item.isWeight()){
+                if(Double.parseDouble(listAdapter.getMapEditAmount().get(item.getCode()).getText().toString())<1){
+                    message += "- Se debe ingresar una cantidad mayor a 0 \n";
+                }
+            }else{
+                if(Integer.parseInt(listAdapter.getMapEditAmount().get(item.getCode()).getText().toString())<1){
+                    message += "- Se debe ingresar una cantidad mayor a 0 \n";
+                }
+            }
 
+        }
+        return message;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
 
+        tv_subTotal.setText("S/ "+utils.formatDecimal(saleTemporalList.getTotalPrice()));
+
+    }
 }

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="@drawable/backgroun_custom_rectangle"
+    android:orientation="vertical">
+
+
+    <ImageButton
+        android:id="@+id/Imgb_custom_closeDialog"
+        android:layout_width="40dp"
+        android:layout_height="36dp"
+        android:layout_gravity="end"
+        android:layout_weight="1"
+        android:background="@drawable/backgroun_custom_rectangle"
+        android:src="@drawable/baseline_close_24" />
+
+    <TextView
+        android:id="@+id/Tv_message_custom_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Eliminar"
+        android:textAlignment="center"
+        android:textColor="@color/md_theme_light_error"
+        android:textSize="34sp" />
+
+    <TextView
+        android:id="@+id/textView81"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:text="Ingresa la palabra &quot;ELIMINAR&quot; para confirmar"
+        android:textAlignment="center"
+        android:textSize="16sp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_weight="1"
+        android:hint="Ingresa la palabra">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/Edt_confirWordDelete_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            android:layout_weight="1"
+            android:background="@drawable/borde"
+            android:backgroundTint="@color/md_theme_light_onPrimaryContainer"
+            android:stateListAnimator="@null"
+            android:text="Cancelar"
+            android:textAllCaps="false"
+            android:textColor="@color/md_theme_light_onPrimaryContainer" />
+
+        <Button
+            android:id="@+id/btn_accept"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_weight="1"
+            android:background="@drawable/backgroun_custom_rectangle"
+            android:backgroundTint="@color/md_theme_light_onPrimaryContainer"
+            android:stateListAnimator="@null"
+            android:text="Aceptar"
+            android:textAllCaps="false"
+            android:textColor="@android:color/background_light" />
+    </LinearLayout>
+</LinearLayout>

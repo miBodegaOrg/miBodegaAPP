@@ -72,7 +72,7 @@
             android:stateListAnimator="@null"
             android:text="Cancelar"
             android:textAllCaps="false"
-            android:textColor="@color/md_theme_dark_inversePrimary" />
+            android:textColor="@color/md_theme_light_onPrimaryContainer" />
 
         <Button
             android:id="@+id/btn_accept"

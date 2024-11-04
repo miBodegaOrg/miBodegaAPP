@@ -10,8 +10,7 @@
         android:id="@+id/Ly_itemSale_sale"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/borde"
-        android:backgroundTint="@color/md_theme_dark_error"
+        android:background="@drawable/background_custom_rectangle_shadow"
         android:orientation="vertical"
         android:padding="5dp">
 
@@ -87,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="PENDIENTE"
-                android:textColor="@color/md_theme_dark_inversePrimary" />
+                android:textColor="@color/md_theme_light_onPrimaryContainer" />
 
             <TextView
                 android:id="@+id/textView10"
@@ -103,7 +102,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="s/. 10323.0"
+                android:text="S/ 10323.0"
                 android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>

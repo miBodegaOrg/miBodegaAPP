@@ -29,6 +29,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.SaleCategoryDataDashboardResponse;
 import com.mibodega.mystore.models.Responses.SaleTimeDataDashboardResponse;
@@ -55,7 +56,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class SalesDataActivity extends AppCompatActivity {
+public class SalesDataActivity extends MainActivity {
     private LineChart lineChart;
     private PieChart pieChart;
     private ArrayList<SaleTimeDataDashboardResponse> arrayListSalesDate = new ArrayList<>();
@@ -70,7 +71,11 @@ public class SalesDataActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sales_data);
+        //setContentView(R.layout.activity_sales_data);
+        setContentLayout(R.layout.activity_sales_data);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Ventas");
+        }
 
         lineChart = findViewById(R.id.lineChart_sales);
         pieChart = findViewById(R.id.pieChart);

@@ -21,11 +21,13 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.mibodega.mystore.MainNavigationActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.CategoryResponse;
@@ -35,6 +37,7 @@ import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.models.Responses.SubCategoryResponse;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.InputValidator;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProduct;
 import com.mibodega.mystore.shared.adapters.SubcategoryView;
 import com.mibodega.mystore.views.products.ProductDetailActivity;
@@ -67,8 +70,11 @@ public class ProductsFragment extends Fragment {
     private MaterialCardView viewCategory;
     private ImageButton btn_toggleCategory;
     private int NUMBER_SIZE_PAGINATION=20;
+    private TextView tv_messageNotFound;
 
     private TextInputEditText edt_searchText;
+    private TextInputLayout tly_edt_searchText;
+
 
     private LinearLayout linearLayoutSubcategoryViews;
     private View _root;
@@ -87,6 +93,8 @@ public class ProductsFragment extends Fragment {
         btn_toggleCategory = root.findViewById(R.id.Imgb_toggleCategory_product);
         linearLayoutSubcategoryViews = root.findViewById(R.id.Ly_subcategoriesContainer);
         edt_searchText = root.findViewById(R.id.Edt_searchClient_product);
+        tly_edt_searchText= root.findViewById(R.id.Txly_layoutSearch_product);
+        tv_messageNotFound = root.findViewById(R.id.Tv_mensajeNotFoundProduct_product);
 
         btnMoveToAddProduct.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,22 +143,10 @@ public class ProductsFragment extends Fragment {
             }
         });
 
-        edt_searchText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        // Lógica que se ejecutará cuando el texto sea válido
+        Runnable searchProductLogic = this::searchProductWithDifferentCategoriesSubcategories;
+        InputValidator.addBusquedaInputValidation(edt_searchText, tly_edt_searchText, searchProductLogic);
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                searchProductWithDifferentCategoriesSubcategories();
-            }
-        });
         return root;
     }
 
@@ -279,6 +275,11 @@ public class ProductsFragment extends Fragment {
                 if(response.isSuccessful()){
                     pagesProductResponse = response.body();
                     if(pagesProductResponse!=null){
+                        if(!pagesProductResponse.getDocs().isEmpty()){
+                            tv_messageNotFound.setVisibility(View.GONE);
+                        }else{
+                            tv_messageNotFound.setVisibility(View.VISIBLE);
+                        }
                         System.out.println(pagesProductResponse.getDocs().size());
                         productlist  = (ArrayList<ProductResponse>) pagesProductResponse.getDocs();
                         recyclerView.removeAllViews();
@@ -301,9 +302,14 @@ public class ProductsFragment extends Fragment {
 
                         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
                         recyclerView.setAdapter(listAdapter);
-                    }
-                    System.out.println("successfull request");
 
+
+                    }else{
+                        tv_messageNotFound.setVisibility(View.VISIBLE);
+                    }
+
+                }else{
+                    tv_messageNotFound.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -311,6 +317,7 @@ public class ProductsFragment extends Fragment {
             @Override
             public void onFailure(@NonNull Call<PagesProductResponse> call, @NonNull Throwable t) {
                 System.out.println("errror "+t.getMessage());
+                tv_messageNotFound.setVisibility(View.VISIBLE);
             }
         });
     }

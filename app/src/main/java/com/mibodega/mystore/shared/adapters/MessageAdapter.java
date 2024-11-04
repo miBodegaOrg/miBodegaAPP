@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.MessageResponse;
+import com.mibodega.mystore.models.common.ChatMessage;
 import com.mibodega.mystore.shared.TextFormaterMarkdown;
 
 import java.util.List;
@@ -28,11 +29,11 @@ import io.noties.markwon.core.MarkwonTheme;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> {
 
-    private List<MessageResponse> messageList;
+    private List<ChatMessage> messageList;
     private Context context;
     private TextFormaterMarkdown textFormaterMarkdown = new TextFormaterMarkdown();
 
-    public MessageAdapter(Context context,List<MessageResponse> messageList) {
+    public MessageAdapter(Context context,List<ChatMessage> messageList) {
         this.messageList = messageList;
         this.context=context;
     }
@@ -45,13 +46,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     @Override
     public void onBindViewHolder(MessageViewHolder holder, int position) {
-        MessageResponse message = messageList.get(position);
+        ChatMessage message = messageList.get(position);
 
-        holder.textViewMessage.setText(textFormaterMarkdown.formatText(context,message.getText()));
+        holder.textViewMessage.setText(textFormaterMarkdown.formatText(context,message.getMessage()));
 
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) holder.textViewMessage.getLayoutParams();
 
-        if (Objects.equals(message.getRole(), "user")) {
+        if (Objects.equals(message.getOwner(), "user")) {
             layoutParams.gravity = Gravity.END;
             holder.textViewMessage.setBackgroundResource(R.drawable.bg_message_me);
             holder.textViewMessage.setTextColor(Color.WHITE);

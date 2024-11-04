@@ -1,44 +1,50 @@
 package com.mibodega.mystore.views;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.google.android.material.card.MaterialCardView;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.CategoryResponse;
 import com.mibodega.mystore.models.Responses.CategoryResponseWithProducts;
-import com.mibodega.mystore.models.Responses.PagesProductResponse;
+import com.mibodega.mystore.models.Responses.MessageResponseGpt;
 import com.mibodega.mystore.models.Responses.PermissionResponse;
-import com.mibodega.mystore.models.Responses.ProductResponse;
+import com.mibodega.mystore.models.Responses.TodayDataResponse;
+import com.mibodega.mystore.models.common.RecomendationMessage;
 import com.mibodega.mystore.services.ICategoryServices;
+import com.mibodega.mystore.services.IChatServices;
+import com.mibodega.mystore.services.IDashboardServices;
 import com.mibodega.mystore.services.IEmployeeServices;
-import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.shared.Config;
-import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProduct;
+import com.mibodega.mystore.shared.DBfunctionsTableData;
+import com.mibodega.mystore.shared.SharedPreferencesHelper;
+import com.mibodega.mystore.shared.TextFormaterMarkdown;
+import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.views.employers.EmployerActivity;
 import com.mibodega.mystore.views.offers.OffersActivity;
 import com.mibodega.mystore.views.selling.SellingActivity;
 import com.mibodega.mystore.views.supplier.SupplierActivity;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,16 +55,31 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class HomeFragment extends Fragment {
 
     private Config config = new Config();
-    private Button btn_employe,btn_supplier, btn_buying, btn_discountPromotion;
+    private Utils utils= new Utils();
+    private ProgressBar pgb_loadRecomendation;
+    private DBfunctionsTableData dBfunctionsTableData= new DBfunctionsTableData();
+    private MaterialCardView btn_employe,btn_supplier, btn_buying, btn_discountPromotion;
+    private SharedPreferencesHelper preferencesHelper;
+    private TextView tv_recomendation, tv_cantSale,tv_amountSale;
+    //por rango tiempo minutos
+    private static final String KEY_LAST_SEND_TIMESTAMP = "lastSendTimestamp";
+    private static final int INTERVAL_MINUTES = 30; // Intervalo de 30 minutos
+    private TextFormaterMarkdown textFormaterMarkdown = new TextFormaterMarkdown();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root =  inflater.inflate(R.layout.fragment_home, container, false);
-        btn_employe = root.findViewById(R.id.Btn_manageEmployes_home);
-        btn_supplier = root.findViewById(R.id.Btn_manageSupplier_home);
-        btn_buying = root.findViewById(R.id.Btn_managePurchases_home);
-        btn_discountPromotion = root.findViewById(R.id.Btn_manageDiscountsOferts_home);
+        btn_employe = root.findViewById(R.id.MBtn_manageEmployes_home);
+        btn_supplier = root.findViewById(R.id.MBtn_manageSupplier_home);
+        btn_buying = root.findViewById(R.id.MBtn_managePurchases_home);
+        btn_discountPromotion = root.findViewById(R.id.MBtn_manageDiscountsOferts_home);
+        tv_recomendation = root.findViewById(R.id.Tv_recomendationGPT_home);
+        tv_cantSale = root.findViewById(R.id.Tv_cantSaleTotal_home);
+        tv_amountSale = root.findViewById(R.id.Tv_amountSaleTotal_home);
+        pgb_loadRecomendation = root.findViewById(R.id.Pgb_loadingRecomendation_home);
+        pgb_loadRecomendation.setVisibility(View.VISIBLE);
+        preferencesHelper = new SharedPreferencesHelper(getContext());
 
 
         btn_employe.setOnClickListener(new View.OnClickListener() {
@@ -90,50 +111,21 @@ public class HomeFragment extends Fragment {
             }
         });
 
-
-        BarChart chart = root.findViewById(R.id.chart);
-
-        chart.setTouchEnabled(false);
-        chart.setDragEnabled(false);
-        chart.setScaleEnabled(false);
-        chart.setPinchZoom(false);
-        chart.setDoubleTapToZoomEnabled(false);
-        chart.getXAxis().setDrawGridLines(false);
-        chart.getAxisLeft().setDrawGridLines(false);
-        chart.getAxisRight().setDrawGridLines(false);
-
-
-        List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0f, 500f)); // Ejemplo de dato: 500 ventas en enero
-        entries.add(new BarEntry(1f, 750f));
-        entries.add(new BarEntry(2f, 1000f));
-        entries.add(new BarEntry(3f, 500f));
-        entries.add(new BarEntry(4f, 580f));
-        entries.add(new BarEntry(5f, 800f));
-
-
-        BarDataSet dataSet = new BarDataSet(entries, "Ventas mensuales soles");
-
-
-
-        dataSet.setColor(Color.GRAY);
-        dataSet.setValueTextColor(Color.BLACK);
-        dataSet.setValueTextSize(12f);
-        BarData data = new BarData(dataSet);
-        chart.setData(data);
-
-
-        chart.getDescription().setEnabled(false);
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setGranularity(1f);
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(Arrays.asList("Ene", "Feb", "Mar","Abr","May","Jun"))); // Etiquetas del eje X
-
-
         initProductsData(root);
         initPermises();
         initCategoryData(root);
-        chart.invalidate();
+        String recomendation = dBfunctionsTableData.get_recomendation_save(getContext());
+        if(!Objects.equals(recomendation, "")){
+            pgb_loadRecomendation.setVisibility(View.GONE);
+            tv_recomendation.setVisibility(View.VISIBLE);
+        }
+        tv_recomendation.setText(textFormaterMarkdown.formatText(getContext(),recomendation));
+        if (preferencesHelper.hasIntervalPassedInMinutes(KEY_LAST_SEND_TIMESTAMP, INTERVAL_MINUTES)) {
+            getRecomendationData();
+            // Guardar el timestamp actual
+            preferencesHelper.putCurrentTimestamp(KEY_LAST_SEND_TIMESTAMP);
+        }
+        getTodayData();
         return root;
     }
     private void initProductsData(View root) {
@@ -144,7 +136,6 @@ public class HomeFragment extends Fragment {
 
         ICategoryServices service = retrofit.create(ICategoryServices.class);
         Call<List<CategoryResponse>> call = service.getCategories("Bearer "+config.getJwt());
-        System.out.println(config.getJwt());
         call.enqueue(new Callback<List<CategoryResponse>>() {
             @Override
             public void onResponse(@NonNull Call<List<CategoryResponse>> call, @NonNull Response<List<CategoryResponse>> response) {
@@ -174,11 +165,9 @@ public class HomeFragment extends Fragment {
 
         IEmployeeServices service = retrofit.create(IEmployeeServices.class);
         Call<PermissionResponse> call = service.getPermises("Bearer "+config.getJwt());
-        System.out.println(config.getJwt());
         call.enqueue(new Callback<PermissionResponse>() {
             @Override
             public void onResponse(@NonNull Call<PermissionResponse> call, @NonNull Response<PermissionResponse> response) {
-                System.out.println(response.toString());
                 if(response.isSuccessful()){
                     PermissionResponse permissionResponse = response.body();
                     if(permissionResponse!=null){
@@ -194,7 +183,6 @@ public class HomeFragment extends Fragment {
             }
         });
     }
-
     private void initCategoryData(View root) {
         Retrofit retrofit = new Retrofit.
                 Builder().
@@ -203,7 +191,6 @@ public class HomeFragment extends Fragment {
 
         ICategoryServices service = retrofit.create(ICategoryServices.class);
         Call<List<CategoryResponseWithProducts>> call = service.getCategoriesWithProducts("Bearer "+config.getJwt());
-        System.out.println(config.getJwt());
         call.enqueue(new Callback<List<CategoryResponseWithProducts>>() {
             @Override
             public void onResponse(@NonNull Call<List<CategoryResponseWithProducts>> call, @NonNull Response<List<CategoryResponseWithProducts>> response) {
@@ -226,4 +213,107 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    private void getRecomendationData() {
+        pgb_loadRecomendation.setVisibility(View.VISIBLE);
+        tv_recomendation.setVisibility(View.GONE);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(config.getURL_API())
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(new OkHttpClient.Builder()
+                        .connectTimeout(30, TimeUnit.SECONDS) // Tiempo de conexión
+                        .readTimeout(30, TimeUnit.SECONDS) // Tiempo de lectura
+                        .build())
+                .build();
+        IChatServices service = retrofit.create(IChatServices.class);
+        Call<MessageResponseGpt> call = service.createRecomendation("Bearer "+config.getJwt());
+        call.enqueue(new Callback<MessageResponseGpt>() {
+            @Override
+            public void onResponse(@NonNull Call<MessageResponseGpt> call, @NonNull Response<MessageResponseGpt> response) {
+
+                if(response.isSuccessful()){
+                    MessageResponseGpt responseGpt = response.body();
+                    if(responseGpt!=null){
+                        tv_recomendation.setText(textFormaterMarkdown.formatText(getContext(),responseGpt.getResponse()));
+                        dBfunctionsTableData.insert_recomendation_sqlite(getContext(),new RecomendationMessage(1,responseGpt.getResponse(),utils.getDateTimeDDMMYYYYHHMMSS()));
+                        pgb_loadRecomendation.setVisibility(View.GONE);
+                        tv_recomendation.setVisibility(View.VISIBLE);
+                    }
+                }else{
+                    try {
+                        String errorBody = response.errorBody().string();
+                        System.out.println("Error response body recomendacion: " + errorBody);
+                        JSONObject errorJson = new JSONObject(errorBody);
+                        String errorMessage = errorJson.getString("message");
+                        System.out.println(errorMessage);
+
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                pgb_loadRecomendation.setVisibility(View.GONE);
+                tv_recomendation.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<MessageResponseGpt> call, @NonNull Throwable t) {
+                System.out.println("errror "+t.getMessage());
+                pgb_loadRecomendation.setVisibility(View.GONE);
+                tv_recomendation.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private void getTodayData() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(config.getURL_API())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        IDashboardServices service = retrofit.create(IDashboardServices.class);
+        Call<TodayDataResponse> call = service.getTodayData("Bearer "+config.getJwt());
+        call.enqueue(new Callback<TodayDataResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<TodayDataResponse> call, @NonNull Response<TodayDataResponse> response) {
+
+                if(response.isSuccessful()){
+                    TodayDataResponse data = response.body();
+                    if(data!=null){
+                        tv_cantSale.setText(String.valueOf(data.getSales()));
+                        tv_amountSale.setText(utils.formatDecimal(data.getTotal().doubleValue()));
+                    }
+                }else{
+                    try {
+                        String errorBody = response.errorBody().string();
+                        System.out.println("Error response body todaydata: " + errorBody);
+                        JSONObject errorJson = new JSONObject(errorBody);
+                        String errorMessage = errorJson.getString("message");
+
+                        System.out.println(errorMessage);
+
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<TodayDataResponse> call, @NonNull Throwable t) {
+                System.out.println("errror "+t.getMessage());
+            }
+        });
+    }
+
+    private void validatePermisesAccess(){
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getTodayData();
+        if (preferencesHelper.hasIntervalPassedInMinutes(KEY_LAST_SEND_TIMESTAMP, INTERVAL_MINUTES)) {
+            getRecomendationData();
+            // Guardar el timestamp actual
+            preferencesHelper.putCurrentTimestamp(KEY_LAST_SEND_TIMESTAMP);
+        }
+    }
 }

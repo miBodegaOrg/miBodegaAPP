@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "721682485797",
+    "project_id": "mibodega-ce1b1",
+    "storage_bucket": "mibodega-ce1b1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:721682485797:android:bc15d1aa72c170b97ba5cc",
+        "android_client_info": {
+          "package_name": "com.mibodega.mystore"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1Rqt8wIcirs8ABcxw48aZ0r20NgK4n8M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

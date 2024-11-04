@@ -6,7 +6,7 @@ public class ProductResponseSupplier {
     private double cost;
     private String code;
     private double price;
-    private int stock;
+    private Number stock;
     private String image_url;
     private int sales;
     private boolean weight;
@@ -15,9 +15,10 @@ public class ProductResponseSupplier {
     private String shop;
     private String createdAt;
     private String updatedAt;
+    private String supplier;
     private int __v;
 
-    public ProductResponseSupplier(String _id, String name, double cost, String code, double price, int stock, String image_url, int sales, boolean weight, CategoryProduct category, SubCategoryResponse subcategory, String shop, String createdAt, String updatedAt) {
+    public ProductResponseSupplier(String _id, String name, double cost, String code, double price, int stock, String image_url, int sales, boolean weight, CategoryProduct category, SubCategoryResponse subcategory, String shop, String createdAt, String updatedAt, String supplier) {
         this._id = _id;
         this.name = name;
         this.cost = cost;
@@ -32,6 +33,7 @@ public class ProductResponseSupplier {
         this.shop = shop;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.supplier = supplier;
     }
 
     public String get_id() {
@@ -74,7 +76,7 @@ public class ProductResponseSupplier {
         this.price = price;
     }
 
-    public int getStock() {
+    public Number getStock() {
         return stock;
     }
 
@@ -144,5 +146,13 @@ public class ProductResponseSupplier {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(String supplier) {
+        this.supplier = supplier;
     }
 }

@@ -10,8 +10,8 @@ import java.util.Optional;
 
 public class SaleTemporalList {
     private static ArrayList<ProductResponse> arrayList = new ArrayList<>();
-    private static Map<String,Integer> mapAmountProduct = new HashMap<>();
-    private static Double totalPrice;
+    private static Map<String,Double> mapAmountProduct = new HashMap<>();
+    private static Double totalPrice=0.0;
 
     private static SaleResponse saleCurrent=null;
 
@@ -32,11 +32,11 @@ public class SaleTemporalList {
         SaleTemporalList.arrayList = arrayList;
     }
 
-    public static Map<String, Integer> getMapAmountProduct() {
+    public Map<String, Double> getMapAmountProduct() {
         return mapAmountProduct;
     }
 
-    public static void setMapAmountProduct(Map<String, Integer> mapAmountProduct) {
+    public static void setMapAmountProduct(Map<String, Double> mapAmountProduct) {
         SaleTemporalList.mapAmountProduct = mapAmountProduct;
     }
 
@@ -52,19 +52,23 @@ public class SaleTemporalList {
         totalPrice = 0.0;
         for (ProductResponse product : arrayList) {
             String productCode = product.getCode();
-            int amount = mapAmountProduct.getOrDefault(productCode, 0);
+            Double amount = mapAmountProduct.getOrDefault(productCode, 0.0);
             totalPrice += product.getPrice() * amount;
         }
     }
 
     // Función para agregar un producto a la lista
-    public void addProduct(ProductResponse product, int amount) {
+    public void addProduct(ProductResponse product, Double amount) {
         String productCode = product.getCode();
         if (mapAmountProduct.containsKey(productCode)) {
-            int currentAmount = mapAmountProduct.get(productCode);
-            int newAmount = currentAmount + amount;
+            Double currentAmount = mapAmountProduct.get(productCode);
+            System.out.println("actualiza old amount "+currentAmount);
+            Double newAmount = currentAmount + amount;
             mapAmountProduct.put(productCode, newAmount);
+            System.out.println("actualiza new amount "+newAmount);
         } else {
+            System.out.println("agrega "+product.getName());
+            System.out.println("agrega "+amount);
             arrayList.add(product);
             mapAmountProduct.put(productCode, amount);
         }
@@ -96,7 +100,7 @@ public class SaleTemporalList {
 
 
 
-    public void updateAmountProduct(String productCode, int newAmount) {
+    public void updateAmountProduct(String productCode, Double newAmount) {
         if (mapAmountProduct.containsKey(productCode)) {
             mapAmountProduct.put(productCode, newAmount);
             calculateTotalPrice();

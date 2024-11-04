@@ -17,6 +17,10 @@ import io.noties.markwon.ext.tables.TablePlugin;
 
 public class TextFormaterMarkdown {
     public Spannable formatText(Context context, String text) {
+        String aux = "";
+        if(text!=null&& !text.equals("")){
+            aux=text;
+        }
         // Crear una instancia de Markwon
         Markwon markwon = Markwon.builder(context)
                 .usePlugin(StrikethroughPlugin.create())
@@ -24,7 +28,7 @@ public class TextFormaterMarkdown {
                 .build();
 
         // Convertir el texto Markdown a un Spannable
-        Spannable spannableText = (Spannable) markwon.toMarkdown(text);
+        Spannable spannableText = (Spannable) markwon.toMarkdown(aux);
         return spannableText;
     }
 }

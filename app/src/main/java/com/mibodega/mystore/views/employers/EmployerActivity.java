@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.EmployeeResponse;
 import com.mibodega.mystore.models.Responses.PurchaseResponse;
@@ -35,7 +36,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class EmployerActivity extends AppCompatActivity {
+public class EmployerActivity extends MainActivity {
 
     private TextInputEditText searchEmployer;
     private FloatingActionButton btn_newEmployee;
@@ -49,7 +50,11 @@ public class EmployerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_employer);
+        //setContentView(R.layout.activity_employer);
+        setContentLayout(R.layout.activity_employer);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Tus Empleados");
+        }
         searchEmployer = findViewById(R.id.Edt_searchEmployee_employee);
         btn_newEmployee = findViewById(R.id.Btn_addNewEmployee_employee);
         rv_employeeList = findViewById(R.id.Rv_employeeList_employee);

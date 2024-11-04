@@ -8,16 +8,21 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
 
-public class AdminSupplierProductsActivity extends AppCompatActivity {
+public class AdminSupplierProductsActivity extends MainActivity {
     private DrawerLayout drawerLayout;
     private FrameLayout chatFragmentContainer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin_supplier_products);
+        //setContentView(R.layout.activity_admin_supplier_products);
+        setContentLayout(R.layout.activity_admin_supplier_products);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Gestionar Productos");
+        }
         drawerLayout = findViewById(R.id.drawer_layout);
         chatFragmentContainer = findViewById(R.id.chat_fragment_container);
 
