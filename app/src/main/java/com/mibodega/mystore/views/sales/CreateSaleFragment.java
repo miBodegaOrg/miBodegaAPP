@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -50,6 +51,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import android.widget.EditText;
 
 public class CreateSaleFragment extends Fragment {
 
@@ -70,6 +72,7 @@ public class CreateSaleFragment extends Fragment {
     private TextView tv_subTotal;
 
     private PagesProductResponse pagesSearchProductResponse;
+    private static final String REGEX_BUSQUEDA_VALIDO = "^[a-zA-Z0-9\\s\\-_#]*$";
 
     private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
             result -> {
@@ -116,12 +119,14 @@ public class CreateSaleFragment extends Fragment {
         });
 
         loadData();
+
         searchProduct.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 if(!Objects.equals(s, "")){
                     rv_recyclerSearchProductList.setVisibility(View.VISIBLE);
                     searchProducts(s);
+
                 }else{
                     rv_recyclerSearchProductList.setVisibility(View.GONE);
                 }
@@ -131,9 +136,17 @@ public class CreateSaleFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
+
                 if(Objects.equals(s, "")){
                     rv_recyclerSearchProductList.setVisibility(View.GONE);
-
+                }else{
+                    if (!s.matches(REGEX_BUSQUEDA_VALIDO)) {
+                        String filteredInput = s.replaceAll("[^a-zA-Z0-9\\s\\-_#]", ""); // Filtra solo los caracteres no permitidos
+                        if (!s.equals(filteredInput)) {
+                            Toast.makeText(getContext(),"Evitar ingresar simbolos o caracteres especiales",Toast.LENGTH_SHORT).show();
+                            searchProduct.setQuery(filteredInput, false); // Establece el texto filtrado sin activar el submit
+                        }
+                    }
                 }
                 return true;
 
@@ -141,6 +154,7 @@ public class CreateSaleFragment extends Fragment {
         });
         return root;
     }
+
 
     public void loadData(){
         arrayListProduct  = saleTemporalList.getArrayList();

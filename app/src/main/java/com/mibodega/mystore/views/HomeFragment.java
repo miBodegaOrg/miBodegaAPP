@@ -241,10 +241,9 @@ public class HomeFragment extends Fragment {
                 }else{
                     try {
                         String errorBody = response.errorBody().string();
-                        System.out.println("Error response body: " + errorBody);
+                        System.out.println("Error response body recomendacion: " + errorBody);
                         JSONObject errorJson = new JSONObject(errorBody);
                         String errorMessage = errorJson.getString("message");
-                        Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
                         System.out.println(errorMessage);
 
                     } catch (IOException | JSONException e) {
@@ -284,10 +283,10 @@ public class HomeFragment extends Fragment {
                 }else{
                     try {
                         String errorBody = response.errorBody().string();
-                        System.out.println("Error response body: " + errorBody);
+                        System.out.println("Error response body todaydata: " + errorBody);
                         JSONObject errorJson = new JSONObject(errorBody);
                         String errorMessage = errorJson.getString("message");
-                        Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+
                         System.out.println(errorMessage);
 
                     } catch (IOException | JSONException e) {
