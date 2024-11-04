@@ -92,6 +92,9 @@ public class PromotionActivity extends MainActivity {
                     getProductByCode(barcodeValue);
                 }
             });
+
+    private static final String REGEX_BUSQUEDA_VALIDO = "^[a-zA-Z0-9\\s\\-_#]*$";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -207,8 +210,17 @@ public class PromotionActivity extends MainActivity {
             public boolean onQueryTextChange(String s) {
                 if(Objects.equals(s, "")){
                     rv_recyclerSearchProductList.setVisibility(View.GONE);
-
+                }else{
+                    if (!s.matches(REGEX_BUSQUEDA_VALIDO)) {
+                        String filteredInput = s.replaceAll("[^a-zA-Z0-9\\s\\-_#]", ""); // Filtra solo los caracteres no permitidos
+                        if (!s.equals(filteredInput)) {
+                            Toast.makeText(PromotionActivity.this,"Evitar ingresar simbolos o caracteres especiales",Toast.LENGTH_SHORT).show();
+                            searchProduct.setQuery(filteredInput, false); // Establece el texto filtrado sin activar el submit
+                        }
+                    }
                 }
+
+
                 return true;
 
             }
