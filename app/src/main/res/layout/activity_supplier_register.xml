@@ -98,7 +98,8 @@
                             android:id="@+id/textView43"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Selecciona Productos:" />
+                            android:text="Selecciona Productos:"
+                            android:visibility="gone" />
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/Txly_layoutSearch_product"
@@ -106,6 +107,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
+                            android:visibility="gone"
                             app:endIconMode="clear_text"
                             app:startIconDrawable="@drawable/baseline_search_24">
 
