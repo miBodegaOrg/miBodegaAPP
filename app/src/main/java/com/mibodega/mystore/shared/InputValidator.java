@@ -15,7 +15,7 @@ public class InputValidator {
     // Expresión regular para permitir letras, números y algunos signos básicos (sin emojis o caracteres especiales)
     private static final String REGEX_VALIDO = "^[a-zA-Z0-9\\s,.!?@#&()\\-+]*$";
 
-    public static void addInputValidation(EditText editText) {
+    public static void addInputValidation(EditText editText, Runnable onValidInput) {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -37,6 +37,8 @@ public class InputValidator {
                     String filteredInput = input.replaceAll("[^a-zA-Z0-9\\s,.!?@#&()\\-+]", "");
                     editText.setText(filteredInput);
                     editText.setSelection(filteredInput.length());  // Mover el cursor al final
+                }else {
+                    onValidInput.run();
                 }
             }
         });
@@ -45,7 +47,7 @@ public class InputValidator {
     // Expresión regular para permitir letras, números, espacios, y algunos signos básicos comunes en nombres comerciales
     private static final String REGEX_EMPRESA_VALIDO = "^[a-zA-Z0-9\\s&.,'-]*$";
 
-    public static void addEmpresaInputValidation(EditText editText, Context context) {
+    public static void addEmpresaInputValidation(EditText editText, Context context, Runnable onValidInput) {
         editText.addTextChangedListener(new TextWatcher() {
             private String currentText = "";
             @Override
@@ -71,12 +73,13 @@ public class InputValidator {
                     editText.setText(currentText);
                     editText.setSelection(currentText.length()); // Mover el cursor al final
                 } else {
-                    currentText = input;  // Actualizar el texto válido
+                    currentText = input;
+                    onValidInput.run();// Actualizar el texto válido
                 }
             }
         });
     }
-    public static void addEmpresaInputValidationTextInput(TextInputEditText editText, TextInputLayout inputLayout) {
+    public static void addEmpresaInputValidationTextInput(TextInputEditText editText, TextInputLayout inputLayout, Runnable onValidInput) {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -95,7 +98,9 @@ public class InputValidator {
                     editText.setText(filteredInput);
                     editText.setSelection(filteredInput.length());  // Mover el cursor al final
                 } else {
-                    inputLayout.setError(null);  // Limpiar el error si es válido
+                    inputLayout.setError(null);
+                    onValidInput.run();
+                    // Limpiar el error si es válido
                 }
             }
         });

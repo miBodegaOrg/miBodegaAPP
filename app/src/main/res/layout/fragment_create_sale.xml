@@ -42,8 +42,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/Rv_listSearchProduct_sale"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone" />
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
@@ -131,7 +130,7 @@
 
                     <TextView
                         android:id="@+id/textView65"
-                        android:layout_width="100dp"
+                        android:layout_width="120dp"
                         android:layout_height="wrap_content"
                         android:text="SubTotal: "
                         android:textSize="20sp" />
