@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.EmployeeResponse;
@@ -22,6 +23,7 @@ import com.mibodega.mystore.models.Responses.PurchaseResponse;
 import com.mibodega.mystore.services.IEmployeeServices;
 import com.mibodega.mystore.services.IPurchasesService;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.InputValidator;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterEmployee;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterPurchase;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
@@ -39,6 +41,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class EmployerActivity extends MainActivity {
 
     private TextInputEditText searchEmployer;
+    private TextInputLayout tly_searchEmployer;
     private FloatingActionButton btn_newEmployee;
     private RecyclerView rv_employeeList;
     private ArrayList<EmployeeResponse> arrEmployeeList;
@@ -56,6 +59,7 @@ public class EmployerActivity extends MainActivity {
             getSupportActionBar().setTitle("Tus Empleados");
         }
         searchEmployer = findViewById(R.id.Edt_searchEmployee_employee);
+        tly_searchEmployer = findViewById(R.id.Txly_layoutSearch_employee);
         btn_newEmployee = findViewById(R.id.Btn_addNewEmployee_employee);
         rv_employeeList = findViewById(R.id.Rv_employeeList_employee);
 
@@ -98,23 +102,14 @@ public class EmployerActivity extends MainActivity {
                 startActivity(mg);
             }
         });
-        searchEmployer.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            }
+        Runnable searchEmployeLogic = this::searchEmployerbyName;
+        InputValidator.addBusquedaInputValidation(searchEmployer,tly_searchEmployer,searchEmployeLogic);
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
         loadEmployers();
+    }
+    public void searchEmployerbyName(){
+        String name = searchEmployer.getText().toString();
     }
     public void loadEmployers(){
         Retrofit retrofit = new Retrofit.
