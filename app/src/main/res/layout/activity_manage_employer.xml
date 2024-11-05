@@ -49,6 +49,7 @@
                         android:orientation="vertical">
 
                         <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/Tly_nameEmployer_employee"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
 
@@ -61,6 +62,7 @@
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/Tly_lastnameEmployer_employee"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
 
@@ -92,6 +94,7 @@
                                 android:id="@+id/Edt_dniEmployee_employee"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:inputType="phone"
                                 android:hint="DNI"
                                 android:maxLines="1" />
                         </com.google.android.material.textfield.TextInputLayout>
@@ -104,6 +107,7 @@
                                 android:id="@+id/Edt_phoneEmployee_employee"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:inputType="phone"
                                 android:hint="Celular"
                                 android:maxLines="1" />
                         </com.google.android.material.textfield.TextInputLayout>

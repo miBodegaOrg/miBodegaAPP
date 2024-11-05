@@ -26,12 +26,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.RequestEmployee;
 import com.mibodega.mystore.models.Responses.EmployeeResponse;
 import com.mibodega.mystore.services.IEmployeeServices;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.InputValidator;
 import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.shared.adapters.LoadingDialogAdapter;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
@@ -68,6 +70,9 @@ public class ManageEmployerActivity extends MainActivity {
     private LoadingDialogAdapter loadingDialog = new LoadingDialogAdapter();
     private Utils utils = new Utils();
     private Dialog dialog;
+    private TextInputLayout tly_name;
+    private TextInputLayout tly_lastname;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +85,8 @@ public class ManageEmployerActivity extends MainActivity {
         edt_dni = findViewById(R.id.Edt_dniEmployee_employee);
         edt_phone = findViewById(R.id.Edt_phoneEmployee_employee);
         edt_password = findViewById(R.id.Edt_passwordEmployee_employee);
+        tly_name = findViewById(R.id.Tly_nameEmployer_employee);
+        tly_lastname = findViewById(R.id.Tly_lastnameEmployer_employee);
 
         ly_permisesContainer = findViewById(R.id.Ly_permisesContainer_employee);
         ly_permisesCheckList = findViewById(R.id.Ly_permisesListCheck_employee);
@@ -90,6 +97,11 @@ public class ManageEmployerActivity extends MainActivity {
         btn_back = findViewById(R.id.Btn_back_employee);
         ly_permisesCheckList.removeAllViews();
         ly_permisesContainer.setVisibility(View.VISIBLE);
+
+        InputValidator.addPersonaInputValidationTextInput(edt_name,tly_name);
+        InputValidator.addPersonaInputValidationTextInput(edt_lastname,tly_lastname);
+
+
         for (String item : config.getArrPermises()) {
             System.out.println("permises "+item.toString());
             CheckBox checkBox = new CheckBox(getBaseContext());
@@ -503,6 +515,12 @@ public class ManageEmployerActivity extends MainActivity {
         if(edt_email.getText().toString().trim().length() == 0){
             message += "- Debe ingresar correo \n";
         }
+        if(!edt_email.getText().toString().isEmpty()){
+            InputValidator inputValidator = new InputValidator();
+            if(!inputValidator.esEmailValido(edt_email.getText().toString())){
+                message += "- Correo no válido \n";
+            }
+        }
         if(edt_dni.getText().toString().trim().length() == 0){
             message += "- Debe ingresar DNI \n";
         }
@@ -540,6 +558,7 @@ public class ManageEmployerActivity extends MainActivity {
         if(edt_name.getText().toString().trim().length() == 0){
             message += "- Debe ingresar nombre \n";
         }
+
         if(edt_lastname.getText().toString().trim().length() == 0){
             message += "- Debe ingresar apellidos \n";
         }
@@ -548,6 +567,12 @@ public class ManageEmployerActivity extends MainActivity {
         }
         if(edt_email.getText().toString().trim().length() == 0){
             message += "- Debe ingresar correo \n";
+        }
+        if(!edt_email.getText().toString().isEmpty()){
+            InputValidator inputValidator = new InputValidator();
+            if(!inputValidator.esEmailValido(edt_email.getText().toString())){
+                message += "- Correo no válido \n";
+            }
         }
         if(edt_dni.getText().toString().trim().length() == 0){
             message += "- Debe ingresar DNI \n";

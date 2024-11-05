@@ -103,6 +103,66 @@ public class InputValidator {
         });
     }
 
+    private static final String REGEX_NOMBRE_PERSONA_VALIDO = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s']*$";
+    public static void addPersonaInputValidation(EditText editText, Context context, Runnable onValidInput) {
+        editText.addTextChangedListener(new TextWatcher() {
+            private String currentText = "";
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                currentText = s.toString();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // No necesitamos implementar esto
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String input = editable.toString();
+
+                // Si el input no es válido, eliminamos los caracteres no permitidos
+                if (!input.matches(REGEX_EMPRESA_VALIDO)) {
+                    // Mostrar un Toast informando del carácter no permitido
+                    Toast.makeText(context, "Caracter no permitido", Toast.LENGTH_SHORT).show();
+
+                    // Revertir al último texto válido sin cambiar el contenido
+                    editText.setText(currentText);
+                    editText.setSelection(currentText.length()); // Mover el cursor al final
+                } else {
+                    currentText = input;
+                    onValidInput.run();// Actualizar el texto válido
+                }
+            }
+        });
+    }
+    public static void addPersonaInputValidationTextInput(TextInputEditText editText, TextInputLayout inputLayout) {
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String input = editable.toString();
+
+                if (!input.matches(REGEX_NOMBRE_PERSONA_VALIDO)) {
+                    inputLayout.setError("Caracter no permitido");
+                    String filteredInput = input.replaceAll("[^a-zA-ZáéíóúÁÉÍÓÚñÑ\\s']", "");
+                    editText.setText(filteredInput);
+                    editText.setSelection(filteredInput.length());// Mover el cursor al final
+                } else {
+                    inputLayout.setError(null);
+                    // Limpiar el error si es válido
+                }
+            }
+        });
+    }
+
+
     // Expresión regular para letras, números, y algunos símbolos comunes en nombres y códigos de productos
     private static final String REGEX_BUSQUEDA_VALIDO = "^[a-zA-Z0-9\\s\\-_&*.,]*$";
 
@@ -132,7 +192,7 @@ public class InputValidator {
     }
 
     private static final String REGEX_EMAIL_VALIDO = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-    public static boolean esEmailValido(String email) {
+    public boolean esEmailValido(String email) {
         if (email == null || email.isEmpty()) {
             return false;
         }
