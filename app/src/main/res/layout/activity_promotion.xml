@@ -179,6 +179,7 @@
                         </LinearLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/Tly_namePromotion_promotion"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:hint="Nombre de Oferta">

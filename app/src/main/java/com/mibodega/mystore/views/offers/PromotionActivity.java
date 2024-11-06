@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.mibodega.mystore.MainActivity;
@@ -32,6 +33,7 @@ import com.mibodega.mystore.models.Responses.PromotionResponse;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.services.IPromotionService;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.InputValidator;
 import com.mibodega.mystore.shared.SaleTemporalList;
 import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSale;
@@ -76,6 +78,7 @@ public class PromotionActivity extends MainActivity {
 
     private PagesProductResponse pagesSearchProductResponse;
     private TextInputEditText edt_name, edt_dateInit, edt_dateEnd,edt_buy,edt_receiv;
+    private TextInputLayout tly_name;
     private Calendar startCalendar, endCalendar;
     private ImageButton btn_start,btn_end;
     private DrawerLayout drawerLayout;
@@ -114,6 +117,8 @@ public class PromotionActivity extends MainActivity {
         edt_dateEnd = findViewById(R.id.Edt_dateEnd_promotion);
         edt_buy = findViewById(R.id.Edt_payAmount_promotion);
         edt_receiv = findViewById(R.id.Edt_receivAmount_promotion);
+        tly_name = findViewById(R.id.Tly_namePromotion_promotion);
+
         btn_start = findViewById(R.id.Imgb_selectDateInit_promotion);
         btn_end = findViewById(R.id.Imgb_selectDateEnd_promotion);
 
@@ -149,6 +154,8 @@ public class PromotionActivity extends MainActivity {
                 // No es necesario hacer nada aquí
             }
         });
+
+        InputValidator.addPersonaInputValidationTextInput(edt_name,tly_name);
         
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override

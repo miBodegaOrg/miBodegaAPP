@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.mibodega.mystore.MainActivity;
@@ -32,6 +33,7 @@ import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.services.IDiscountsService;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.InputValidator;
 import com.mibodega.mystore.shared.SaleTemporalList;
 import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSale;
@@ -73,6 +75,7 @@ public class DiscountsActivity extends MainActivity {
 
     private PagesProductResponse pagesSearchProductResponse;
     private TextInputEditText edt_name, edt_discount, edt_value,edt_dateInit, edt_dateEnd;
+    private TextInputLayout tly_name;
 
     private String startDateValue="";
     private String endDateValue="";
@@ -113,7 +116,7 @@ public class DiscountsActivity extends MainActivity {
         edt_name = findViewById(R.id.Edt_nameDiscount_discount);
         edt_discount =findViewById(R.id.Edt_discount_discount);
         edt_value = findViewById(R.id.Edt_value_discount);
-
+        tly_name = findViewById(R.id.Tly_nameDiscount_discount);
         edt_dateInit = findViewById(R.id.Edt_dateInit_discount);
         edt_dateEnd = findViewById(R.id.Edt_dateEnd_discount);
         btn_start = findViewById(R.id.Imgb_selectDateInit_discount);
@@ -122,6 +125,8 @@ public class DiscountsActivity extends MainActivity {
         startCalendar = Calendar.getInstance();
         endCalendar = Calendar.getInstance();
 
+
+        InputValidator.addPersonaInputValidationTextInput(edt_name,tly_name);
 
         drawerLayout = findViewById(R.id.drawer_layout);
         chatFragmentContainer = findViewById(R.id.chat_fragment_container);

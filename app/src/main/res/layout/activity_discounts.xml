@@ -178,6 +178,7 @@ tools:context=".views.offers.DiscountsActivity">
                     </LinearLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/Tly_nameDiscount_discount"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 

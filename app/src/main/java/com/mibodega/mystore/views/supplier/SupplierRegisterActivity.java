@@ -17,6 +17,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.RequestSupplier;
@@ -28,6 +29,7 @@ import com.mibodega.mystore.models.common.ProductSupplier;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.services.ISupplierServices;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.InputValidator;
 import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSearch;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSupplier;
@@ -46,6 +48,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class SupplierRegisterActivity extends MainActivity {
 
     private TextInputEditText edt_name, edt_ruc, edt_phone, search;
+    private TextInputLayout tly_name;
     private RecyclerView rv_products, rv_products_supplier;
     private Button btn_cancel,btn_save, btn_update, btn_delete;
     private Utils utils = new Utils();
@@ -73,6 +76,7 @@ public class SupplierRegisterActivity extends MainActivity {
         edt_name = findViewById(R.id.Edt_nameSupplier_supplier);
         edt_ruc = findViewById(R.id.Edt_rucSupplier_supplier);
         edt_phone = findViewById(R.id.Edt_phoneSupplier_supplier);
+        tly_name = findViewById(R.id.Tly_nameSupplier_supplier);
 
         rv_products = findViewById(R.id.Rv_productList_supplier);
         rv_products_supplier = findViewById(R.id.Rv_productSupplierList_supplier);
@@ -84,6 +88,8 @@ public class SupplierRegisterActivity extends MainActivity {
         ruc = getIntent().getExtras().getString("ruc");
         drawerLayout = findViewById(R.id.drawer_layout);
         chatFragmentContainer = findViewById(R.id.chat_fragment_container);
+
+        InputValidator.addPersonaInputValidationTextInput(edt_name,tly_name);
 
         // Configura el deslizable desde el lado derecho
         //drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
@@ -195,7 +201,7 @@ public class SupplierRegisterActivity extends MainActivity {
                 getSupportActionBar().setTitle("Detalle de Proveedor");
             }
             arrayListProduct.clear();
-            btn_update.setVisibility(View.VISIBLE);
+            //btn_update.setVisibility(View.VISIBLE);
             btn_delete.setVisibility(View.VISIBLE);
             btn_save.setVisibility(View.GONE);
             loadData(ruc);
@@ -515,12 +521,6 @@ public class SupplierRegisterActivity extends MainActivity {
                 message += "- Debe ingresar un ruc con 11 digitos\n";
             }
         }
-
-        edt_name = findViewById(R.id.Edt_nameSupplier_supplier);
-        edt_ruc = findViewById(R.id.Edt_rucSupplier_supplier);
-        edt_phone = findViewById(R.id.Edt_phoneSupplier_supplier);
-
-
         return message;
 
     }
