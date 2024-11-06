@@ -38,14 +38,17 @@
                 android:text="rentabilidad de cada producto" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/Tly_searchProductRentability_dashboard"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:endIconMode="clear_text">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/Edt_searchProductRentability_dashboard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Buscar producto" />
+                    android:hint="Buscar producto"
+                    android:inputType="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.recyclerview.widget.RecyclerView

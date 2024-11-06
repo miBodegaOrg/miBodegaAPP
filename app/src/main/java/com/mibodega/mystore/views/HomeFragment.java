@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.text.Spannable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -233,10 +234,22 @@ public class HomeFragment extends Fragment {
                 if(response.isSuccessful()){
                     MessageResponseGpt responseGpt = response.body();
                     if(responseGpt!=null){
-                        tv_recomendation.setText(textFormaterMarkdown.formatText(getContext(),responseGpt.getResponse()));
-                        dBfunctionsTableData.insert_recomendation_sqlite(getContext(),new RecomendationMessage(1,responseGpt.getResponse(),utils.getDateTimeDDMMYYYYHHMMSS()));
+                        Spannable spannable = textFormaterMarkdown.formatText(getContext(),responseGpt.getResponse());
+                        String formattedText = spannable.toString().isEmpty()
+                                ? "No hay recomendación disponible."
+                                : spannable.toString();
+                        tv_recomendation.setText(formattedText);
                         pgb_loadRecomendation.setVisibility(View.GONE);
                         tv_recomendation.setVisibility(View.VISIBLE);
+
+                        String responseText = responseGpt.getResponse();
+                        // Guarda en la base de datos solo si el texto es válido
+                        if (!responseText.isEmpty()) {
+                            dBfunctionsTableData.insert_recomendation_sqlite(
+                                    getContext(),
+                                    new RecomendationMessage(1, responseText, utils.getDateTimeDDMMYYYYHHMMSS())
+                            );
+                        }
                     }
                 }else{
                     try {

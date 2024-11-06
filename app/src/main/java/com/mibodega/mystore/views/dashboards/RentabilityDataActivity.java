@@ -13,12 +13,14 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.ProductRentabilityResponse;
 import com.mibodega.mystore.models.Responses.SaleCategoryDataDashboardResponse;
 import com.mibodega.mystore.services.IDashboardServices;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.InputValidator;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductRentability;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
 
@@ -39,6 +41,8 @@ public class RentabilityDataActivity extends MainActivity {
     private RecyclerView rv_dataListProduct;
     private ArrayList<ProductRentabilityResponse> productList = new ArrayList<>();
     private TextInputEditText edt_searchProduct;
+    private TextInputLayout tly_searchProduct;
+
     private Config config = new Config();
     private RecyclerViewAdapterProductRentability recyclerViewAdapterProductRentability;
 
@@ -55,22 +59,10 @@ public class RentabilityDataActivity extends MainActivity {
         chatFragmentContainer = findViewById(R.id.chat_fragment_container);
         rv_dataListProduct = findViewById(R.id.Rv_productRentabiltyData_dashboard);
         edt_searchProduct = findViewById(R.id.Edt_searchProductRentability_dashboard);
-        edt_searchProduct.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        tly_searchProduct = findViewById(R.id.Tly_searchProductRentability_dashboard);
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                filterData(editable.toString());
-            }
-        });
+        Runnable searchProductLogic = this::filterData;
+        InputValidator.addBusquedaInputValidation(edt_searchProduct,tly_searchProduct,searchProductLogic);
         drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
@@ -101,7 +93,8 @@ public class RentabilityDataActivity extends MainActivity {
 
         loadProductRentability();
     }
-    private void filterData(String name){
+    private void filterData(){
+        String name = edt_searchProduct.getText().toString();
         if(Objects.equals(name, "")){
             GridLayoutManager gridLayoutManager = new GridLayoutManager(getBaseContext(), 2);
             rv_dataListProduct.setLayoutManager(gridLayoutManager);

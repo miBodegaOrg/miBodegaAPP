@@ -629,8 +629,9 @@ public class ManageEmployerActivity extends MainActivity {
         dialog.getWindow().setLayout(dialogWidth, dialogHeight);
         dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
         TextInputEditText editText = dialog.findViewById(R.id.Edt_confirWordDelete_dialog);
+        TextInputLayout tly_editext = dialog.findViewById(R.id.Tly_confirWordDelete_dialog);
         ImageButton btn_close = dialog.findViewById(R.id.Imgb_custom_closeDialog);
-
+        InputValidator.addPersonaInputValidationTextInput(editText,tly_editext);
         Button btn_accept = dialog.findViewById(R.id.btn_accept);
         btn_accept.setOnClickListener(new View.OnClickListener() {
             @Override

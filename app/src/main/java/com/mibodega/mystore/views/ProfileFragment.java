@@ -17,11 +17,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.RequestUpdateProfile;
 import com.mibodega.mystore.models.Responses.SignInResponse;
@@ -30,6 +32,7 @@ import com.mibodega.mystore.services.ISettingService;
 import com.mibodega.mystore.services.IUserServices;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.DBfunctionsTableData;
+import com.mibodega.mystore.shared.InputValidator;
 import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.views.employers.ManageEmployerActivity;
 import com.mibodega.mystore.views.user.ChangePasswordActivity;
@@ -141,9 +144,12 @@ public class ProfileFragment extends Fragment {
         dialog.getWindow().setLayout(dialogWidth, dialogHeight);
         dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
         TextInputEditText editText = dialog.findViewById(R.id.Edt_confirWordDelete_dialog);
+        TextInputLayout tly_editext = dialog.findViewById(R.id.Tly_confirWordDelete_dialog);
         ImageButton btn_close = dialog.findViewById(R.id.Imgb_custom_closeDialog);
-
         Button btn_accept = dialog.findViewById(R.id.btn_accept);
+
+        InputValidator.addPersonaInputValidationTextInput(editText,tly_editext);
+
         btn_accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
