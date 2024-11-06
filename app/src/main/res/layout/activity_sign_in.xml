@@ -88,13 +88,16 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/md_theme_light_onPrimaryContainer"
                     android:hint="Ingrese DNI / RUC"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="11"
                     app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/Tedt_user"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress" />
+                        android:maxLength="11"
+                        android:inputType="phone" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <CheckBox
