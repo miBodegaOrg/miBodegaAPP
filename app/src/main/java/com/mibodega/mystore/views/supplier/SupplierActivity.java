@@ -8,11 +8,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.PagesProductResponse;
@@ -22,6 +25,7 @@ import com.mibodega.mystore.models.Responses.SupplierResponseV2;
 import com.mibodega.mystore.services.IProductServices;
 import com.mibodega.mystore.services.ISupplierServices;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.InputValidator;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProduct;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterSupplier;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
@@ -38,6 +42,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class SupplierActivity extends MainActivity {
 
     private TextInputEditText edt_searchSupplier;
+    private TextInputLayout tly_searchSupplier;
     private FloatingActionButton btn_newSupplier;
     private RecyclerView rv_supplierList;
     private Config config = new Config();
@@ -53,6 +58,7 @@ public class SupplierActivity extends MainActivity {
             getSupportActionBar().setTitle("Mis Proveedores");
         }
         edt_searchSupplier = findViewById(R.id.Edt_searchSuplier_supplier);
+        tly_searchSupplier = findViewById(R.id.Txly_layoutSearch_supplier);
         btn_newSupplier = findViewById(R.id.Btn_addNewSupplier_supplier);
         rv_supplierList = findViewById(R.id.Rv_supplierList_supplier);
         drawerLayout = findViewById(R.id.drawer_layout_supplier);
@@ -95,6 +101,25 @@ public class SupplierActivity extends MainActivity {
             @Override
             public void onDrawerStateChanged(int newState) {
                 // No es necesario hacer nada aquí
+            }
+        });
+
+        InputValidator.addPersonaInputValidationTextInput(edt_searchSupplier,tly_searchSupplier);
+
+        edt_searchSupplier.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }
