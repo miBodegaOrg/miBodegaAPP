@@ -33,6 +33,7 @@
             android:padding="30dp">
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/Tly_nameSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -40,10 +41,12 @@
                     android:id="@+id/Edt_nameSignUp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Nombre" />
+                    android:hint="Nombre"
+                    android:inputType="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/Tly_lastnameSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -51,10 +54,12 @@
                     android:id="@+id/Edt_lastnameSignUp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Apellidos" />
+                    android:hint="Apellidos"
+                    android:inputType="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/Tly_addressSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -62,7 +67,8 @@
                     android:id="@+id/Edt_addressSignUp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Correo" />
+                    android:hint="Correo"
+                    android:inputType="textEmailAddress" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -72,6 +78,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/Edt_phoneSignUp"
                     android:layout_width="match_parent"
+                    android:inputType="phone"
                     android:layout_height="wrap_content"
                     android:hint="Numero de telefono" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -84,6 +91,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
                     android:hint="Correo electronico" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -95,6 +103,7 @@
                     android:id="@+id/Edt_rucdniSignUp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="phone"
                     android:hint="Ruc" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -107,6 +116,7 @@
                     android:id="@+id/Edt_passwprdSignUp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="textPassword"
                     android:hint="Contraseña" />
             </com.google.android.material.textfield.TextInputLayout>
 

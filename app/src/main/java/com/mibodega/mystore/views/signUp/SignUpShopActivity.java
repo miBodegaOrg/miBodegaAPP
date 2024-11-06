@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.RequestEmployee;
 import com.mibodega.mystore.models.Requests.RequestSignUp;
@@ -20,6 +21,7 @@ import com.mibodega.mystore.models.Responses.SignUpResponse;
 import com.mibodega.mystore.services.IEmployeeServices;
 import com.mibodega.mystore.services.IUserServices;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.InputValidator;
 import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.views.employers.ManageEmployerActivity;
 
@@ -33,6 +35,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SignUpShopActivity extends AppCompatActivity {
     private TextInputEditText edt_nameSignUp_shop,edt_lastnameSignUp_shop,edt_phoneSignUp_shop,edt_rucSignUp_shop,edt_passwordSignUp_shop, edt_addressSignUp_shop;
+    private TextInputLayout tly_name,tly_lastname,tly_correo;
+
     private Button btn_register;
     private TextView tv_moveSignIn;
     private Config config = new Config();
@@ -46,9 +50,16 @@ public class SignUpShopActivity extends AppCompatActivity {
         edt_rucSignUp_shop = findViewById(R.id.Edt_rucdniSignUp);
         edt_passwordSignUp_shop = findViewById(R.id.Edt_passwprdSignUp);
         edt_addressSignUp_shop = findViewById(R.id.Edt_addressSignUp);
-
+        tly_name = findViewById(R.id.Tly_nameSignUp);
+        tly_lastname = findViewById(R.id.Tly_lastnameSignUp);
+        tly_correo = findViewById(R.id.Tly_addressSignUp);
         btn_register = findViewById(R.id.Btn_registerSignUp);
         tv_moveSignIn = findViewById(R.id.Tv_moveSignIn);
+
+        InputValidator.addPersonaInputValidationTextInput(edt_nameSignUp_shop,tly_name);
+        InputValidator.addPersonaInputValidationTextInput(edt_lastnameSignUp_shop,tly_lastname);
+
+
 
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +96,12 @@ public class SignUpShopActivity extends AppCompatActivity {
         if(edt_addressSignUp_shop.getText().toString().trim().length() == 0){
             message += "- Debe ingresar correo \n";
         }
-
+        if(!edt_addressSignUp_shop.getText().toString().isEmpty()){
+            InputValidator inputValidator = new InputValidator();
+            if(!inputValidator.esEmailValido(edt_addressSignUp_shop.getText().toString())){
+                message += "- Correo no válido \n";
+            }
+        }
         if(edt_phoneSignUp_shop.getText().toString().trim().length() == 0){
             message += "- Debe ingresar telefono \n";
         }
