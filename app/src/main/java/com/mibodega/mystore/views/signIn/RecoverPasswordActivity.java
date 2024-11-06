@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Requests.RequestEmailCode;
 import com.mibodega.mystore.models.Requests.RequestUpdateProfile;
@@ -21,13 +22,16 @@ import com.mibodega.mystore.models.Responses.EmailSendResponse;
 import com.mibodega.mystore.models.Responses.UpdateProfileResponse;
 import com.mibodega.mystore.services.IUserServices;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.InputValidator;
 import com.mibodega.mystore.shared.Utils;
+import com.mibodega.mystore.views.signUp.SignUpShopActivity;
 import com.mibodega.mystore.views.user.EditProfileActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,6 +42,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RecoverPasswordActivity extends AppCompatActivity {
 
     private TextInputEditText edt_email;
+    private TextInputLayout tly_email;
     private Button btn_send;
     private Config config = new Config();
     private Utils utils = new Utils();
@@ -51,7 +56,19 @@ public class RecoverPasswordActivity extends AppCompatActivity {
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendEmail();
+
+                if(Objects.equals(valiteFields(), "")){
+                    sendEmail();
+                }else{
+                    Utils utils = new Utils();
+                    Dialog dialog = utils.getAlertCustom(RecoverPasswordActivity.this,"danger","Error",valiteFields(),false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    dialog.show();
+                }
             }
         });
 
@@ -111,5 +128,20 @@ public class RecoverPasswordActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+    }
+
+    public String valiteFields(){
+        String message = "";
+        if(edt_email.getText().toString().trim().length() == 0){
+            message += "- Debe ingresar correo \n";
+        }
+        if(!edt_email.getText().toString().isEmpty()){
+            InputValidator inputValidator = new InputValidator();
+            if(!inputValidator.esEmailValido(edt_email.getText().toString())){
+                message += "- Correo no válido \n";
+            }
+        }
+        return message;
+
     }
 }

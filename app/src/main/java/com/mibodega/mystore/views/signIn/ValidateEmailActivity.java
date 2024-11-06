@@ -21,12 +21,14 @@ import com.mibodega.mystore.models.Responses.EmailSendResponse;
 import com.mibodega.mystore.models.Responses.ValidCodeEmailResponse;
 import com.mibodega.mystore.services.IUserServices;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.InputValidator;
 import com.mibodega.mystore.shared.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,7 +55,19 @@ public class ValidateEmailActivity extends AppCompatActivity {
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendCode(email);
+
+                if(Objects.equals(valiteFields(), "")){
+                    sendCode(email);
+                }else{
+                    Utils utils = new Utils();
+                    Dialog dialog = utils.getAlertCustom(ValidateEmailActivity.this,"danger","Error",valiteFields(),false);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    dialog.show();
+                }
             }
         });
     }
@@ -112,5 +126,13 @@ public class ValidateEmailActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+    }
+    public String valiteFields(){
+        String message = "";
+        if(edt_code.getText().toString().trim().length() == 0){
+            message += "- Debe ingresar código \n";
+        }
+        return message;
+
     }
 }
