@@ -158,7 +158,7 @@ public class CreateSaleFragment extends Fragment {
 
     public void loadData(){
         arrayListProduct  = saleTemporalList.getArrayList();
-        listAdapter = new RecyclerViewAdapterProductSale(getContext(), arrayListProduct, new RecyclerViewAdapterProductSale.OnEdit() {
+        listAdapter = new RecyclerViewAdapterProductSale("",getContext(), arrayListProduct, new RecyclerViewAdapterProductSale.OnEdit() {
             @Override
             public void onClick(ProductResponse product) {
                 tv_subTotal.setText("S/ "+utils.formatDecimal(saleTemporalList.getTotalPrice()));

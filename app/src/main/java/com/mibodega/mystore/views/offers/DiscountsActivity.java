@@ -233,7 +233,7 @@ public class DiscountsActivity extends MainActivity {
 
     public void loadData(){
         arrayListProduct  = saleTemporalList.getArrayList();
-        RecyclerViewAdapterProductSale listAdapter = new RecyclerViewAdapterProductSale(getBaseContext(), arrayListProduct, new RecyclerViewAdapterProductSale.OnEdit() {
+        RecyclerViewAdapterProductSale listAdapter = new RecyclerViewAdapterProductSale("offers",getBaseContext(), arrayListProduct, new RecyclerViewAdapterProductSale.OnEdit() {
             @Override
             public void onClick(ProductResponse product) {
 

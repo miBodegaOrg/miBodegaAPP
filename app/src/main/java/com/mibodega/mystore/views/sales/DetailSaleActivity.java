@@ -8,11 +8,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.journeyapps.barcodescanner.Util;
 import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
 import com.mibodega.mystore.models.Responses.SaleResponse;
 import com.mibodega.mystore.models.common.ProductSale;
 import com.mibodega.mystore.shared.Config;
+import com.mibodega.mystore.shared.Utils;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterSale;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterSaleDetail;
 
@@ -24,6 +26,7 @@ public class DetailSaleActivity extends MainActivity {
     private RecyclerView rv_saleItemList;
     private RecyclerViewAdapterSaleDetail recyclerViewAdapterSaleDetail;
     private Config config = new Config();
+    private Utils utils = new Utils();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +41,7 @@ public class DetailSaleActivity extends MainActivity {
         tv_total = findViewById(R.id.Tv_total_sale_detail);
         rv_saleItemList = findViewById(R.id.Rv_itemsale_detail);
         if(config.getSaleResponsecurrent()!=null){
-            tv_date.setText(config.getSaleResponsecurrent().getCreatedAt());
+            tv_date.setText(utils.convertDateToClearFormat(config.getSaleResponsecurrent().getCreatedAt()));
 
             DecimalFormat decimalFormat = new DecimalFormat("#0.00");
             String formatteq = decimalFormat.format(config.getSaleResponsecurrent().getDiscount());

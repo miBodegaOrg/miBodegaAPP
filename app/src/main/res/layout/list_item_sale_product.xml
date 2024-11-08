@@ -131,6 +131,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/Ly_amountSection_sale"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:background="@drawable/backgroun_custom_rectangle"

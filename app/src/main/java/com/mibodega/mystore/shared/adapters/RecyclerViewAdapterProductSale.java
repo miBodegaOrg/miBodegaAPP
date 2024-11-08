@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,6 +32,7 @@ import com.mibodega.mystore.views.products.ProductDetailActivity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<RecyclerViewAdapterProductSale.ViewHolder> implements View.OnClickListener {
     private Utils utils = new Utils();
@@ -43,6 +45,7 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
     private View.OnClickListener listener;
     final RecyclerViewAdapterProductSale.OnEdit onEdit;
     final RecyclerViewAdapterProductSale.OnDelete onDelete;
+    private String type="";
 
 
 
@@ -62,11 +65,12 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
     }
 
 
-        public RecyclerViewAdapterProductSale(Context context, ArrayList<ProductResponse> productList, OnEdit onEdit, OnDelete onDelete) {
+        public RecyclerViewAdapterProductSale(String _type,Context context, ArrayList<ProductResponse> productList, OnEdit onEdit, OnDelete onDelete) {
             this.context = context;
             this.productList = productList;
             this.onEdit = onEdit;
             this.onDelete = onDelete;
+            this.type = _type;
             for (ProductResponse product:productList){
                 arrIsEdit.put(product.getCode(),false);
             }
@@ -100,6 +104,13 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
                     .centerCrop()
                     .transform(new RoundedCorners(20))
                     .into(holder.image);
+
+            if(Objects.equals(type, "offers")){
+                holder.ly_containeramount.setVisibility(View.GONE);
+
+            }else{
+                holder.ly_containeramount.setVisibility(View.VISIBLE);
+            }
             arrEdtAmount.put(product.getCode(),holder.edt_amount);
             holder.productDescription.setText(product.getName());
             holder.productStock.setText(String.valueOf(product.getStock()));
@@ -239,6 +250,7 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
         ImageButton btn_delete;
         ImageButton btn_edit_save;
         ImageButton btn_cancel;
+        LinearLayout ly_containeramount;
 
 
 
@@ -257,6 +269,7 @@ public class RecyclerViewAdapterProductSale extends RecyclerView.Adapter<Recycle
 
             total_price = itemView.findViewById(R.id.Tv_totalPrice_item_sale);
             edt_amount = itemView.findViewById(R.id.Edt_amountProduct_sale);
+            ly_containeramount = itemView.findViewById(R.id.Ly_amountSection_sale);
 
 
 

@@ -46,6 +46,7 @@ public class SalesListFragment extends Fragment {
 
     private PagesSaleResponse pagesSaleResponse;
     private ArrayList<SaleResponse> arrSaleList = new ArrayList<>();
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
