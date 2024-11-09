@@ -182,19 +182,7 @@ public class PurchaseFormActivity extends MainActivity {
             }
         });
 
-        sp_selectSupplier.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                arrProducts.clear();
-                arrProducts = mapsupplierResponses.get(sp_selectSupplier.getSelectedItem().toString()).getProducts();
-                loadData();
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
     }
 
     public String valiteFields(){
@@ -251,6 +239,31 @@ public class PurchaseFormActivity extends MainActivity {
                         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_spinner_item, suppliers);
                         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         sp_selectSupplier.setAdapter(adapter2);
+                        sp_selectSupplier.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                arrProducts.clear();
+
+                                /*System.out.println("***");
+                                arrProducts = mapsupplierResponses.get(sp_selectSupplier.getSelectedItem().toString()).getProducts();
+                                System.out.println(sp_selectSupplier.getSelectedItem().toString());
+                                System.out.println(mapsupplierResponses.get(sp_selectSupplier.getSelectedItem().toString()).getProducts().size());
+                                System.out.println(mapsupplierResponses.get(sp_selectSupplier.getSelectedItem().toString()).getName());
+*/
+                                String selectedSupplier = sp_selectSupplier.getSelectedItem().toString();
+                                SupplierResponseV2 selectedSupplierResponse = mapsupplierResponses.get(selectedSupplier);
+
+                                if (selectedSupplierResponse != null && selectedSupplierResponse.getProducts() != null) {
+                                    arrProducts = new ArrayList<>(selectedSupplierResponse.getProducts());
+                                }
+                                loadData();
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> adapterView) {
+
+                            }
+                        });
                         System.out.println("successfull request");
                     }
                 }
