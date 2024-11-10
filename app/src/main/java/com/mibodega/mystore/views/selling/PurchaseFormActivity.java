@@ -187,6 +187,9 @@ public class PurchaseFormActivity extends MainActivity {
 
     public String valiteFields(){
             String message = "";
+        if (arrProducts.size()<1) {
+            message += "- Debe tener al menos un producto en la lista \n";
+        }
             if(edt_shipping.getText().toString().trim().length() == 0){
                 message += "- Debe ingresar costo de envio \n";
             }
