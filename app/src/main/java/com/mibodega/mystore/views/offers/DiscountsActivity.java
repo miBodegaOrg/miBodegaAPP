@@ -490,6 +490,9 @@ public class DiscountsActivity extends MainActivity {
     }
     public String valiteFields(){
         String message = "";
+        if (saleTemporalList.getArrayList().size()<1) {
+            message += "- Debe agregar al menos un producto a la lista \n";
+        }
         if(edt_name.getText().toString().trim().length() == 0){
             message += "- Debe ingresar nombre \n";
         }
