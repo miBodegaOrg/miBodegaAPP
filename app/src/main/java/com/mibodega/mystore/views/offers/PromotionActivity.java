@@ -493,6 +493,9 @@ public class PromotionActivity extends MainActivity {
     }
     public String valiteFields(){
         String message = "";
+        if (saleTemporalList.getArrayList().size()<1) {
+            message += "- Debe agregar al menos un producto a la lista \n";
+        }
         if(edt_dateInit.getText().toString().trim().length() == 0){
             message += "- Debe ingresar fecha inicial \n";
         }
