@@ -110,6 +110,38 @@ public class EmployerActivity extends MainActivity {
     }
     public void searchEmployerbyName(){
         String name = searchEmployer.getText().toString();
+
+        searchEmployer.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.toString().isEmpty()){
+                    rv_employeeList.removeAllViews();
+                    adapter.setFilteredList(arrEmployeeList);
+                    rv_employeeList.setAdapter(adapter);
+                }else{
+                    ArrayList<EmployeeResponse> aux = new ArrayList<>();
+                    for(EmployeeResponse item: arrEmployeeList){
+                        if(item.getName().toLowerCase().contains(s.toString().toLowerCase())){
+                            aux.add(item);
+                        }
+                    }
+                    rv_employeeList.removeAllViews();
+                    adapter.setFilteredList(aux);
+                    rv_employeeList.setAdapter(adapter);
+                }
+            }
+        });
+
     }
     public void loadEmployers(){
         Retrofit retrofit = new Retrofit.

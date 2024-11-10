@@ -18,6 +18,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.mibodega.mystore.MainActivity;
 import com.mibodega.mystore.R;
+import com.mibodega.mystore.models.Responses.EmployeeResponse;
 import com.mibodega.mystore.models.Responses.PagesProductResponse;
 import com.mibodega.mystore.models.Responses.ProductResponse;
 import com.mibodega.mystore.models.Responses.SupplierResponse;
@@ -49,6 +50,7 @@ public class SupplierActivity extends MainActivity {
     private ArrayList<SupplierResponseV2> arrayListSupplier = new ArrayList<>();
     private DrawerLayout drawerLayout;
     private FrameLayout chatFragmentContainer;
+    private RecyclerViewAdapterSupplier listAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +108,11 @@ public class SupplierActivity extends MainActivity {
 
         InputValidator.addPersonaInputValidationTextInput(edt_searchSupplier,tly_searchSupplier);
 
+        searchEmployerbyName();
+    }
+    public void searchEmployerbyName(){
+        String name = edt_searchSupplier.getText().toString();
+
         edt_searchSupplier.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -119,9 +126,24 @@ public class SupplierActivity extends MainActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if(s.toString().isEmpty()){
+                    rv_supplierList.removeAllViews();
+                    listAdapter.setFilteredList(arrayListSupplier);
+                    rv_supplierList.setAdapter(listAdapter);
+                }else{
+                    ArrayList<SupplierResponseV2> aux = new ArrayList<>();
+                    for(SupplierResponseV2 item: arrayListSupplier){
+                        if(item.getName().toLowerCase().contains(s.toString().toLowerCase())){
+                            aux.add(item);
+                        }
+                    }
+                    rv_supplierList.removeAllViews();
+                    listAdapter.setFilteredList(aux);
+                    rv_supplierList.setAdapter(listAdapter);
+                }
             }
         });
+
     }
     public void laodSupplier(){
         Retrofit retrofit = new Retrofit.
@@ -141,7 +163,7 @@ public class SupplierActivity extends MainActivity {
                     if(arrayListSupplier!=null){
                         System.out.println(arrayListSupplier.size());
                         rv_supplierList.removeAllViews();
-                        RecyclerViewAdapterSupplier listAdapter = new RecyclerViewAdapterSupplier(getBaseContext(), arrayListSupplier, new RecyclerViewAdapterSupplier.OnDetailItem() {
+                        listAdapter = new RecyclerViewAdapterSupplier(getBaseContext(), arrayListSupplier, new RecyclerViewAdapterSupplier.OnDetailItem() {
                             @Override
                             public void onClick(SupplierResponseV2 item) {
                                 Intent mg = new Intent(getBaseContext(), SupplierDetailActivity.class);
