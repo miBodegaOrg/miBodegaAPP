@@ -89,7 +89,6 @@
                     android:backgroundTint="@color/md_theme_light_onPrimaryContainer"
                     android:hint="Ingrese DNI / RUC"
                     app:counterEnabled="true"
-                    app:counterMaxLength="11"
                     app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText

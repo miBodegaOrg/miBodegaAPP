@@ -648,9 +648,10 @@ public class ProductDetailActivity extends MainActivity {
     }
     */
 
+
     private void setupButtons() {
-        btnCamera = findViewById(R.id.Imgb_takeProductPhoto_product);
-        btnGallery = findViewById(R.id.Imgb_getproductPhoto_product);
+        btnCamera = findViewById(R.id.Imgb_takeProductPhoto_product_update);
+        btnGallery = findViewById(R.id.Imgb_getproductPhoto_product_update);
 
         btnCamera.setOnClickListener(v -> {
             mCurrentAction = ACTION_CAMERA;

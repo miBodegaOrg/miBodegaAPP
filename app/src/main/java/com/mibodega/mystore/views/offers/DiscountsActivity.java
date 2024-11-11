@@ -456,7 +456,7 @@ public class DiscountsActivity extends MainActivity {
                         JSONObject errorJson = new JSONObject(errorBody);
                         String errorMessage = errorJson.getString("message");
                         Utils utils = new Utils();
-                        Dialog dialog = utils.getAlertCustom(DiscountsActivity.this,"danger","Error","La fecha de inicio debe ser menor a la fecha final",false);
+                        Dialog dialog = utils.getAlertCustom(DiscountsActivity.this,"danger","Error",errorMessage,false);
                         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                             @Override
                             public void onDismiss(DialogInterface dialog) {
