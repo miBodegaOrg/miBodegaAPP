@@ -31,11 +31,16 @@ import com.mibodega.mystore.services.ISupplierServices;
 import com.mibodega.mystore.shared.Config;
 import com.mibodega.mystore.shared.InputValidator;
 import com.mibodega.mystore.shared.Utils;
+import com.mibodega.mystore.shared.adapters.LoadingDialogAdapter;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSearch;
 import com.mibodega.mystore.shared.adapters.RecyclerViewAdapterProductSupplier;
 import com.mibodega.mystore.views.chatbot.ChatBotGlobalFragment;
 import com.mibodega.mystore.views.products.ProductEditActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -54,6 +59,7 @@ public class SupplierRegisterActivity extends MainActivity {
     private Utils utils = new Utils();
     private Config config =  new Config();
 
+    private LoadingDialogAdapter loadingDialog = new LoadingDialogAdapter();
 
     private ArrayList<ProductResponseSupplierV2> arrayListProduct = new ArrayList<>();
     private ArrayList<ProductResponse> arraySearchListProduct = new ArrayList<>();
@@ -201,7 +207,7 @@ public class SupplierRegisterActivity extends MainActivity {
                 getSupportActionBar().setTitle("Detalle de Proveedor");
             }
             arrayListProduct.clear();
-            //btn_update.setVisibility(View.VISIBLE);
+            btn_update.setVisibility(View.VISIBLE);
             btn_delete.setVisibility(View.VISIBLE);
             btn_save.setVisibility(View.GONE);
             loadData(ruc);
@@ -216,6 +222,9 @@ public class SupplierRegisterActivity extends MainActivity {
         }
     }
     public void registerSupplier(){
+        View dialogView = getLayoutInflater().from(getBaseContext()).inflate(R.layout.progress_dialog, null);
+        loadingDialog.startLoadingDialog(this, dialogView, "Cargando","Porfavor espere...");
+
         String name =edt_name.getText().toString();
         String phone = edt_phone.getText().toString();
         String ruc = edt_ruc.getText().toString();
@@ -239,6 +248,8 @@ public class SupplierRegisterActivity extends MainActivity {
             public void onResponse(@NonNull Call<SupplierResponseV2> call, @NonNull Response<SupplierResponseV2> response) {
                 System.out.println(response.toString());
                 if(response.isSuccessful()){
+                    loadingDialog.dismissDialog();
+
                     System.out.println("body: "+response.body());
                     edt_name.setText("");
                     edt_phone.setText("");
@@ -253,10 +264,31 @@ public class SupplierRegisterActivity extends MainActivity {
                     });
                     dialog.show();
 
+                }else{
+                    loadingDialog.dismissDialog();
+                    Dialog dialog = utils.getAlertCustom(SupplierRegisterActivity.this, "warning", "No Creado", "Asegurece de ingresar bien los datos", false);
+                    dialog.show();
+                    try {
+                        String errorBody = response.errorBody().string();
+                        System.out.println("Error response body: " + errorBody);
+                        JSONObject errorJson = new JSONObject(errorBody);
+                        String errorMessage = errorJson.getString("message");
+                        System.out.println(errorMessage);
+
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+
+                        }
+                    });
                 }
             }
             @Override
             public void onFailure(@NonNull Call<SupplierResponseV2> call, @NonNull Throwable t) {
+                loadingDialog.dismissDialog();
                 System.out.println("errror "+t.getMessage());
             }
         });
@@ -361,6 +393,9 @@ public class SupplierRegisterActivity extends MainActivity {
     }
 
     public void updateSupplier(String ruc){
+        View dialogView = getLayoutInflater().from(getBaseContext()).inflate(R.layout.progress_dialog, null);
+        loadingDialog.startLoadingDialog(this, dialogView, "Cargando","Porfavor espere...");
+
         String name =edt_name.getText().toString();
         String phone = edt_phone.getText().toString();
         String _ruc = edt_ruc.getText().toString();
@@ -386,19 +421,45 @@ public class SupplierRegisterActivity extends MainActivity {
                 if(response.isSuccessful()){
                     supplierResponse = response.body();
                     if(supplierResponse!=null){
-                        Toast.makeText(getBaseContext(),"ACTUALIZADO",Toast.LENGTH_SHORT).show();
+                        loadingDialog.dismissDialog();
+                        Dialog dialog = utils.getAlertCustom(SupplierRegisterActivity.this, "success", "Actualizado", "Proveedor actualizado", false);
+                        dialog.show();
+                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialogInterface) {
+
+                            }
+                        });
                         edt_name.setText(supplierResponse.getName());
                         edt_phone.setText(supplierResponse.getPhone());
                         edt_ruc.setText(supplierResponse.getRuc());
                     }
+                }else{
+                    loadingDialog.dismissDialog();
+                    Dialog dialog = utils.getAlertCustom(SupplierRegisterActivity.this, "warning", "No Actualizado", "Asegurece de ingresar bien los datos", false);
+                    dialog.show();
+                    try {
+                        String errorBody = response.errorBody().string();
+                        System.out.println("Error response body: " + errorBody);
+                        JSONObject errorJson = new JSONObject(errorBody);
+                        String errorMessage = errorJson.getString("message");
+                        System.out.println(errorMessage);
 
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
 
-
+                        }
+                    });
                 }
             }
             @Override
             public void onFailure(@NonNull Call<SupplierResponseV2> call, @NonNull Throwable t) {
                 System.out.println("errror "+t.getMessage());
+                loadingDialog.dismissDialog();
             }
         });
     }

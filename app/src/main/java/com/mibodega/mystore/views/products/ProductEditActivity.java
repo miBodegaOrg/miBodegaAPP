@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -74,6 +75,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -92,10 +94,93 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ProductEditActivity extends AppCompatActivity {
 
+    private static final int CAMERA_PERMISSION_REQUEST = 101;
+
+
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_GALLERY = 2;
     private static final int PERMISSION_REQUEST_CODE = 100;
-    private static final int CAMERA_PERMISSION_REQUEST = 101;
+
+    private static final int ACTION_CAMERA = 1;
+    private static final int ACTION_GALLERY = 2;
+    private int mCurrentAction = 0;
+    // Arrays de permisos según versión de Android
+    private String[] getRequiredPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // Android 13+
+            return new String[]{
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.READ_MEDIA_IMAGES
+            };
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) { // Android 10+
+            return new String[]{
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+            };
+        } else { // Android 8-9
+            return new String[]{
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            };
+        }
+    }
+
+
+
+    // ActivityResultLauncher para permisos
+    private final ActivityResultLauncher<String[]> permissionLauncher = registerForActivityResult(
+            new ActivityResultContracts.RequestMultiplePermissions(),
+            permissions -> {
+                boolean allGranted = true;
+                for (Boolean granted : permissions.values()) {
+                    if (!granted) {
+                        allGranted = false;
+                        break;
+                    }
+                }
+                if (allGranted) {
+                    // Todos los permisos concedidos
+                    if (mCurrentAction == ACTION_CAMERA) {
+                        openCamera();
+                    } else if (mCurrentAction == ACTION_GALLERY) {
+                        openGallery();
+                    }
+                } else {
+                    Toast.makeText(this, "Se requieren permisos para esta funcionalidad", Toast.LENGTH_SHORT).show();
+                }
+            }
+    );
+
+    // ActivityResultLauncher para cámara
+    private final ActivityResultLauncher<Intent> cameraLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    Bundle extras = result.getData().getExtras();
+                    if (extras != null) {
+                        Bitmap imageBitmap = (Bitmap) extras.get("data");
+                        if (imageBitmap != null) {
+                            saveImageFromCamera(imageBitmap);
+                        }
+                    }
+                }
+            }
+    );
+
+    // ActivityResultLauncher para galería
+    private final ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    Uri selectedImageUri = result.getData().getData();
+                    if (selectedImageUri != null) {
+                        imageUri = selectedImageUri;
+                        createImagePartFromGallery();
+                    }
+                }
+            }
+    );
+
 
 
     //***************
@@ -112,6 +197,7 @@ public class ProductEditActivity extends AppCompatActivity {
     private TextInputEditText txt_stock_product;
     private TextInputEditText txt_code_product;
     private TextInputEditText txt_saleprice_product;
+
 
     private Spinner sp_category_product;
     private TextView tv_fileName;
@@ -307,6 +393,9 @@ public class ProductEditActivity extends AppCompatActivity {
         loadSuppliers();
 
     }
+
+
+    /*
     private void setupButtons() {
          btnCamera = findViewById(R.id.Imgb_takeProductPhoto_product);
          btnGallery = findViewById(R.id.Imgb_getproductPhoto_product);
@@ -329,7 +418,126 @@ public class ProductEditActivity extends AppCompatActivity {
         });
 
     }
+*/
+    private void setupButtons() {
+        btnCamera = findViewById(R.id.Imgb_takeProductPhoto_product);
+        btnGallery = findViewById(R.id.Imgb_getproductPhoto_product);
 
+        btnCamera.setOnClickListener(v -> {
+            mCurrentAction = ACTION_CAMERA;
+            if (checkPermissions()) {
+                openCamera();
+            } else {
+                requestPermissions();
+            }
+        });
+
+        btnGallery.setOnClickListener(v -> {
+            mCurrentAction = ACTION_GALLERY;
+            if (checkPermissions()) {
+                openGallery();
+            } else {
+                requestPermissions();
+            }
+        });
+    }
+    private boolean checkPermissions() {
+        String[] permissions = getRequiredPermissions();
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission)
+                    != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void requestPermissions() {
+        permissionLauncher.launch(getRequiredPermissions());
+    }
+
+    private void openCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try {
+            cameraLauncher.launch(takePictureIntent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "No se encontró aplicación de cámara", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        try {
+            galleryLauncher.launch(intent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "No se encontró aplicación de galería", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void saveImageFromCamera(Bitmap bitmap) {
+        String fileName = "temp_image_" + System.currentTimeMillis() + ".jpg";
+        File file;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), fileName);
+        } else {
+            File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            file = new File(storageDir, fileName);
+        }
+
+        try (FileOutputStream outputStream = new FileOutputStream(file)) {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            paymentBitmapImg = bitmap;
+
+            RequestBody requestFile = RequestBody.create(MediaType.parse("image/jpeg"), file);
+            finalImageBody = requestFile;
+            imagePart = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
+            tv_fileName.setText(file.getName());
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error al guardar la imagen", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void createImagePartFromGallery() {
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(imageUri);
+            String fileName = "gallery_image_" + System.currentTimeMillis() + ".jpg";
+            File outputFile;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                outputFile = new File(getCacheDir(), fileName);
+            } else {
+                File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                outputFile = new File(storageDir, fileName);
+            }
+
+            try (OutputStream outputStream = new FileOutputStream(outputFile)) {
+                byte[] buffer = new byte[4 * 1024];
+                int read;
+                while ((read = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, read);
+                }
+                outputStream.flush();
+            }
+
+            if (inputStream != null) {
+                inputStream.close();
+            }
+
+            paymentBitmapImg = BitmapFactory.decodeFile(outputFile.getAbsolutePath());
+            RequestBody requestFile = RequestBody.create(MediaType.parse("image/jpeg"), outputFile);
+            finalImageBody = requestFile;
+            imagePart = MultipartBody.Part.createFormData("image", outputFile.getName(), requestFile);
+            tv_fileName.setText(outputFile.getName());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error al procesar la imagen", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //***
     public void setSelectSubCategories(String category){
         mapsupcategoriesResponses.clear();
         ArrayList<String> subcategories = new ArrayList<>();
@@ -545,7 +753,7 @@ public class ProductEditActivity extends AppCompatActivity {
 
     }
 
-
+/*
     private ActivityResultLauncher<Intent> cameraLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -569,10 +777,6 @@ public class ProductEditActivity extends AppCompatActivity {
                 }
             }
     );
-
-
-
-
     private boolean checkPermissions() {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
@@ -584,7 +788,7 @@ public class ProductEditActivity extends AppCompatActivity {
                 new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
                 PERMISSION_REQUEST_CODE);
     }
-
+*/
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -603,7 +807,7 @@ public class ProductEditActivity extends AppCompatActivity {
         }
     }
 
-
+/*
     private void openCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -657,6 +861,8 @@ public class ProductEditActivity extends AppCompatActivity {
             tv_fileName.setText("imageGallery.jpg");
         }
     }
+    */
+
     private String getPathFromUri(Uri uri) {
         String[] projection = {MediaStore.Images.Media.DATA};
         try (Cursor cursor = getContentResolver().query(uri, projection, null, null, null)) {
